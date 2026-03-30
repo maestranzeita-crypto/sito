@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Maestranze">
+  <!-- Icon: orange circle with white house silhouette, centered -->
+  <circle cx="100" cy="76" r="60" fill="#f97316"/>
+  <polygon points="100,34 136,76 64,76" fill="white"/>
+  <rect x="67" y="76" width="66" height="34" fill="white"/>
+  <rect x="84" y="86" width="24" height="24" fill="#f97316"/>
+  <!-- Wordmark -->
+  <text x="100" y="168"
+        font-family="Georgia, 'Times New Roman', 'Palatino Linotype', serif"
+        font-size="30" font-weight="700"
+        text-anchor="middle" fill="#0f172a" letter-spacing="1">Maest<tspan fill="#f97316">ranze</tspan></text>
+</svg>

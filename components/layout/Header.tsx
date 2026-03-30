@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { CATEGORIES } from '@/lib/categories'
@@ -15,10 +16,15 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-extrabold text-slate-900 tracking-tight">
-              Maest<span className="text-orange-500">ranze</span>
-            </span>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo-horizontal.svg"
+              alt="Maestranze"
+              width={180}
+              height={33}
+              priority
+              className="h-8 w-auto"
+            />
           </Link>
 
           {/* Desktop nav */}

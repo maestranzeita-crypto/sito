@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { CATEGORIES } from '@/lib/categories'
 import { SITE_NAME } from '@/lib/utils'
 
@@ -10,9 +11,13 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-extrabold text-white tracking-tight">
-                Maest<span className="text-orange-500">ranze</span>
-              </span>
+              <Image
+                src="/logo-horizontal-white.svg"
+                alt="Maestranze"
+                width={180}
+                height={33}
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed">
               Il marketplace di riferimento per il settore edile e impiantistico italiano.
