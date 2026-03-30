@@ -18,10 +18,10 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo-horizontal.svg"
+              src="/logo.svg"
               alt="Maestranze"
-              width={180}
-              height={33}
+              width={195}
+              height={40}
               priority
               className="h-8 w-auto"
             />

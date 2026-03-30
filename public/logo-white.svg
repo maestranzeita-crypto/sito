@@ -3,6 +3,6 @@
   <g transform="translate(2,2) scale(0.9)">
     <path d="M3,4 L11,4 L20,25 L29,4 L37,4 L37,36 L29,36 L29,13 L22,31 L18,31 L11,13 L11,36 L3,36 Z" fill="#f97316"/>
   </g>
-  <!-- Wordmark: "aestranze" serif bold, navy scuro -->
-  <text x="44" y="30" font-family="Georgia, 'Times New Roman', serif" font-size="27" font-weight="bold" fill="#1e293b">aestranze</text>
+  <!-- Wordmark: "aestranze" serif bold, bianco per sfondi scuri -->
+  <text x="44" y="30" font-family="Georgia, 'Times New Roman', serif" font-size="27" font-weight="bold" fill="#ffffff">aestranze</text>
 </svg>

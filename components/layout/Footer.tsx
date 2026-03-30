@@ -12,10 +12,10 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Link href="/" className="inline-block mb-4">
               <Image
-                src="/logo-horizontal-white.svg"
+                src="/logo-white.svg"
                 alt="Maestranze"
-                width={180}
-                height={33}
+                width={195}
+                height={40}
                 className="h-8 w-auto"
               />
             </Link>

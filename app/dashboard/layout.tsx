@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { LayoutDashboard, User, LogOut, Bell, HardHat } from 'lucide-react'
+import { LayoutDashboard, User, LogOut, Bell } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import type { Professional } from '@/lib/database.types'
 
@@ -106,7 +106,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </span>
           </Link>
           <div className="flex items-center gap-3">
-            <HardHat className="w-5 h-5 text-slate-400" />
             <span className="text-sm font-medium text-slate-700 truncate max-w-28">{name}</span>
           </div>
         </header>

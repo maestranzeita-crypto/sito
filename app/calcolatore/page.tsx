@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Sun, Zap, Droplets, HardHat, Home } from 'lucide-react'
+import { ArrowRight, Sun, Zap, Droplets, Home } from 'lucide-react'
 import { SITE_URL } from '@/lib/utils'
 
 export const metadata: Metadata = {

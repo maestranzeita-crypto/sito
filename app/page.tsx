@@ -125,11 +125,6 @@ export default function HomePage() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 rounded-full px-4 py-1.5 text-sm font-medium text-orange-300 mb-6">
-              <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
-              Il marketplace #1 per l&apos;edilizia italiana
-            </div>
-
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
               Trova il professionista
               <span className="text-orange-400"> giusto </span>
