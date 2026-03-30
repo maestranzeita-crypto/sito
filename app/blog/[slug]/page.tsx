@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Clock, Calendar, ChevronRight, AlertCircle } from 'lucide-react'
+import { ArrowRight, Clock, Calendar, ChevronRight, AlertCircle, Newspaper } from 'lucide-react'
 import { BLOG_POSTS, getPostBySlug, getRelatedPosts, type BlogSection } from '@/lib/blog'
 import { CATEGORIES } from '@/lib/categories'
 import { SITE_URL } from '@/lib/utils'
@@ -125,8 +125,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-4">
               {cat && (
-                <span className="text-xs font-semibold bg-orange-500/20 border border-orange-500/30 text-orange-300 px-3 py-1 rounded-full">
-                  {cat.icon} {CATEGORY_LABELS[post.category]}
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-orange-500/20 border border-orange-500/30 text-orange-300 px-3 py-1 rounded-full">
+                  <cat.icon className="w-3.5 h-3.5" /> {CATEGORY_LABELS[post.category]}
                 </span>
               )}
             </div>
@@ -219,7 +219,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                   href={`/${cat.slug}`}
                   className="flex items-center gap-2 font-semibold text-slate-800 hover:text-orange-600 transition-colors text-sm"
                 >
-                  <span className="text-xl">{cat.icon}</span>
+                  <cat.icon className="w-5 h-5 text-orange-500 flex-shrink-0" />
                   {cat.name} verificati in Italia
                   <ArrowRight className="w-4 h-4 ml-auto" />
                 </Link>
@@ -231,12 +231,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               <div className="bg-white rounded-2xl border border-slate-200 p-5">
                 <h3 className="font-bold text-slate-900 mb-4 text-sm">Leggi anche</h3>
                 <div className="space-y-3">
-                  {related.map((rel) => (
+                  {related.map((rel) => {
+                    const RelIcon = CATEGORIES.find((c) => c.slug === rel.category)?.icon ?? Newspaper
+                    return (
                     <Link key={rel.slug} href={`/blog/${rel.slug}`} className="block group">
                       <div className="flex items-start gap-3">
-                        <span className="text-xl flex-shrink-0">
-                          {CATEGORIES.find((c) => c.slug === rel.category)?.icon ?? '📰'}
-                        </span>
+                        <RelIcon className="w-5 h-5 flex-shrink-0 text-slate-400 mt-0.5" />
                         <div>
                           <p className="text-xs font-semibold text-slate-800 group-hover:text-orange-600 transition-colors leading-snug">
                             {rel.title}
@@ -247,7 +247,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                         </div>
                       </div>
                     </Link>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             )}

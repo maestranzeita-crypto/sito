@@ -119,7 +119,7 @@ export default function RegistratiPage({
                   'Verifica certificazioni di settore',
                   'Attivazione profilo pubblico',
                   'Prima richiesta di preventivo',
-                ].map((step, i) => (
+                ].map((step) => (
                   <li key={step} className="flex items-center gap-2.5 text-sm text-slate-600">
                     <CheckCircle2 className="w-4 h-4 text-orange-500 flex-shrink-0" />
                     {step}

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { CATEGORIES, CITIES } from '@/lib/categories'
 import { createClient } from '@/lib/supabase/client'
+import type { ProfessionalStatus } from '@/lib/database.types'
 import Button from '@/components/ui/Button'
 
 interface Props {
@@ -125,7 +126,7 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
         email: form.email,
         anni_esperienza: form.anniEsperienza,
         bio: form.bio,
-        status: 'pending',
+        status: 'pending' as ProfessionalStatus,
       })
       setSubmitted(true)
     } catch {
@@ -228,7 +229,7 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
                         : 'border-slate-200 text-slate-700 hover:border-slate-300 bg-white'
                     }`}
                   >
-                    <span className="text-xl">{cat.icon}</span>
+                    <cat.icon className="w-5 h-5 flex-shrink-0" />
                     <span className="text-sm font-medium">{cat.name}</span>
                     {selected && <CheckCircle2 className="w-4 h-4 text-orange-500 ml-auto flex-shrink-0" />}
                   </button>

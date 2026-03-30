@@ -7,11 +7,12 @@ import {
 } from 'lucide-react'
 import { CATEGORIES, CITIES } from '@/lib/categories'
 import { createClient } from '@/lib/supabase/client'
+import type { ContrattoType, ListingStatus } from '@/lib/database.types'
 import Button from '@/components/ui/Button'
 
 type FormData = {
   categoria: string
-  tipo: string
+  tipo: ContrattoType | ''
   titolo: string
   citta: string
   raggio: string
@@ -24,7 +25,7 @@ type FormData = {
   email: string
 }
 
-const TIPO_OPTIONS = [
+const TIPO_OPTIONS: { value: ContrattoType; label: string; desc: string }[] = [
   { value: 'Dipendente', label: 'Dipendente', desc: 'Assunzione a tempo determinato o indeterminato' },
   { value: 'Subappalto', label: 'Subappalto', desc: 'Collaborazione come ditta o artigiano esterno' },
   { value: 'Progetto', label: 'Progetto', desc: 'Collaborazione per uno o più cantieri specifici' },
@@ -82,17 +83,17 @@ export default function JobPostForm() {
       const supabase = createClient()
       await supabase.from('job_listings').insert({
         categoria: form.categoria,
-        tipo_contratto: form.tipo,
+        tipo_contratto: form.tipo as ContrattoType,
         titolo: form.titolo,
         citta: form.citta,
         raggio: form.raggio,
         descrizione: form.descrizione,
-        requisiti: form.requisiti,
-        retribuzione: form.retribuzioneVisibile ? form.retribuzione : null,
+        requisiti: form.requisiti || null,
+        retribuzione: form.retribuzioneVisibile ? form.retribuzione || null : null,
         ragione_sociale: form.ragioneSociale,
         telefono: form.telefono,
         email: form.email,
-        status: 'pending',
+        status: 'pending' as ListingStatus,
       })
       setSubmitted(true)
     } catch {
@@ -190,7 +191,7 @@ export default function JobPostForm() {
                         : 'border-slate-200 text-slate-700 hover:border-slate-300 bg-white'
                     }`}
                   >
-                    <span className="text-xl">{cat.icon}</span>
+                    <cat.icon className="w-5 h-5 flex-shrink-0" />
                     <span className="text-sm font-medium">{cat.name}</span>
                     {selected && <CheckCircle2 className="w-4 h-4 text-orange-500 ml-auto flex-shrink-0" />}
                   </button>

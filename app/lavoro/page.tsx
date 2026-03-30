@@ -2,7 +2,10 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Briefcase, Users, TrendingUp } from 'lucide-react'
 import { SITE_URL } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/server'
 import JobBoard from './JobBoard'
+
+export const revalidate = 300 // aggiorna ogni 5 minuti
 
 export const metadata: Metadata = {
   title: 'Offerte di Lavoro Edilizia — Trova Lavoro come Elettricista, Idraulico, Muratore | Maestranze',
@@ -19,7 +22,15 @@ export const metadata: Metadata = {
   ],
 }
 
-export default function LavoroPage() {
+export default async function LavoroPage() {
+  const supabase = await createClient()
+  const { data: jobs } = await supabase
+    .from('job_listings')
+    .select('*')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(100)
+
   return (
     <div className="min-h-screen bg-slate-50">
 
@@ -64,11 +75,11 @@ export default function LavoroPage() {
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <span className="text-xs font-semibold text-slate-400 whitespace-nowrap mr-1">Cerca per:</span>
             {[
-              { label: '⚡ Elettricista', href: '/lavoro?categoria=elettricista' },
-              { label: '🔧 Idraulico', href: '/lavoro?categoria=idraulico' },
-              { label: '☀️ Fotovoltaico', href: '/lavoro?categoria=fotovoltaico' },
-              { label: '🧱 Muratore', href: '/lavoro?categoria=muratore' },
-              { label: '🏠 Ristrutturazione', href: '/lavoro?categoria=ristrutturazione' },
+              { label: 'Elettricista', href: '/lavoro?categoria=elettricista' },
+              { label: 'Idraulico', href: '/lavoro?categoria=idraulico' },
+              { label: 'Fotovoltaico', href: '/lavoro?categoria=fotovoltaico' },
+              { label: 'Muratore', href: '/lavoro?categoria=muratore' },
+              { label: 'Ristrutturazione', href: '/lavoro?categoria=ristrutturazione' },
             ].map(({ label, href }) => (
               <Link
                 key={href}
@@ -89,7 +100,7 @@ export default function LavoroPage() {
       </section>
 
       {/* ── JOB BOARD ─────────────────────────────────────────── */}
-      <JobBoard />
+      <JobBoard initialJobs={jobs ?? []} />
 
       {/* ── CTA MOBILE pubblica offerta ───────────────────────── */}
       <section className="lg:hidden bg-slate-900 text-white py-10 px-4">

@@ -1,10 +1,13 @@
+import type { LucideIcon } from 'lucide-react'
+import { Sun, Zap, Wrench, HardHat, Home } from 'lucide-react'
+
 export type Category = {
   slug: string
   name: string
   nameShort: string
   description: string
   longDescription: string
-  icon: string
+  icon: LucideIcon
   color: string
   metaTitle: string
   metaDescription: string
@@ -21,7 +24,7 @@ export const CATEGORIES: Category[] = [
     description: 'Installazione e manutenzione di pannelli solari e impianti fotovoltaici',
     longDescription:
       'Trova installatori di impianti fotovoltaici certificati e verificati nella tua città. Confronta preventivi, leggi le recensioni di chi ha già installato il fotovoltaico e scegli il professionista più adatto alle tue esigenze. Scopri anche come accedere agli incentivi statali e alle detrazioni fiscali disponibili.',
-    icon: '☀️',
+    icon: Sun,
     color: 'amber',
     metaTitle: 'Installatori Fotovoltaico Certificati',
     metaDescription:
@@ -63,7 +66,7 @@ export const CATEGORIES: Category[] = [
     description: 'Impianti elettrici civili e industriali, certificazioni e collaudi',
     longDescription:
       'Trova elettricisti abilitati e certificati nella tua zona. Dalla realizzazione di nuovi impianti elettrici alla ristrutturazione di quelli esistenti, dal montaggio di punti luce alla domotica avanzata. Tutti i professionisti su Maestranze sono verificati e rilasciano la dichiarazione di conformità.',
-    icon: '⚡',
+    icon: Zap,
     color: 'yellow',
     metaTitle: 'Elettricisti Certificati',
     metaDescription:
@@ -101,7 +104,7 @@ export const CATEGORIES: Category[] = [
     description: 'Impianti idraulici, termoidraulici e sanitari per casa e azienda',
     longDescription:
       'Trova idraulici qualificati e termoidraulici verificati vicino a te. Dai piccoli interventi di pronto intervento alla realizzazione di nuovi impianti, dalla manutenzione della caldaia all\'installazione di pavimento radiante. Preventivi gratuiti e risposta in 24 ore.',
-    icon: '🔧',
+    icon: Wrench,
     color: 'blue',
     metaTitle: 'Idraulici Qualificati',
     metaDescription:
@@ -139,7 +142,7 @@ export const CATEGORIES: Category[] = [
     description: 'Lavori edili, costruzioni, ristrutturazioni strutturali e opere murarie',
     longDescription:
       'Trova muratori esperti e imprese edili qualificate per tutti i tuoi lavori in muratura. Demolizioni e costruzioni, intonaci, massetti, tamponamenti, interventi antisismici e molto altro. Professionisti verificati con esperienza documentata e recensioni reali.',
-    icon: '🧱',
+    icon: HardHat,
     color: 'orange',
     metaTitle: 'Muratori e Imprese Edili',
     metaDescription:
@@ -177,7 +180,7 @@ export const CATEGORIES: Category[] = [
     description: 'Ristrutturazioni complete di appartamenti, ville e locali commerciali',
     longDescription:
       'Trova imprese di ristrutturazione affidabili per rimettere a nuovo la tua casa o il tuo locale. Dalla ristrutturazione leggera al restyling completo, gestione delle pratiche comunali, accesso ai bonus fiscali. Imprese verificate, preventivi dettagliati, tempi certi.',
-    icon: '🏠',
+    icon: Home,
     color: 'green',
     metaTitle: 'Imprese di Ristrutturazione',
     metaDescription:

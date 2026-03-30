@@ -266,7 +266,7 @@ export default function ComeFunzionaPage() {
                 </div>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   I professionisti con più di 10 recensioni verificate e una media superiore a 4.7/5
-                  ottengono il badge <strong>"Top Rated"</strong> e appaiono in cima ai risultati
+                  ottengono il badge <strong>&ldquo;Top Rated&rdquo;</strong> e appaiono in cima ai risultati
                   di ricerca per la loro zona.
                 </p>
               </div>

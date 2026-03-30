@@ -3,155 +3,8 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { MapPin, Clock, Briefcase, ChevronDown, Search, ArrowRight, Building2 } from 'lucide-react'
-import { CATEGORIES } from '@/lib/categories'
-
-type Job = {
-  id: number
-  titolo: string
-  azienda: string
-  citta: string
-  provincia: string
-  categoria: string
-  tipo: 'Dipendente' | 'Subappalto' | 'Progetto'
-  retribuzione?: string
-  descrizione: string
-  giorni: number
-}
-
-const JOBS: Job[] = [
-  {
-    id: 1,
-    titolo: 'Elettricista qualificato per cantieri residenziali',
-    azienda: 'Impianti Bianchi SRL',
-    citta: 'Milano', provincia: 'MI',
-    categoria: 'elettricista',
-    tipo: 'Dipendente',
-    retribuzione: '1.800€ – 2.400€/mese',
-    descrizione: 'Cerchiamo elettricista con almeno 3 anni di esperienza su impianti civili e residenziali. Indispensabile patentino. Zona Milano nord.',
-    giorni: 2,
-  },
-  {
-    id: 2,
-    titolo: 'Installatore impianti fotovoltaici',
-    azienda: 'SolarTech Italia',
-    citta: 'Roma', provincia: 'RM',
-    categoria: 'fotovoltaico',
-    tipo: 'Dipendente',
-    retribuzione: '2.000€ – 2.800€/mese',
-    descrizione: 'Installatore con esperienza su impianti fotovoltaici residenziali e commerciali. Necessaria certificazione CEI EN 50618. Auto aziendale inclusa.',
-    giorni: 1,
-  },
-  {
-    id: 3,
-    titolo: 'Idraulico termoidraulico',
-    azienda: 'Termoidraulica Esposito',
-    citta: 'Napoli', provincia: 'NA',
-    categoria: 'idraulico',
-    tipo: 'Subappalto',
-    retribuzione: '25€ – 35€/ora',
-    descrizione: 'Cerchiamo idraulico per lavori in subappalto su cantieri privati. Preferibile esperienza su impianti di riscaldamento a pavimento e pompe di calore.',
-    giorni: 4,
-  },
-  {
-    id: 4,
-    titolo: 'Muratore specializzato in ristrutturazioni',
-    azienda: 'Edil Ferrari & C.',
-    citta: 'Torino', provincia: 'TO',
-    categoria: 'muratore',
-    tipo: 'Dipendente',
-    retribuzione: '1.600€ – 2.200€/mese',
-    descrizione: 'Impresa edile cerca muratore per ristrutturazioni civili. Esperienza in intonaci, massetti e tamponamenti. Zona Torino e provincia.',
-    giorni: 5,
-  },
-  {
-    id: 5,
-    titolo: 'Coordinatore lavori di ristrutturazione',
-    azienda: 'RisturaCasa SRL',
-    citta: 'Firenze', provincia: 'FI',
-    categoria: 'ristrutturazione',
-    tipo: 'Dipendente',
-    retribuzione: '2.500€ – 3.200€/mese',
-    descrizione: 'Cerchiamo un coordinatore tecnico per gestione cantieri di ristrutturazione residenziale. Diploma geometra o laurea ingegneria edile. Gestione pratiche CILA/SCIA.',
-    giorni: 3,
-  },
-  {
-    id: 6,
-    titolo: 'Elettricista industriale per azienda manifatturiera',
-    azienda: 'Meccanica Nord SpA',
-    citta: 'Brescia', provincia: 'BS',
-    categoria: 'elettricista',
-    tipo: 'Dipendente',
-    retribuzione: '2.200€ – 3.000€/mese',
-    descrizione: 'Ricerchiamo elettricista industriale per manutenzione impianti in stabilimento produttivo. Esperienza con quadri BT, PLC e automazione industriale.',
-    giorni: 6,
-  },
-  {
-    id: 7,
-    titolo: 'Installatore fotovoltaico + accumulo (batterie)',
-    azienda: 'GreenPower Sud',
-    citta: 'Bari', provincia: 'BA',
-    categoria: 'fotovoltaico',
-    tipo: 'Progetto',
-    retribuzione: '200€ – 350€/giornata',
-    descrizione: 'Collaborazione a progetto per installazione impianti fotovoltaici con sistema di accumulo. Lavori in Puglia e Basilicata. Patentino obbligatorio.',
-    giorni: 1,
-  },
-  {
-    id: 8,
-    titolo: 'Idraulico per pronto intervento e manutenzioni',
-    azienda: 'IdroPronto Bologna',
-    citta: 'Bologna', provincia: 'BO',
-    categoria: 'idraulico',
-    tipo: 'Dipendente',
-    retribuzione: '1.700€ – 2.300€/mese',
-    descrizione: 'Idraulico per interventi di pronto intervento e manutenzione programmata su condomini e uffici. Disponibilità reperibilità. Furgone aziendale.',
-    giorni: 8,
-  },
-  {
-    id: 9,
-    titolo: 'Muratore per cappotto termico e isolamenti',
-    azienda: 'IsolaEdil SRL',
-    citta: 'Verona', provincia: 'VR',
-    categoria: 'muratore',
-    tipo: 'Progetto',
-    retribuzione: '180€ – 250€/giornata',
-    descrizione: 'Cerchiamo muratori specializzati in posa cappotto termico (ETICS) per cantieri residenziali e condomini. Lavori legati a Ecobonus e Sismabonus.',
-    giorni: 10,
-  },
-  {
-    id: 10,
-    titolo: 'Project manager ristrutturazioni luxury',
-    azienda: 'PremiumHome Milano',
-    citta: 'Milano', provincia: 'MI',
-    categoria: 'ristrutturazione',
-    tipo: 'Dipendente',
-    retribuzione: '3.000€ – 4.500€/mese',
-    descrizione: 'Ricerchiamo PM per gestione ristrutturazioni di pregio nel centro di Milano. Esperienza minima 5 anni, ottimo italiano e inglese. Gestione fornitori e clienti HNWI.',
-    giorni: 2,
-  },
-  {
-    id: 11,
-    titolo: 'Elettricista domotica e smart home',
-    azienda: 'SmartLiving Genova',
-    citta: 'Genova', provincia: 'GE',
-    categoria: 'elettricista',
-    tipo: 'Subappalto',
-    retribuzione: '28€ – 40€/ora',
-    descrizione: 'Collaborazione per installazione sistemi domotici KNX/BTicino MyHome. Esperienza in impianti smart home e audio/video residenziali.',
-    giorni: 7,
-  },
-  {
-    id: 12,
-    titolo: 'Termoidraulico pompe di calore',
-    azienda: 'ClimaTech Venezia',
-    citta: 'Venezia', provincia: 'VE',
-    categoria: 'idraulico',
-    tipo: 'Dipendente',
-    retribuzione: '2.000€ – 2.700€/mese',
-    descrizione: 'Installatore pompe di calore aria-acqua per sostituzione caldaie incentivata. Certificazione F-Gas e patentino caldaie richiesti. Zona Veneto.',
-    giorni: 3,
-  },
-]
+import { CATEGORIES, CITIES } from '@/lib/categories'
+import type { JobListing } from '@/lib/database.types'
 
 const TIPO_OPTIONS = ['Tutti', 'Dipendente', 'Subappalto', 'Progetto'] as const
 
@@ -161,30 +14,36 @@ const TIPO_COLORS: Record<string, string> = {
   Progetto: 'bg-green-100 text-green-700',
 }
 
-function daysLabel(n: number) {
+function daysLabel(dateStr: string): string {
+  const ms = Date.now() - new Date(dateStr).getTime()
+  const n = Math.max(1, Math.floor(ms / (1000 * 60 * 60 * 24)))
   if (n === 1) return 'Oggi'
-  if (n <= 3) return `${n} giorni fa`
   return `${n} giorni fa`
 }
 
-export default function JobBoard() {
+function getCityDisplay(citta: string): { name: string; province: string } {
+  const city = CITIES.find((c) => c.slug === citta)
+  return city ? { name: city.name, province: city.province } : { name: citta, province: '' }
+}
+
+export default function JobBoard({ initialJobs }: { initialJobs: JobListing[] }) {
   const [searchText, setSearchText] = useState('')
   const [filterCat, setFilterCat] = useState('tutte')
   const [filterTipo, setFilterTipo] = useState<string>('Tutti')
-  const [showFilters, setShowFilters] = useState(false)
 
   const filtered = useMemo(() => {
-    return JOBS.filter((job) => {
+    return initialJobs.filter((job) => {
       const matchCat = filterCat === 'tutte' || job.categoria === filterCat
-      const matchTipo = filterTipo === 'Tutti' || job.tipo === filterTipo
+      const matchTipo = filterTipo === 'Tutti' || job.tipo_contratto === filterTipo
+      const { name: cityName } = getCityDisplay(job.citta)
       const matchSearch =
         searchText === '' ||
         job.titolo.toLowerCase().includes(searchText.toLowerCase()) ||
-        job.citta.toLowerCase().includes(searchText.toLowerCase()) ||
-        job.azienda.toLowerCase().includes(searchText.toLowerCase())
+        cityName.toLowerCase().includes(searchText.toLowerCase()) ||
+        job.ragione_sociale.toLowerCase().includes(searchText.toLowerCase())
       return matchCat && matchTipo && matchSearch
     })
-  }, [searchText, filterCat, filterTipo])
+  }, [searchText, filterCat, filterTipo, initialJobs])
 
   return (
     <div>
@@ -214,7 +73,7 @@ export default function JobBoard() {
                 <option value="tutte">Tutte le categorie</option>
                 {CATEGORIES.map((cat) => (
                   <option key={cat.slug} value={cat.slug}>
-                    {cat.icon} {cat.nameShort}
+                    {cat.nameShort}
                   </option>
                 ))}
               </select>
@@ -252,11 +111,16 @@ export default function JobBoard() {
               <div className="text-center py-16 text-slate-400">
                 <Briefcase className="w-10 h-10 mx-auto mb-3 opacity-40" />
                 <p className="font-medium">Nessuna offerta trovata</p>
-                <p className="text-sm mt-1">Prova a modificare i filtri</p>
+                <p className="text-sm mt-1">
+                  {initialJobs.length === 0
+                    ? 'Nessuna offerta attiva al momento. Torna presto!'
+                    : 'Prova a modificare i filtri'}
+                </p>
               </div>
             ) : (
               filtered.map((job) => {
                 const cat = CATEGORIES.find((c) => c.slug === job.categoria)
+                const { name: cityName, province } = getCityDisplay(job.citta)
                 return (
                   <article
                     key={job.id}
@@ -269,26 +133,26 @@ export default function JobBoard() {
                         </h2>
                         <div className="flex items-center gap-2 mt-1 text-sm text-slate-500">
                           <Building2 className="w-3.5 h-3.5 flex-shrink-0" />
-                          <span>{job.azienda}</span>
+                          <span>{job.ragione_sociale}</span>
                         </div>
                       </div>
-                      <span className="text-2xl flex-shrink-0">{cat?.icon}</span>
+                      {cat && <cat.icon className="w-7 h-7 flex-shrink-0 text-slate-400" />}
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2 mb-3">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${TIPO_COLORS[job.tipo]}`}>
-                        {job.tipo}
+                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${TIPO_COLORS[job.tipo_contratto]}`}>
+                        {job.tipo_contratto}
                       </span>
                       <span className="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">
-                        {cat?.nameShort}
+                        {cat?.nameShort ?? job.categoria}
                       </span>
                       <span className="flex items-center gap-1 text-xs text-slate-500">
                         <MapPin className="w-3.5 h-3.5" />
-                        {job.citta} ({job.provincia})
+                        {cityName}{province ? ` (${province})` : ''}
                       </span>
                       <span className="flex items-center gap-1 text-xs text-slate-400">
                         <Clock className="w-3.5 h-3.5" />
-                        {daysLabel(job.giorni)}
+                        {daysLabel(job.created_at)}
                       </span>
                     </div>
 

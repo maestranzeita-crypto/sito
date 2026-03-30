@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ArrowRight, ArrowLeft, CheckCircle2, Loader2, Phone, Mail, User, FileText, MapPin, Clock } from 'lucide-react'
 import { CATEGORIES, CITIES } from '@/lib/categories'
-import { createClient } from '@/lib/supabase/client'
+import type { UrgenzaType } from '@/lib/database.types'
 import Button from '@/components/ui/Button'
 
 interface Props {
@@ -15,13 +15,13 @@ type FormData = {
   categoria: string
   citta: string
   descrizione: string
-  urgenza: string
+  urgenza: UrgenzaType
   nome: string
   telefono: string
   email: string
 }
 
-const URGENCY_OPTIONS = [
+const URGENCY_OPTIONS: { value: UrgenzaType; label: string }[] = [
   { value: 'urgente', label: 'Urgente (entro 48h)' },
   { value: 'settimana', label: 'Entro una settimana' },
   { value: 'mese', label: 'Entro un mese' },
@@ -63,21 +63,26 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
     setLoading(true)
     setError('')
     try {
-      const supabase = createClient()
-      const { error: dbError } = await supabase.from('lead_requests').insert({
-        categoria: form.categoria,
-        citta: form.citta,
-        descrizione: form.descrizione,
-        urgenza: form.urgenza,
-        nome: form.nome,
-        telefono: form.telefono,
-        email: form.email,
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          categoria: form.categoria,
+          citta: form.citta,
+          descrizione: form.descrizione,
+          urgenza: form.urgenza,
+          nome: form.nome,
+          telefono: form.telefono,
+          email: form.email,
+        }),
       })
-      if (dbError) throw dbError
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error((data as { error?: string }).error ?? 'Errore server')
+      }
       setSubmitted(true)
-    } catch {
-      // DB non ancora configurato — mostriamo successo lo stesso
-      setSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Errore imprevisto. Riprova.')
     } finally {
       setLoading(false)
     }
@@ -177,7 +182,7 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
               <option value="" disabled>Seleziona un servizio...</option>
               {CATEGORIES.map((cat) => (
                 <option key={cat.slug} value={cat.slug}>
-                  {cat.icon} {cat.name}
+                  {cat.name}
                 </option>
               ))}
             </select>

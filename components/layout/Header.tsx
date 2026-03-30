@@ -43,13 +43,16 @@ export default function Header() {
                       href={`/${cat.slug}`}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-600"
                     >
-                      <span>{cat.icon}</span>
+                      <cat.icon className="w-4 h-4 text-slate-500 flex-shrink-0" />
                       {cat.nameShort}
                     </Link>
                   ))}
                 </div>
               )}
             </div>
+            <Link href="/calcolatore" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
+              Calcolatori
+            </Link>
             <Link href="/lavoro" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
               Trova Lavoro
             </Link>
@@ -93,11 +96,12 @@ export default function Header() {
               className="flex items-center gap-3 px-2 py-2.5 text-sm text-slate-700 hover:bg-orange-50 rounded-lg"
               onClick={() => setMobileOpen(false)}
             >
-              <span>{cat.icon}</span>
+              <cat.icon className="w-4 h-4 text-slate-500 flex-shrink-0" />
               {cat.nameShort}
             </Link>
           ))}
           <div className="border-t border-slate-100 pt-3 mt-3 space-y-2">
+            <Link href="/calcolatore" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Calcolatori</Link>
             <Link href="/lavoro" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Trova Lavoro</Link>
             <Link href="/blog" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Guide</Link>
             <Link href="/come-funziona" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Come Funziona</Link>

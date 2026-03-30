@@ -39,6 +39,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/registrati" className="hover:text-white transition-colors">Registrati Gratis</Link></li>
               <li><Link href="/come-funziona" className="hover:text-white transition-colors">Come Funziona</Link></li>
+              <li><Link href="/calcolatore/fotovoltaico" className="hover:text-white transition-colors">Calcolatore Fotovoltaico</Link></li>
               <li><Link href="/lavoro" className="hover:text-white transition-colors">Bacheca Offerte Lavoro</Link></li>
               <li><Link href="/blog" className="hover:text-white transition-colors">Guide e Risorse</Link></li>
             </ul>

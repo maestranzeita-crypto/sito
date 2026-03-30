@@ -152,7 +152,7 @@ export default function HomePage() {
                   <option value="" disabled>Che lavoro ti serve?</option>
                   {CATEGORIES.map((cat) => (
                     <option key={cat.slug} value={cat.slug}>
-                      {cat.icon} {cat.nameShort}
+                      {cat.nameShort}
                     </option>
                   ))}
                 </select>

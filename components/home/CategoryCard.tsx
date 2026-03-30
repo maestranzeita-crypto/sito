@@ -9,7 +9,7 @@ export default function CategoryCard({ cat }: { cat: Category }) {
   return (
     <div className="group bg-white rounded-2xl p-6 border border-slate-200 hover:border-orange-400 hover:shadow-lg transition-all duration-200">
       <Link href={`/${cat.slug}`} className="flex items-start gap-4">
-        <span className="text-4xl">{cat.icon}</span>
+        <cat.icon className="w-10 h-10 text-orange-500 flex-shrink-0" />
         <div className="flex-1">
           <h3 className="font-bold text-slate-900 group-hover:text-orange-600 transition-colors mb-1">
             {cat.name}

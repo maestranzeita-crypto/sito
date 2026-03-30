@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { headers } from 'next/headers'
 import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -53,17 +54,21 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') ?? ''
+  const hideChrome = pathname.startsWith('/dashboard') || pathname.startsWith('/accedi')
+
   return (
     <html lang="it">
       <body className={`${inter.className} antialiased bg-white text-slate-900`}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        {!hideChrome && <Header />}
+        {hideChrome ? children : <main>{children}</main>}
+        {!hideChrome && <Footer />}
       </body>
     </html>
   )
