@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import type { Category } from '@/lib/categories'
@@ -25,7 +23,6 @@ export default function CategoryCard({ cat }: { cat: Category }) {
           <Link
             key={city}
             href={`/${cat.slug}/${city.toLowerCase()}`}
-            onClick={(e) => e.stopPropagation()}
             className="text-xs bg-slate-100 hover:bg-orange-100 hover:text-orange-700 text-slate-600 px-2.5 py-1 rounded-full transition-colors"
           >
             {city}
