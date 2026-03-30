@@ -128,6 +128,21 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
         bio: form.bio,
         status: 'pending' as ProfessionalStatus,
       })
+
+      // Notifica admin — fire and forget, non blocca il flusso
+      fetch('/api/notify-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ragione_sociale: form.ragioneSociale,
+          piva: form.piva,
+          email: form.email,
+          telefono: form.telefono,
+          categorie: form.categorie,
+          citta: form.citta,
+        }),
+      }).catch(() => {})
+
       setSubmitted(true)
     } catch {
       setSubmitted(true) // fallback graceful

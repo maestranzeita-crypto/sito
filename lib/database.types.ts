@@ -2,7 +2,7 @@
 // Per rigenerare automaticamente: npx supabase gen types typescript --local > lib/database.types.ts
 
 export type LeadStatus = 'pending' | 'contacted' | 'closed'
-export type ProfessionalStatus = 'pending' | 'active' | 'suspended'
+export type ProfessionalStatus = 'pending' | 'active' | 'suspended' | 'rejected'
 export type ListingStatus = 'pending' | 'active' | 'closed' | 'expired'
 export type UrgenzaType = 'urgente' | 'settimana' | 'mese' | 'nessuna'
 export type ContrattoType = 'Dipendente' | 'Subappalto' | 'Progetto'
