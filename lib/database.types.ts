@@ -25,6 +25,7 @@ export type Database = {
           status: LeadStatus
           notes: string | null
           contacted_at: string | null
+          unlocked: boolean
         }
         Insert: {
           id?: string
@@ -39,6 +40,7 @@ export type Database = {
           status?: LeadStatus
           notes?: string | null
           contacted_at?: string | null
+          unlocked?: boolean
         }
         Update: Partial<Database['public']['Tables']['lead_requests']['Insert']>
         Relationships: []

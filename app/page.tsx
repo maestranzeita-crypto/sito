@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, Star, Users, Briefcase, Shield, Zap, TrendingUp } from 'lucide-react'
-// ArrowRight used in HOW_IT_WORKS sections and CTA buttons
-import { CATEGORIES } from '@/lib/categories'
 import Button from '@/components/ui/Button'
 import { SITE_DESCRIPTION } from '@/lib/utils'
 import CategoryCard from '@/components/home/CategoryCard'
+import HomeSearchForm from '@/components/home/HomeSearchForm'
+import { CATEGORIES } from '@/lib/categories'
 
 export const metadata: Metadata = {
   title: 'Maestranze — Trova Professionisti Edili e Impiantistici Verificati in Italia',
@@ -137,33 +137,7 @@ export default function HomePage() {
             </p>
 
             {/* Search box */}
-            <div className="bg-white rounded-2xl p-2 shadow-2xl max-w-2xl">
-              <div className="flex flex-col sm:flex-row gap-2">
-                <select
-                  className="flex-1 px-4 py-3 text-slate-800 bg-transparent rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-400 border border-slate-200"
-                  defaultValue=""
-                  aria-label="Tipo di servizio"
-                >
-                  <option value="" disabled>Che lavoro ti serve?</option>
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat.slug} value={cat.slug}>
-                      {cat.nameShort}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  placeholder="La tua città..."
-                  className="flex-1 px-4 py-3 text-slate-800 rounded-xl text-sm border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-400"
-                  aria-label="Città"
-                />
-                <Link href="/richiedi-preventivo">
-                  <Button size="md" className="w-full sm:w-auto whitespace-nowrap">
-                    Cerca Gratis <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
+            <HomeSearchForm />
 
             <p className="mt-4 text-sm text-slate-400">
               ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h

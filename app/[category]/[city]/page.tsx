@@ -1,7 +1,8 @@
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { CheckCircle2, ArrowRight, MapPin, Euro, Star, Users, Briefcase } from 'lucide-react'
+import { CheckCircle2, ArrowRight, MapPin, Euro, Star, Users, Briefcase, Loader2 } from 'lucide-react'
 import { CATEGORIES, CITIES, getCategoryBySlug, getCityBySlug } from '@/lib/categories'
 import { SITE_URL } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/server'
@@ -9,10 +10,10 @@ import type { Professional } from '@/lib/database.types'
 import ServiceSchema from '@/components/category/ServiceSchema'
 import FaqAccordion from '@/components/category/FaqAccordion'
 import RequestQuoteBanner from '@/components/category/RequestQuoteBanner'
+import ResultsClient from './ResultsClient'
 
-export const revalidate = 3600 // aggiorna ogni ora
+export const revalidate = 3600
 
-// Genera tutte le combinazioni categoria × città al build time
 export function generateStaticParams() {
   return CATEGORIES.flatMap((cat) =>
     CITIES.map((city) => ({ category: cat.slug, city: city.slug }))
@@ -47,10 +48,58 @@ export async function generateMetadata({
   }
 }
 
-function proYearsLabel(anni: string): string {
-  const n = parseInt(anni, 10)
-  if (!isNaN(n)) return `${n} ann${n === 1 ? 'o' : 'i'} esperienza`
-  return `${anni} anni esperienza`
+// Algoritmo di ranking dei professionisti
+function rankProfessionals(pros: Professional[]): Professional[] {
+  if (pros.length <= 1) return pros
+
+  const maxReviews = Math.max(...pros.map((p) => p.review_count), 1)
+
+  type Scored = { pro: Professional; score: number }
+
+  const scored: Scored[] = pros.map((pro) => {
+    // 1. Distanza (30%): tutti nella stessa città → score uniforme
+    const distanceScore = 1.0
+
+    // 2. Media stelle (25%)
+    const ratingScore = pro.rating_avg !== null ? pro.rating_avg / 5 : 0.3
+
+    // 3. Tasso di risposta (20%) — proxy: numero recensioni normalizzato
+    const responseRateScore = pro.review_count / maxReviews
+
+    // 4. Velocità risposta (15%) — proxy: is_top_rated
+    const responseSpeedScore = pro.is_top_rated ? 1.0 : 0.4
+
+    // 5. Completezza profilo (10%)
+    let completeness = 0
+    if (pro.foto_url) completeness += 0.25
+    if (pro.bio && pro.bio.length > 30) completeness += 0.25
+    if (pro.piva) completeness += 0.25
+    if (pro.verified_at) completeness += 0.25
+
+    const score =
+      distanceScore * 0.3 +
+      ratingScore * 0.25 +
+      responseRateScore * 0.2 +
+      responseSpeedScore * 0.15 +
+      completeness * 0.1
+
+    return { pro, score }
+  })
+
+  // Ordina per punteggio decrescente (sort stabile in JS ES2019+)
+  scored.sort((a, b) => b.score - a.score)
+  const ranked = scored.map((s) => s.pro)
+
+  // Boost Pro: ogni professionista is_top_rated sale di una posizione a parità
+  for (let i = 1; i < ranked.length; i++) {
+    if (ranked[i].is_top_rated && !ranked[i - 1].is_top_rated) {
+      const tmp = ranked[i]
+      ranked[i] = ranked[i - 1]
+      ranked[i - 1] = tmp
+    }
+  }
+
+  return ranked
 }
 
 export default async function CategoryCityPage({
@@ -69,13 +118,18 @@ export default async function CategoryCityPage({
     .contains('categorie', [cat.slug])
     .eq('citta', city.slug)
     .eq('status', 'active')
-    .order('is_top_rated', { ascending: false })
-    .order('rating_avg', { ascending: false, nullsFirst: false })
-    .limit(3)
-  const professionals: Professional[] = pros ?? []
+
+  const rankedPros: Professional[] = rankProfessionals(pros ?? [])
 
   const otherCities = CITIES.filter((c) => c.slug !== city.slug).slice(0, 15)
   const otherCategories = CATEGORIES.filter((c) => c.slug !== cat.slug)
+
+  const totalReviews = rankedPros.reduce((acc, p) => acc + p.review_count, 0)
+  const ratedPros = rankedPros.filter((p) => p.rating_avg !== null)
+  const avgRating =
+    ratedPros.length > 0
+      ? ratedPros.reduce((acc, p) => acc + p.rating_avg!, 0) / ratedPros.length
+      : null
 
   return (
     <>
@@ -84,7 +138,6 @@ export default async function CategoryCityPage({
       {/* ─── HERO ──────────────────────────────────────────────── */}
       <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-14 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
           <nav className="text-sm text-slate-400 mb-6 flex items-center gap-2 flex-wrap" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span>›</span>
@@ -135,28 +188,21 @@ export default async function CategoryCityPage({
             <div className="flex flex-col items-center gap-1">
               <Users className="w-5 h-5 text-orange-500" />
               <span className="text-2xl font-extrabold text-slate-900">
-                {professionals.length > 0 ? professionals.length : '—'}
+                {rankedPros.length > 0 ? rankedPros.length : '—'}
               </span>
               <span className="text-xs text-slate-500">Professionisti a {city.name}</span>
             </div>
             <div className="flex flex-col items-center gap-1">
               <Briefcase className="w-5 h-5 text-orange-500" />
               <span className="text-2xl font-extrabold text-slate-900">
-                {professionals.reduce((acc, p) => acc + p.review_count, 0) > 0
-                  ? professionals.reduce((acc, p) => acc + p.review_count, 0)
-                  : '—'}
+                {totalReviews > 0 ? totalReviews : '—'}
               </span>
               <span className="text-xs text-slate-500">Recensioni totali</span>
             </div>
             <div className="flex flex-col items-center gap-1">
               <Star className="w-5 h-5 text-orange-500" />
               <span className="text-2xl font-extrabold text-slate-900">
-                {(() => {
-                  const rated = professionals.filter((p) => p.rating_avg !== null)
-                  if (rated.length === 0) return '—'
-                  const avg = rated.reduce((acc, p) => acc + p.rating_avg!, 0) / rated.length
-                  return `${avg.toFixed(1)}/5`
-                })()}
+                {avgRating !== null ? `${avgRating.toFixed(1)}/5` : '—'}
               </span>
               <span className="text-xs text-slate-500">Valutazione media</span>
             </div>
@@ -164,7 +210,7 @@ export default async function CategoryCityPage({
         </div>
       </section>
 
-      {/* ─── PROFESSIONISTI ────────────────────────────────────── */}
+      {/* ─── LISTA PROFESSIONISTI ──────────────────────────────── */}
       <section className="py-14 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8">
@@ -184,110 +230,15 @@ export default async function CategoryCityPage({
             </Link>
           </div>
 
-          {professionals.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {professionals.map((pro) => (
-                <div key={pro.id} className="bg-white rounded-2xl border border-slate-200 p-5 hover:border-orange-300 hover:shadow-md transition-all">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center text-xl font-bold text-orange-600 flex-shrink-0">
-                      {pro.ragione_sociale.charAt(0)}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-bold text-slate-900 truncate">{pro.ragione_sociale}</span>
-                        {pro.is_top_rated && (
-                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-orange-600">
-                            Top Rated
-                          </span>
-                        )}
-                        {pro.verified_at && !pro.is_top_rated && (
-                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-600">
-                            Verificato
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-sm text-slate-500 mt-0.5">
-                        {cat.nameShort} · {city.name} · {proYearsLabel(pro.anni_esperienza)}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4 text-sm mb-4">
-                    {pro.rating_avg !== null ? (
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                        <span className="font-semibold text-slate-900">{pro.rating_avg.toFixed(1)}</span>
-                        <span className="text-slate-400">({pro.review_count} rec.)</span>
-                      </div>
-                    ) : (
-                      <span className="text-xs text-slate-400 italic">Nessuna recensione ancora</span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-1 text-sm text-slate-500 mb-4">
-                    <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                    {city.name}, {city.province}
-                  </div>
-
-                  <ul className="space-y-1.5 mb-5">
-                    {cat.services.slice(0, 3).map((service) => (
-                      <li key={service} className="flex items-start gap-2 text-xs text-slate-600">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-green-500 flex-shrink-0 mt-0.5" />
-                        {service}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/professionisti/${pro.id}`}
-                      className="flex-1 text-center border border-slate-200 hover:border-orange-400 text-slate-600 hover:text-orange-600 font-semibold text-sm py-2.5 rounded-xl transition-colors"
-                    >
-                      Vedi profilo
-                    </Link>
-                    <Link
-                      href={`/richiedi-preventivo?categoria=${cat.slug}&citta=${city.slug}`}
-                      className="flex-1 text-center bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
-                    >
-                      Preventivo
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-14 bg-white rounded-2xl border border-slate-200">
-              <Users className="w-10 h-10 mx-auto mb-3 text-slate-300" />
-              <p className="font-semibold text-slate-700 mb-1">
-                Nessun professionista ancora registrato a {city.name}
-              </p>
-              <p className="text-sm text-slate-500 mb-6">
-                Sei un {cat.nameShort.toLowerCase()} a {city.name}? Registrati gratis e raggiungi nuovi clienti.
-              </p>
-              <Link
-                href={`/registrati?categoria=${cat.slug}&citta=${city.slug}`}
-                className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-6 py-3 rounded-xl transition-colors"
-              >
-                Registrati gratis <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          )}
-
-          {/* CTA registrazione professionista (quando ci sono già pros) */}
-          {professionals.length > 0 && (
-            <div className="mt-6 text-center bg-white border border-dashed border-orange-300 rounded-2xl p-6">
-              <p className="text-slate-600 font-medium mb-3">
-                Sei un {cat.nameShort.toLowerCase()} a {city.name}?
-                <span className="text-slate-900"> Registrati gratis e raggiungi nuovi clienti.</span>
-              </p>
-              <Link
-                href={`/registrati?categoria=${cat.slug}&citta=${city.slug}`}
-                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors"
-              >
-                Crea il tuo profilo gratis <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          )}
+          <Suspense
+            fallback={
+              <div className="py-16 text-center">
+                <Loader2 className="w-8 h-8 animate-spin text-orange-500 mx-auto" />
+              </div>
+            }
+          >
+            <ResultsClient pros={rankedPros} category={cat} city={city} />
+          </Suspense>
         </div>
       </section>
 
@@ -318,7 +269,7 @@ export default async function CategoryCityPage({
               </div>
               <p className="text-2xl font-extrabold text-orange-600 mb-2">{cat.avgPrice}</p>
               <p className="text-sm text-slate-500 mb-6">
-                Il prezzo dipende dalla complessità del lavoro e dai materiali. Richiedi un preventivo gratuito per avere un costo preciso per il tuo intervento.
+                Il prezzo dipende dalla complessità del lavoro e dai materiali. Richiedi un preventivo gratuito per avere un costo preciso.
               </p>
               <div className="space-y-3 mb-6">
                 {[
