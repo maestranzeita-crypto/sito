@@ -202,7 +202,7 @@ function UnlockBanner({
             <><Unlock className="w-4 h-4" /> Sblocca tutti — €4,99</>
           )}
         </button>
-        <p className="text-xs text-slate-400 mt-2">€6,09 IVA inclusa · Pagamento sicuro con Stripe</p>
+        <p className="text-xs text-slate-400 mt-2">€6,09 IVA 22% inclusa · Pagamento sicuro con Stripe</p>
         {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
       </div>
     </div>

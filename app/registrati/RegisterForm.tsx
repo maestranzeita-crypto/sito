@@ -2,12 +2,10 @@
 
 import { useState } from 'react'
 import {
-  ArrowRight, ArrowLeft, CheckCircle2, Loader2,
+  ArrowRight, ArrowLeft, CheckCircle2, Loader2, AlertCircle,
   Phone, Mail, User, MapPin, Briefcase, Building2, FileCheck,
 } from 'lucide-react'
 import { CATEGORIES, CITIES } from '@/lib/categories'
-import { createClient } from '@/lib/supabase/client'
-import type { ProfessionalStatus } from '@/lib/database.types'
 import Button from '@/components/ui/Button'
 
 interface Props {
@@ -67,6 +65,7 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
   const [step, setStep] = useState(1)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [pivaError, setPivaError] = useState('')
 
   const [form, setForm] = useState<FormData>({
@@ -113,21 +112,30 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
 
   async function handleSubmit() {
     setLoading(true)
+    setSubmitError('')
     try {
-      const supabase = createClient()
-      await supabase.from('professionals').insert({
-        categorie: form.categorie,
-        citta: form.citta,
-        raggio_km: form.raggio,
-        ragione_sociale: form.ragioneSociale,
-        piva: form.piva,
-        forma_giuridica: form.formaGiuridica,
-        telefono: form.telefono,
-        email: form.email,
-        anni_esperienza: form.anniEsperienza,
-        bio: form.bio,
-        status: 'pending' as ProfessionalStatus,
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          categorie: form.categorie,
+          citta: form.citta,
+          raggio_km: form.raggio,
+          ragione_sociale: form.ragioneSociale,
+          piva: form.piva,
+          forma_giuridica: form.formaGiuridica,
+          telefono: form.telefono,
+          email: form.email,
+          anni_esperienza: form.anniEsperienza,
+          bio: form.bio,
+        }),
       })
+
+      const data = await res.json()
+      if (!res.ok) {
+        setSubmitError(data.error ?? 'Errore imprevisto. Riprova.')
+        return
+      }
 
       // Notifica admin — fire and forget, non blocca il flusso
       fetch('/api/notify-admin', {
@@ -145,7 +153,7 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
 
       setSubmitted(true)
     } catch {
-      setSubmitted(true) // fallback graceful
+      setSubmitError('Errore di connessione. Controlla la rete e riprova.')
     } finally {
       setLoading(false)
     }
@@ -464,6 +472,13 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
               Minimo 30 caratteri ({form.bio.length}/30)
             </p>
           </div>
+
+          {submitError && (
+            <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+              <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+              {submitError}
+            </div>
+          )}
 
           {/* Privacy */}
           <p className="text-xs text-slate-400 leading-relaxed">

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe, UNLOCK_PRICE_CENTS } from '@/lib/stripe'
+import { getStripe, UNLOCK_PRICE_CENTS } from '@/lib/stripe'
 import { SITE_URL } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     const successUrl = `${SITE_URL}/${category}/${city}?payment=success&sid={CHECKOUT_SESSION_ID}`
     const cancelUrl = `${SITE_URL}/${category}/${city}`
 
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       mode: 'payment',
       line_items: [
         {
@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
           },
         },
       ],
-      automatic_tax: { enabled: true },
       success_url: successUrl,
       cancel_url: cancelUrl,
       metadata: { category, city },

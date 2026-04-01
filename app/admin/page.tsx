@@ -4,7 +4,7 @@ import { createServerClient } from '@supabase/ssr'
 import type { Database, Professional } from '@/lib/database.types'
 import { approveProfessional, rejectProfessional, suspendProfessional } from './actions'
 
-const ADMIN_EMAIL = 'maestranze.ita@gmail.com'
+const ADMIN_EMAIL = 'info@maestranze.com'
 
 function createServiceClient() {
   return createServerClient<Database>(
