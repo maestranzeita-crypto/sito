@@ -17,21 +17,25 @@ export default function UpdatePasswordPage() {
   const [done, setDone] = useState(false)
   const [ready, setReady] = useState(false)
 
-  // Controlla subito la sessione, poi ascolta i cambiamenti come fallback
+  // Estrae il token dall'hash URL e imposta la sessione direttamente — nessuna attesa
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        setReady(true)
-        return
-      }
-      // Nessuna sessione ancora — aspetta l'evento auth
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-        if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
-          setReady(true)
-          subscription.unsubscribe()
-        }
-      })
-    })
+    const hash = window.location.hash.slice(1)
+    const params = new URLSearchParams(hash)
+    const accessToken = params.get('access_token')
+    const refreshToken = params.get('refresh_token') ?? ''
+
+    if (accessToken) {
+      supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+        .then(({ error }) => {
+          if (error) {
+            setError('Link non valido o scaduto. Contatta info@maestranze.com.')
+          } else {
+            setReady(true)
+          }
+        })
+    } else {
+      setError('Link non valido. Contatta info@maestranze.com.')
+    }
   }, [supabase])
 
   async function handleSubmit(e: React.FormEvent) {
