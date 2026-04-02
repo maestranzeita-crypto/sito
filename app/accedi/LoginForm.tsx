@@ -28,7 +28,7 @@ export default function LoginForm() {
     setLoading(true)
     setError('')
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
       setError('Email o password non corretti.')
@@ -36,7 +36,8 @@ export default function LoginForm() {
       return
     }
 
-    router.push(redirectTo)
+    const destination = data.user?.email === 'info@maestranze.com' ? '/admin' : redirectTo
+    router.push(destination)
     router.refresh()
   }
 
