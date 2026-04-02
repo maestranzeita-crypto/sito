@@ -49,7 +49,6 @@ export async function approveProfessional(
 ) {
   await getAdminUser()
   const supabase = createServiceClient()
-  const adminAuth = createAdminClient()
 
   const { error: dbError } = await supabase
     .from('professionals')
@@ -64,6 +63,7 @@ export async function approveProfessional(
   // Crea utente auth (ignora se già esiste) e genera link per impostare la password
   let passwordResetUrl = 'https://maestranze.com/dashboard'
   try {
+    const adminAuth = createAdminClient()
     const { error: createError } = await adminAuth.auth.admin.createUser({
       email,
       email_confirm: true,

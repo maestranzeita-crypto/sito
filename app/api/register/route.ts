@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import type { Database, ProfessionalStatus } from '@/lib/database.types'
-import { sendEmail, buildWelcomeEmailHtml } from '@/lib/emails'
 
 function createServiceClient() {
   return createServerClient<Database>(
@@ -52,13 +51,6 @@ export async function POST(request: Request) {
     console.error('[API register] DB insert error:', error.message)
     return NextResponse.json({ error: 'Errore nel salvataggio. Riprova.' }, { status: 500 })
   }
-
-  // Email di conferma ricezione registrazione (fire and forget)
-  sendEmail({
-    to: String(email),
-    subject: 'Abbiamo ricevuto la tua richiesta — Maestranze',
-    html: buildWelcomeEmailHtml({ ragioneSociale: String(ragione_sociale) }),
-  }).catch(() => {})
 
   return NextResponse.json({ ok: true })
 }
