@@ -3,11 +3,10 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createServerClient } from '@supabase/ssr'
-import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/database.types'
 import {
   sendEmail,
-  buildPasswordSetupEmailHtml,
+  buildApprovalEmailHtml,
   buildRejectionEmailHtml,
   sendTelegramMessage,
 } from '@/lib/emails'
@@ -20,14 +19,6 @@ function createServiceClient() {
       cookies: { getAll: () => [], setAll: () => {} },
       auth: { persistSession: false },
     }
-  )
-}
-
-function createAdminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
   )
 }
 
@@ -60,37 +51,11 @@ export async function approveProfessional(
     redirect('/admin?error=db')
   }
 
-  // Crea utente auth (ignora se già esiste) e genera link per impostare la password
-  let passwordResetUrl = 'https://maestranze.com/dashboard'
-  try {
-    const adminAuth = createAdminClient()
-    const { error: createError } = await adminAuth.auth.admin.createUser({
-      email,
-      email_confirm: true,
-    })
-    if (createError && !createError.message.includes('already been registered')) {
-      console.error('[approveProfessional] createUser error:', createError.message)
-    }
-
-    const { data: linkData, error: linkError } = await adminAuth.auth.admin.generateLink({
-      type: 'recovery',
-      email,
-      options: { redirectTo: 'https://maestranze.com/auth/update-password' },
-    })
-    if (linkError) {
-      console.error('[approveProfessional] generateLink error:', linkError.message)
-    } else if (linkData?.properties?.action_link) {
-      passwordResetUrl = linkData.properties.action_link
-    }
-  } catch (err) {
-    console.error('[approveProfessional] errore generazione link password:', err)
-  }
-
-  // Email con link imposta password
+  // Email di approvazione — un solo invio, nessuna dipendenza da Supabase Auth
   const sent = await sendEmail({
     to: email,
-    subject: 'Il tuo profilo Maestranze è attivo — imposta la tua password',
-    html: buildPasswordSetupEmailHtml({ ragioneSociale, passwordResetUrl }),
+    subject: 'Il tuo profilo Maestranze è attivo!',
+    html: buildApprovalEmailHtml({ ragioneSociale, profileId: id }),
   })
   if (!sent) {
     console.error('[approveProfessional] Email non inviata a', email)
