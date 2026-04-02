@@ -17,12 +17,20 @@ export default function UpdatePasswordPage() {
   const [done, setDone] = useState(false)
   const [ready, setReady] = useState(false)
 
-  // Il token arriva nel fragment (#access_token=...) — Supabase lo gestisce automaticamente
+  // Controlla subito la sessione, poi ascolta i cambiamenti come fallback
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
         setReady(true)
+        return
       }
+      // Nessuna sessione ancora — aspetta l'evento auth
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+        if (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') {
+          setReady(true)
+          subscription.unsubscribe()
+        }
+      })
     })
   }, [supabase])
 
