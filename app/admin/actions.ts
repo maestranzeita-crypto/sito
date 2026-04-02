@@ -64,19 +64,26 @@ export async function approveProfessional(
   // Crea utente auth (ignora se già esiste) e genera link per impostare la password
   let passwordResetUrl = 'https://maestranze.com/dashboard'
   try {
-    await adminAuth.auth.admin.createUser({ email, email_confirm: true })
-  } catch {
-    // utente già esistente — va bene
-  }
-  const { data: linkData, error: linkError } = await adminAuth.auth.admin.generateLink({
-    type: 'recovery',
-    email,
-    options: { redirectTo: 'https://maestranze.com/auth/update-password' },
-  })
-  if (linkError) {
-    console.error('[approveProfessional] generateLink error:', linkError.message)
-  } else if (linkData?.properties?.action_link) {
-    passwordResetUrl = linkData.properties.action_link
+    const { error: createError } = await adminAuth.auth.admin.createUser({
+      email,
+      email_confirm: true,
+    })
+    if (createError && !createError.message.includes('already been registered')) {
+      console.error('[approveProfessional] createUser error:', createError.message)
+    }
+
+    const { data: linkData, error: linkError } = await adminAuth.auth.admin.generateLink({
+      type: 'recovery',
+      email,
+      options: { redirectTo: 'https://maestranze.com/auth/update-password' },
+    })
+    if (linkError) {
+      console.error('[approveProfessional] generateLink error:', linkError.message)
+    } else if (linkData?.properties?.action_link) {
+      passwordResetUrl = linkData.properties.action_link
+    }
+  } catch (err) {
+    console.error('[approveProfessional] errore generazione link password:', err)
   }
 
   // Email con link imposta password
