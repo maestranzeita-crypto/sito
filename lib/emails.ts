@@ -2,6 +2,7 @@
 export type {
   WelcomeEmailData,
   ApprovalEmailData,
+  PasswordSetupEmailData,
   RejectionEmailData,
   LeadEmailData,
   ConfirmEmailData,
@@ -11,11 +12,38 @@ export type {
 export {
   buildWelcomeEmailHtml,
   buildApprovalEmailHtml,
+  buildPasswordSetupEmailHtml,
   buildRejectionEmailHtml,
   buildLeadEmailHtml,
   buildConfirmEmailHtml,
   buildAdminNotificationEmailHtml,
 } from '@/lib/email-templates'
+
+// ─── Telegram sender helper ──────────────────────────────────────────────────
+
+export async function sendTelegramMessage(chatId: string, text: string): Promise<boolean> {
+  const token = process.env.TELEGRAM_BOT_TOKEN
+  if (!token) {
+    console.warn('[Telegram] TELEGRAM_BOT_TOKEN non configurata — messaggio non inviato')
+    return false
+  }
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text }),
+    })
+    if (!res.ok) {
+      const body = await res.text()
+      console.error(`[Telegram] Errore ${res.status} inviando a ${chatId}:`, body)
+      return false
+    }
+    return true
+  } catch (err) {
+    console.error('[Telegram] Errore invio messaggio:', err)
+    return false
+  }
+}
 
 // ─── Resend sender helper ────────────────────────────────────────────────────
 export async function sendEmail({

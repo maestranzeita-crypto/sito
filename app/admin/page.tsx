@@ -146,7 +146,7 @@ function ProfessionalCard({ pro, mode }: { pro: Professional; mode: 'pending' | 
         <div className="flex gap-2 shrink-0">
           {mode === 'pending' && (
             <>
-              <form action={approveProfessional.bind(null, pro.id, pro.email, pro.ragione_sociale)}>
+              <form action={approveProfessional.bind(null, pro.id, pro.email, pro.ragione_sociale, pro.telegram_username)}>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors"

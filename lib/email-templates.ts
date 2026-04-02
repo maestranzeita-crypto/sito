@@ -329,6 +329,53 @@ export function buildConfirmEmailHtml(data: ConfirmEmailData): string {
   return layout('Richiesta ricevuta — Maestranze', body)
 }
 
+// ─── TEMPLATE 2b — SETUP PASSWORD DOPO APPROVAZIONE ─────────────────────────
+
+export type PasswordSetupEmailData = {
+  ragioneSociale: string
+  passwordResetUrl: string
+}
+
+export function buildPasswordSetupEmailHtml(data: PasswordSetupEmailData): string {
+  const body = `
+  <div style="text-align:center;margin-bottom:24px;">
+    <span style="display:inline-block;width:64px;height:64px;background-color:#dcfce7;border-radius:50%;text-align:center;line-height:64px;font-size:28px;">✓</span>
+  </div>
+  <h1 style="margin:0 0 8px;font-size:22px;font-weight:800;color:${DARK};text-align:center;font-family:Arial,Helvetica,sans-serif;">
+    Il tuo profilo è attivo!
+  </h1>
+  <p style="margin:0 0 28px;font-size:15px;color:${SLATE};line-height:1.6;text-align:center;font-family:Arial,Helvetica,sans-serif;">
+    Ciao <strong>${data.ragioneSociale}</strong>, il tuo profilo su Maestranze.com è stato verificato e approvato.
+    Da adesso sei visibile ai clienti della tua zona.
+  </p>
+
+  <p style="margin:0 0 16px;font-size:15px;color:${DARK};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
+    Per accedere alla tua dashboard e completare il profilo, imposta una password:
+  </p>
+
+  ${cta(data.passwordResetUrl, 'Imposta la tua password →')}
+
+  <p style="margin:0 0 24px;font-size:13px;color:${MUTED};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
+    Il link è valido per 24 ore. Se scade, scrivici a
+    <a href="mailto:info@maestranze.com" style="color:${ORANGE};text-decoration:none;">info@maestranze.com</a>
+    e ne generiamo uno nuovo.
+  </p>
+
+  <p style="margin:0 0 16px;font-size:14px;font-weight:700;color:${DARK};font-family:Arial,Helvetica,sans-serif;">Da adesso puoi</p>
+  ${steps([
+    ['1', 'Accedere alla dashboard e <strong>completare il profilo</strong> con foto e descrizione dettagliata.'],
+    ['2', 'Ricevere <strong>richieste di preventivo</strong> dai clienti nella tua zona.'],
+    ['3', 'Costruire la tua <strong>reputazione con le recensioni</strong> dei clienti soddisfatti.'],
+  ])}
+
+  <p style="margin:16px 0 0;font-size:13px;color:${MUTED};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
+    Bentornato nella community!<br>
+    <strong>Team Maestranze</strong>
+  </p>`
+
+  return layout('Il tuo profilo Maestranze è attivo — imposta la tua password', body)
+}
+
 // ─── TEMPLATE 5 — NOTIFICA ADMIN NUOVA REGISTRAZIONE ─────────────────────────
 
 export type AdminNotificationData = {

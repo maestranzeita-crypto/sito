@@ -24,6 +24,7 @@ type FormData = {
   email: string
   anniEsperienza: string
   bio: string
+  telegramUsername: string
 }
 
 const RAGGI = [
@@ -79,6 +80,7 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
     email: '',
     anniEsperienza: '5–10',
     bio: '',
+    telegramUsername: '',
   })
 
   const set = <K extends keyof FormData>(field: K, value: FormData[K]) =>
@@ -128,6 +130,7 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
           email: form.email,
           anni_esperienza: form.anniEsperienza,
           bio: form.bio,
+          telegram_username: form.telegramUsername.trim() || null,
         }),
       })
 
@@ -470,6 +473,23 @@ export default function RegisterForm({ defaultCategory, defaultCity }: Props) {
             />
             <p className={`text-xs mt-1 ${form.bio.length < 30 && form.bio.length > 0 ? 'text-red-500' : 'text-slate-400'}`}>
               Minimo 30 caratteri ({form.bio.length}/30)
+            </p>
+          </div>
+
+          {/* Telegram username (opzionale) */}
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+              Username Telegram <span className="text-slate-400 font-normal">(opzionale)</span>
+            </label>
+            <input
+              type="text"
+              value={form.telegramUsername}
+              onChange={(e) => set('telegramUsername', e.target.value)}
+              placeholder="Es. @tuonome"
+              className="w-full px-4 py-3 border border-slate-300 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+            />
+            <p className="text-xs text-slate-400 mt-1">
+              Se lo inserisci, ti invieremo un messaggio su Telegram quando il profilo viene approvato.
             </p>
           </div>
 

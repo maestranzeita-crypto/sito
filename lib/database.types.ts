@@ -66,6 +66,7 @@ export type Database = {
           rating_avg: number | null
           review_count: number
           verified_at: string | null
+          telegram_username: string | null
         }
         Insert: {
           id?: string
@@ -86,6 +87,7 @@ export type Database = {
           rating_avg?: number | null
           review_count?: number
           verified_at?: string | null
+          telegram_username?: string | null
         }
         Update: Partial<Database['public']['Tables']['professionals']['Insert']>
         Relationships: []
