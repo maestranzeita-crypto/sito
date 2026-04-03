@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createServerClient } from '@supabase/ssr'
-import type { Database, Professional } from '@/lib/database.types'
+import type { Database, Professional, LeadRequest } from '@/lib/database.types'
 import { approveProfessional, rejectProfessional, suspendProfessional } from './actions'
+import LeadsSection from './LeadsSection'
 
 const ADMIN_EMAIL = 'info@maestranze.com'
 
@@ -33,7 +34,7 @@ export default async function AdminPage() {
 
   const service = createServiceClient()
 
-  const [{ data: pending }, { data: active }] = await Promise.all([
+  const [{ data: pending }, { data: active }, { data: leads }, { data: allPros }] = await Promise.all([
     service
       .from('professionals')
       .select('*')
@@ -44,10 +45,21 @@ export default async function AdminPage() {
       .select('*')
       .eq('status', 'active')
       .order('created_at', { ascending: false }),
+    service
+      .from('lead_requests')
+      .select('*')
+      .order('created_at', { ascending: false }),
+    service
+      .from('professionals')
+      .select('*')
+      .in('status', ['active'])
+      .order('ragione_sociale', { ascending: true }),
   ])
 
   const pendingList = (pending ?? []) as Professional[]
   const activeList = (active ?? []) as Professional[]
+  const leadsList = (leads ?? []) as LeadRequest[]
+  const allProsList = (allPros ?? []) as Professional[]
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -102,6 +114,9 @@ export default async function AdminPage() {
             </div>
           )}
         </section>
+
+        {/* Leads Section */}
+        <LeadsSection leads={leadsList} professionals={allProsList} />
 
       </div>
     </div>

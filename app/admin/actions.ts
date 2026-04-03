@@ -141,3 +141,66 @@ export async function suspendProfessional(id: string) {
   revalidatePath('/admin')
 }
 
+export async function assignLeadManually(leadId: string, professionalId: string) {
+  await getAdminUser()
+  const supabase = createServiceClient()
+
+  const [{ data: lead }, { data: pro }] = await Promise.all([
+    supabase.from('lead_requests').select('*').eq('id', leadId).single(),
+    supabase.from('professionals').select('*').eq('id', professionalId).single(),
+  ])
+
+  if (!lead || !pro) throw new Error('Lead o professionista non trovato')
+
+  const { error } = await supabase
+    .from('lead_requests')
+    .update({ assigned_professional_id: professionalId, status: 'contacted' })
+    .eq('id', leadId)
+
+  if (error) throw new Error(error.message)
+
+  if (pro.telegram_username) {
+    await sendTelegramMessage(
+      pro.telegram_username,
+      `Nuovo lead assegnato da Maestranze!\n\nCliente: ${lead.nome}\nServizio: ${lead.categoria}\nCittà: ${lead.citta}\nTelefono: ${lead.telefono}\nEmail: ${lead.email}\n\nContattalo il prima possibile.`,
+    )
+  }
+
+  await sendEmail({
+    to: pro.email,
+    subject: `Nuovo cliente assegnato — ${lead.categoria} a ${lead.citta}`,
+    html: buildLeadAssignedEmail({ proName: pro.ragione_sociale, lead }),
+  })
+
+  revalidatePath('/admin')
+}
+
+function buildLeadAssignedEmail({
+  proName,
+  lead,
+}: {
+  proName: string
+  lead: { nome: string; categoria: string; citta: string; telefono: string; email: string }
+}): string {
+  return `<!DOCTYPE html>
+<html lang="it">
+<head><meta charset="UTF-8"><title>Nuovo lead assegnato</title></head>
+<body style="margin:0;padding:32px 16px;background:#f8fafc;font-family:Arial,sans-serif;">
+  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;padding:32px;border:1px solid #e2e8f0;">
+    <h1 style="color:#f97316;font-size:22px;margin-top:0;">Nuovo cliente assegnato</h1>
+    <p style="color:#475569;">Ciao <strong>${proName}</strong>,</p>
+    <p style="color:#475569;">Il team di Maestranze ti ha assegnato un nuovo cliente. Ecco i dettagli:</p>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+      <tr><td style="padding:8px 0;color:#94a3b8;font-size:13px;width:100px;">Cliente</td><td style="padding:8px 0;font-weight:600;color:#0f172a;">${lead.nome}</td></tr>
+      <tr><td style="padding:8px 0;color:#94a3b8;font-size:13px;">Servizio</td><td style="padding:8px 0;font-weight:600;color:#0f172a;">${lead.categoria}</td></tr>
+      <tr><td style="padding:8px 0;color:#94a3b8;font-size:13px;">Città</td><td style="padding:8px 0;font-weight:600;color:#0f172a;">${lead.citta}</td></tr>
+      <tr><td style="padding:8px 0;color:#94a3b8;font-size:13px;">Telefono</td><td style="padding:8px 0;font-weight:600;color:#0f172a;">${lead.telefono}</td></tr>
+      <tr><td style="padding:8px 0;color:#94a3b8;font-size:13px;">Email</td><td style="padding:8px 0;font-weight:600;color:#0f172a;">${lead.email}</td></tr>
+    </table>
+    <p style="color:#475569;">Contattalo il prima possibile per fornire un preventivo.</p>
+    <p style="color:#94a3b8;font-size:12px;margin-top:24px;">— Team Maestranze.com</p>
+  </div>
+</body>
+</html>`
+}
+

@@ -63,6 +63,7 @@ export type Database = {
           anni_esperienza: string
           bio: string
           foto_url: string | null
+          foto_lavori: string[]
           status: ProfessionalStatus
           is_top_rated: boolean
           rating_avg: number | null
@@ -90,6 +91,7 @@ export type Database = {
           anni_esperienza: string
           bio: string
           foto_url?: string | null
+          foto_lavori?: string[]
           status?: ProfessionalStatus
           is_top_rated?: boolean
           rating_avg?: number | null

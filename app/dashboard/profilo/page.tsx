@@ -4,6 +4,9 @@ import { Star, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import type { Professional, Review } from '@/lib/database.types'
 import ProfileForm from './ProfileForm'
+import MediaSection from './MediaSection'
+import CertificazioniSection from './CertificazioniSection'
+import GmbSection from './GmbSection'
 
 export const metadata: Metadata = {
   title: 'Il mio profilo — Dashboard Maestranze',
@@ -54,9 +57,27 @@ export default async function DashboardProfiloPage() {
         </div>
       )}
 
-      {/* ── FORM ── */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-8">
+      {/* ── PARTE 1: FOTO PROFILO E LAVORI ── */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-6">
+        <h2 className="font-extrabold text-slate-900 mb-6">Foto profilo e lavori</h2>
+        <MediaSection pro={pro} />
+      </div>
+
+      {/* ── FORM DATI ── */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-6">
         <ProfileForm pro={pro} />
+      </div>
+
+      {/* ── PARTE 2: CERTIFICAZIONI ── */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-6">
+        <h2 className="font-extrabold text-slate-900 mb-6">Certificazioni</h2>
+        <CertificazioniSection pro={pro} />
+      </div>
+
+      {/* ── PARTE 3: GOOGLE MY BUSINESS ── */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-8">
+        <h2 className="font-extrabold text-slate-900 mb-6">Google My Business</h2>
+        <GmbSection pro={pro} />
       </div>
 
       {/* ── RECENSIONI ── */}

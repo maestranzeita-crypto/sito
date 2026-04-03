@@ -278,6 +278,147 @@ export async function transferLead(leadId: string, toProfessionalId: string) {
   revalidatePath('/dashboard')
 }
 
+// ── Storage client (service role per upload/delete) ──────────────────────────
+function createStorageClient() {
+  const { createClient } = require('@supabase/supabase-js')
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  )
+}
+
+// ── Upload foto profilo ───────────────────────────────────────────────────────
+export async function uploadAvatar(formData: FormData): Promise<string> {
+  const pro = await getAuthenticatedPro()
+  const file = formData.get('file') as File
+  if (!file || file.size === 0) throw new Error('File mancante')
+
+  const ext = file.name.split('.').pop() ?? 'jpg'
+  const path = `${pro.id}/avatar.${ext}`
+  const arrayBuffer = await file.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+
+  const storage = createStorageClient()
+  const { error } = await storage.storage
+    .from('avatars')
+    .upload(path, buffer, { upsert: true, contentType: file.type })
+  if (error) throw new Error(error.message)
+
+  const { data: { publicUrl } } = storage.storage.from('avatars').getPublicUrl(path)
+
+  const service = createServiceClient()
+  await service.from('professionals').update({ foto_url: publicUrl }).eq('id', pro.id)
+
+  revalidatePath('/dashboard')
+  return publicUrl
+}
+
+// ── Elimina foto profilo ──────────────────────────────────────────────────────
+export async function deleteAvatar(): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+
+  const { data: proData } = await service
+    .from('professionals')
+    .select('foto_url')
+    .eq('id', pro.id)
+    .single()
+
+  if (proData?.foto_url) {
+    const pathPart = proData.foto_url.split('/avatars/')[1]
+    if (pathPart) {
+      const storage = createStorageClient()
+      await storage.storage.from('avatars').remove([pathPart])
+    }
+  }
+
+  await service.from('professionals').update({ foto_url: null }).eq('id', pro.id)
+  revalidatePath('/dashboard')
+}
+
+// ── Upload foto lavori (portfolio) ────────────────────────────────────────────
+export async function uploadPortfolioPhoto(formData: FormData): Promise<string> {
+  const pro = await getAuthenticatedPro()
+  const file = formData.get('file') as File
+  if (!file || file.size === 0) throw new Error('File mancante')
+
+  const service = createServiceClient()
+  const { data: proData } = await service
+    .from('professionals')
+    .select('foto_lavori')
+    .eq('id', pro.id)
+    .single()
+  const current: string[] = (proData?.foto_lavori as string[]) ?? []
+  if (current.length >= 10) throw new Error('Massimo 10 foto nel portfolio')
+
+  const ext = file.name.split('.').pop() ?? 'jpg'
+  const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+  const path = `${pro.id}/${uniqueName}`
+  const arrayBuffer = await file.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+
+  const storage = createStorageClient()
+  const { error } = await storage.storage
+    .from('portfolio')
+    .upload(path, buffer, { contentType: file.type })
+  if (error) throw new Error(error.message)
+
+  const { data: { publicUrl } } = storage.storage.from('portfolio').getPublicUrl(path)
+  const updated = [...current, publicUrl]
+  await service.from('professionals').update({ foto_lavori: updated }).eq('id', pro.id)
+
+  revalidatePath('/dashboard')
+  return publicUrl
+}
+
+// ── Elimina foto lavori ───────────────────────────────────────────────────────
+export async function deletePortfolioPhoto(photoUrl: string): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+
+  const { data: proData } = await service
+    .from('professionals')
+    .select('foto_lavori')
+    .eq('id', pro.id)
+    .single()
+  const current: string[] = (proData?.foto_lavori as string[]) ?? []
+
+  const pathPart = photoUrl.split('/portfolio/')[1]
+  if (pathPart) {
+    const storage = createStorageClient()
+    await storage.storage.from('portfolio').remove([pathPart])
+  }
+
+  const updated = current.filter((u) => u !== photoUrl)
+  await service.from('professionals').update({ foto_lavori: updated }).eq('id', pro.id)
+  revalidatePath('/dashboard')
+}
+
+// ── Salva certificazioni ──────────────────────────────────────────────────────
+export async function saveCertificazioni(certificazioni: string[]): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  await service
+    .from('professionals')
+    .update({ certificazioni })
+    .eq('id', pro.id)
+  revalidatePath('/dashboard')
+  revalidatePath(`/professionisti/${pro.id}`)
+}
+
+// ── Salva link Google My Business ─────────────────────────────────────────────
+export async function saveGmbLink(gmbLink: string): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  await service
+    .from('professionals')
+    .update({ gmb_link: gmbLink || null })
+    .eq('id', pro.id)
+  revalidatePath('/dashboard')
+  revalidatePath(`/professionisti/${pro.id}`)
+}
+
 export async function createProUpgradeCheckout() {
   const pro = await getAuthenticatedPro()
 
