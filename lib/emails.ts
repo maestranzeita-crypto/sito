@@ -7,6 +7,9 @@ export type {
   LeadEmailData,
   ConfirmEmailData,
   AdminNotificationData,
+  WaitlistNotifyEmailData,
+  LeadTransferredToColleagueData,
+  LeadTransferredToClientData,
 } from '@/lib/email-templates'
 
 export {
@@ -17,6 +20,9 @@ export {
   buildLeadEmailHtml,
   buildConfirmEmailHtml,
   buildAdminNotificationEmailHtml,
+  buildWaitlistNotifyEmailHtml,
+  buildLeadTransferredToColleagueEmailHtml,
+  buildLeadTransferredToClientEmailHtml,
 } from '@/lib/email-templates'
 
 // ─── Telegram sender helper ──────────────────────────────────────────────────

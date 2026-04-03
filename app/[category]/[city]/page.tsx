@@ -53,35 +53,40 @@ function rankProfessionals(pros: Professional[]): Professional[] {
   if (pros.length <= 1) return pros
 
   const maxReviews = Math.max(...pros.map((p) => p.review_count), 1)
+  const maxReputation = Math.max(...pros.map((p) => p.reputation_points ?? 0), 1)
 
   type Scored = { pro: Professional; score: number }
 
   const scored: Scored[] = pros.map((pro) => {
-    // 1. Distanza (30%): tutti nella stessa città → score uniforme
+    // 1. Distanza (29%): tutti nella stessa città → score uniforme
     const distanceScore = 1.0
 
-    // 2. Media stelle (25%)
+    // 2. Media stelle (24%)
     const ratingScore = pro.rating_avg !== null ? pro.rating_avg / 5 : 0.3
 
-    // 3. Tasso di risposta (20%) — proxy: numero recensioni normalizzato
+    // 3. Tasso di risposta (19%) — proxy: numero recensioni normalizzato
     const responseRateScore = pro.review_count / maxReviews
 
-    // 4. Velocità risposta (15%) — proxy: is_top_rated
+    // 4. Velocità risposta (14%) — proxy: is_top_rated
     const responseSpeedScore = pro.is_top_rated ? 1.0 : 0.4
 
-    // 5. Completezza profilo (10%)
+    // 5. Completezza profilo (9%)
     let completeness = 0
     if (pro.foto_url) completeness += 0.25
     if (pro.bio && pro.bio.length > 30) completeness += 0.25
     if (pro.piva) completeness += 0.25
     if (pro.verified_at) completeness += 0.25
 
+    // 6. Punti reputazione (5%) — guadagnati cedendo richieste ai colleghi
+    const reputationScore = (pro.reputation_points ?? 0) / maxReputation
+
     const score =
-      distanceScore * 0.3 +
-      ratingScore * 0.25 +
-      responseRateScore * 0.2 +
-      responseSpeedScore * 0.15 +
-      completeness * 0.1
+      distanceScore * 0.29 +
+      ratingScore * 0.24 +
+      responseRateScore * 0.19 +
+      responseSpeedScore * 0.14 +
+      completeness * 0.09 +
+      reputationScore * 0.05
 
     return { pro, score }
   })

@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Star, MapPin, CheckCircle2, Lock, Unlock, ArrowRight, Loader2 } from 'lucide-react'
+import { Star, MapPin, CheckCircle2, Lock, Unlock, ArrowRight, Loader2, PauseCircle } from 'lucide-react'
 import type { Professional } from '@/lib/database.types'
 import type { Category, City } from '@/lib/categories'
 
@@ -93,6 +93,11 @@ function ProCard({
                 Verificato
               </span>
             )}
+            {!blurred && pro.available === false && (
+              <span className="flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-400">
+                <PauseCircle className="w-3 h-3" /> Non disponibile
+              </span>
+            )}
           </div>
           <p className="text-sm text-slate-500 mt-0.5">
             {category.nameShort} · {city.name} · {proYearsLabel(pro.anni_esperienza)}
@@ -130,12 +135,21 @@ function ProCard({
           >
             Vedi profilo
           </Link>
-          <Link
-            href={`/richiedi-preventivo?categoria=${category.slug}&citta=${city.slug}`}
-            className="flex-1 text-center bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
-          >
-            Preventivo
-          </Link>
+          {pro.available === false ? (
+            <Link
+              href={`/professionisti/${pro.id}#avvisami`}
+              className="flex-1 text-center bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold text-sm py-2.5 rounded-xl transition-colors"
+            >
+              Avvisami
+            </Link>
+          ) : (
+            <Link
+              href={`/richiedi-preventivo?categoria=${category.slug}&citta=${city.slug}`}
+              className="flex-1 text-center bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm py-2.5 rounded-xl transition-colors"
+            >
+              Preventivo
+            </Link>
+          )}
         </div>
       )}
     </div>

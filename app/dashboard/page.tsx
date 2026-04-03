@@ -10,6 +10,7 @@ import type { Database, LeadRequest, Professional, Review } from '@/lib/database
 import { getCategoryBySlug } from '@/lib/categories'
 import { LeadsSection } from './LeadsSection'
 import { ReviewsSection } from './ReviewsSection'
+import { AvailabilityToggle } from './AvailabilityToggle'
 import { createProUpgradeCheckout } from './actions'
 
 // ── Service-role client (bypassa RLS per lettura dati dashboard) ──
@@ -153,12 +154,13 @@ export default async function DashboardPage() {
   const lastWeekStart  = startOfWeek(-1)
 
   const [leadsRes, reviewsRes, viewsThisWeekRes, viewsLastWeekRes] = await Promise.all([
-    // Lead nella zona del professionista
+    // Lead nella zona del professionista (non assegnati ad altri o assegnati a questo pro)
     service
       .from('lead_requests')
       .select('*')
       .in('categoria', pro.categorie)
       .eq('citta', pro.citta)
+      .or(`assigned_professional_id.is.null,assigned_professional_id.eq.${pro.id}`)
       .order('created_at', { ascending: false })
       .limit(50),
 
@@ -223,19 +225,22 @@ export default async function DashboardPage() {
 
       {/* ══ HEADER: 4 STAT CARD ══════════════════════════════════ */}
       <div>
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900">
               Ciao, {pro.ragione_sociale.split(' ')[0]}
             </h1>
             <p className="text-slate-500 text-sm mt-0.5">Dashboard professionista</p>
           </div>
-          {pro.status === 'pending' && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center gap-2 text-xs font-medium text-amber-800">
-              <AlertCircle className="w-4 h-4 text-amber-500" />
-              Profilo in revisione
-            </div>
-          )}
+          <div className="flex items-center gap-2 flex-wrap">
+            {pro.status === 'pending' && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center gap-2 text-xs font-medium text-amber-800">
+                <AlertCircle className="w-4 h-4 text-amber-500" />
+                Profilo in revisione
+              </div>
+            )}
+            <AvailabilityToggle initialAvailable={pro.available ?? true} />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

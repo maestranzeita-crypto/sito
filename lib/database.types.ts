@@ -26,6 +26,7 @@ export type Database = {
           notes: string | null
           contacted_at: string | null
           unlocked: boolean
+          assigned_professional_id: string | null
         }
         Insert: {
           id?: string
@@ -41,6 +42,7 @@ export type Database = {
           notes?: string | null
           contacted_at?: string | null
           unlocked?: boolean
+          assigned_professional_id?: string | null
         }
         Update: Partial<Database['public']['Tables']['lead_requests']['Insert']>
         Relationships: []
@@ -67,6 +69,12 @@ export type Database = {
           review_count: number
           verified_at: string | null
           telegram_username: string | null
+          gmb_link: string | null
+          certificazioni: string[]
+          plan_type: string
+          plan_expires_at: string | null
+          available: boolean
+          reputation_points: number
         }
         Insert: {
           id?: string
@@ -88,6 +96,12 @@ export type Database = {
           review_count?: number
           verified_at?: string | null
           telegram_username?: string | null
+          gmb_link?: string | null
+          certificazioni?: string[]
+          plan_type?: string
+          plan_expires_at?: string | null
+          available?: boolean
+          reputation_points?: number
         }
         Update: Partial<Database['public']['Tables']['professionals']['Insert']>
         Relationships: []
@@ -176,6 +190,7 @@ export type Database = {
           nome_cliente: string
           verified: boolean
           verified_at: string | null
+          risposta_professionista: string | null
         }
         Insert: {
           id?: string
@@ -187,6 +202,7 @@ export type Database = {
           nome_cliente: string
           verified?: boolean
           verified_at?: string | null
+          risposta_professionista?: string | null
         }
         Update: Partial<Database['public']['Tables']['reviews']['Insert']>
         Relationships: [
@@ -199,6 +215,55 @@ export type Database = {
           }
         ]
       }
+
+      profile_views: {
+        Row: {
+          id: string
+          professional_id: string
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          professional_id: string
+          viewed_at?: string
+        }
+        Update: Partial<Database['public']['Tables']['profile_views']['Insert']>
+        Relationships: [
+          {
+            foreignKeyName: 'profile_views_professional_id_fkey'
+            columns: ['professional_id']
+            isOneToOne: false
+            referencedRelation: 'professionals'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+
+      waitlist: {
+        Row: {
+          id: string
+          professional_id: string
+          email: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          professional_id: string
+          email: string
+          created_at?: string
+        }
+        Update: Partial<Database['public']['Tables']['waitlist']['Insert']>
+        Relationships: [
+          {
+            foreignKeyName: 'waitlist_professional_id_fkey'
+            columns: ['professional_id']
+            isOneToOne: false
+            referencedRelation: 'professionals'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+
     }
     Views: Record<string, never>
     Enums: Record<string, never>
@@ -218,3 +283,5 @@ export type Professional = Database['public']['Tables']['professionals']['Row']
 export type JobListing = Database['public']['Tables']['job_listings']['Row']
 export type JobApplication = Database['public']['Tables']['job_applications']['Row']
 export type Review = Database['public']['Tables']['reviews']['Row']
+export type ProfileView = Database['public']['Tables']['profile_views']['Row']
+export type Waitlist = Database['public']['Tables']['waitlist']['Row']

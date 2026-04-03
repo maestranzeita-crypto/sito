@@ -2,14 +2,15 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
-  MapPin, Star, CheckCircle2, Briefcase, Phone, Mail,
-  ArrowRight, Shield, Clock, Users,
+  MapPin, Star, CheckCircle2, Briefcase,
+  ArrowRight, Shield, Clock, Users, PauseCircle,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import type { Professional, Review } from '@/lib/database.types'
 import { getCategoryBySlug } from '@/lib/categories'
 import { SITE_URL } from '@/lib/utils'
 import ContactProForm from './ContactProForm'
+import WaitlistForm from './WaitlistForm'
 
 export const revalidate = 3600
 
@@ -140,6 +141,11 @@ export default async function ProfiloPage({ params }: { params: { id: string } }
                     <Shield className="w-3 h-3" /> Verificato
                   </span>
                 )}
+                {pro.available === false && (
+                  <span className="flex items-center gap-1 text-xs font-semibold text-slate-400 bg-slate-400/10 px-2.5 py-1 rounded-full">
+                    <PauseCircle className="w-3 h-3" /> Al momento non disponibile
+                  </span>
+                )}
               </div>
 
               {/* Categorie */}
@@ -263,18 +269,30 @@ export default async function ProfiloPage({ params }: { params: { id: string } }
 
             {/* ── COLONNA DESTRA — FORM CONTATTO ── */}
             <div className="lg:col-span-1 space-y-5">
-              {/* Form */}
-              <div className="bg-white rounded-2xl border border-orange-200 shadow-sm p-6 sticky top-24">
-                <div className="mb-4">
-                  <h2 className="font-extrabold text-slate-900 mb-1">Richiedi un preventivo</h2>
-                  <p className="text-xs text-slate-500">Contatto diretto · Gratuito · Senza impegno</p>
-                </div>
-                <ContactProForm
-                  proId={pro.id}
-                  proName={pro.ragione_sociale}
-                  categories={pro.categorie}
-                  citta={pro.citta}
-                />
+              {/* Form contatto / waitlist */}
+              <div className="bg-white rounded-2xl border border-orange-200 shadow-sm p-6 sticky top-24" id="avvisami">
+                {pro.available === false ? (
+                  <>
+                    <div className="mb-4">
+                      <h2 className="font-extrabold text-slate-900 mb-1">Avvisami quando torna disponibile</h2>
+                      <p className="text-xs text-slate-500">Gratuito · Nessuna pubblicità</p>
+                    </div>
+                    <WaitlistForm professionalId={pro.id} />
+                  </>
+                ) : (
+                  <>
+                    <div className="mb-4">
+                      <h2 className="font-extrabold text-slate-900 mb-1">Richiedi un preventivo</h2>
+                      <p className="text-xs text-slate-500">Contatto diretto · Gratuito · Senza impegno</p>
+                    </div>
+                    <ContactProForm
+                      proId={pro.id}
+                      proName={pro.ragione_sociale}
+                      categories={pro.categorie}
+                      citta={pro.citta}
+                    />
+                  </>
+                )}
               </div>
 
               {/* Trust badges */}

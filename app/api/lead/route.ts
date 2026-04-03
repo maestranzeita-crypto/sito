@@ -53,11 +53,12 @@ export async function POST(request: Request) {
   const cat = getCategoryBySlug(categoria)
   const categoriaLabel = cat?.nameShort ?? categoria
 
-  // 2. Trova professionisti attivi che coprono questa categoria + città
+  // 2. Trova professionisti attivi e disponibili che coprono questa categoria + città
   const { data: prosData } = await supabase
     .from('professionals')
     .select('ragione_sociale, email, categorie, citta')
     .eq('status', 'active')
+    .eq('available', true)
     .contains('categorie', [categoria])
     .eq('citta', citta.toLowerCase().replace(/\s+/g, '-'))
     .limit(10)

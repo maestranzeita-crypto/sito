@@ -416,3 +416,132 @@ export function buildAdminNotificationEmailHtml(data: AdminNotificationData): st
 
   return layout(`Nuova registrazione — ${data.ragioneSociale}`, body)
 }
+
+// ─── TEMPLATE 6 — WAITLIST: PRO TORNATO DISPONIBILE ─────────────────────────
+
+export type WaitlistNotifyEmailData = {
+  clienteEmail: string
+  proName: string
+  proId: string
+  categoriaLabel: string
+}
+
+export function buildWaitlistNotifyEmailHtml(data: WaitlistNotifyEmailData): string {
+  const profileUrl = `${SITE}/professionisti/${data.proId}`
+
+  const body = `
+  <div style="text-align:center;margin-bottom:24px;">
+    <span style="display:inline-block;width:64px;height:64px;background-color:#dcfce7;border-radius:50%;text-align:center;line-height:64px;font-size:28px;">🟢</span>
+  </div>
+  <h1 style="margin:0 0 8px;font-size:22px;font-weight:800;color:${DARK};text-align:center;font-family:Arial,Helvetica,sans-serif;">
+    Il professionista è tornato disponibile!
+  </h1>
+  <p style="margin:0 0 28px;font-size:15px;color:${SLATE};line-height:1.6;text-align:center;font-family:Arial,Helvetica,sans-serif;">
+    <strong>${data.proName}</strong> (${data.categoriaLabel}) che avevi salvato nella lista d'attesa
+    è ora nuovamente disponibile su Maestranze.com.
+  </p>
+
+  ${cta(`${profileUrl}`, 'Richiedi un preventivo →')}
+
+  <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
+    Hai ricevuto questa email perché hai richiesto di essere avvisato quando ${data.proName} tornasse disponibile.
+  </p>`
+
+  return layout(`${data.proName} è tornato disponibile — Maestranze`, body)
+}
+
+// ─── TEMPLATE 7 — LEAD CEDUTO AL COLLEGA ────────────────────────────────────
+
+export type LeadTransferredToColleagueData = {
+  collegaName: string
+  cedenteName: string
+  categoriaLabel: string
+  citta: string
+  clienteNome: string
+  clienteTelefono: string
+  clienteEmail: string
+  descrizione: string
+}
+
+export function buildLeadTransferredToColleagueEmailHtml(data: LeadTransferredToColleagueData): string {
+  const body = `
+  <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:.08em;font-family:Arial,Helvetica,sans-serif;">
+    Richiesta ceduta da un collega
+  </p>
+  <h1 style="margin:0 0 20px;font-size:22px;font-weight:800;color:${DARK};line-height:1.3;font-family:Arial,Helvetica,sans-serif;">
+    ${data.cedenteName} ti ha ceduto una richiesta di preventivo
+  </h1>
+  <p style="margin:0 0 24px;font-size:15px;color:${SLATE};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
+    Ciao <strong>${data.collegaName}</strong>, il tuo collega <strong>${data.cedenteName}</strong>
+    non era disponibile e ha pensato a te per questa richiesta di ${data.categoriaLabel} a ${data.citta}.
+    Contatta il cliente il prima possibile!
+  </p>
+
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+         style="background-color:#f8fafc;border-radius:10px;border:1px solid ${BORDER};margin-bottom:20px;">
+    <tr><td style="padding:20px 24px;">
+      <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:${MUTED};text-transform:uppercase;letter-spacing:.08em;font-family:Arial,Helvetica,sans-serif;">Servizio richiesto</p>
+      <p style="margin:0 0 16px;font-size:15px;font-weight:700;color:${DARK};font-family:Arial,Helvetica,sans-serif;">${data.categoriaLabel} · ${data.citta}</p>
+      <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:${MUTED};text-transform:uppercase;letter-spacing:.08em;font-family:Arial,Helvetica,sans-serif;">Descrizione</p>
+      <p style="margin:0;font-size:15px;color:#334155;line-height:1.6;font-family:Arial,Helvetica,sans-serif;">${data.descrizione}</p>
+    </td></tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+         style="background-color:#fff7ed;border-radius:10px;border:1px solid #fed7aa;margin-bottom:28px;">
+    <tr><td style="padding:20px 24px;">
+      <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:${MUTED};text-transform:uppercase;letter-spacing:.08em;font-family:Arial,Helvetica,sans-serif;">Contatti del cliente</p>
+      <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:${DARK};font-family:Arial,Helvetica,sans-serif;">${data.clienteNome}</p>
+      <p style="margin:0 0 6px;font-size:14px;color:#334155;font-family:Arial,Helvetica,sans-serif;">
+        &#128222; <a href="tel:${data.clienteTelefono}" style="color:${ORANGE};font-weight:600;text-decoration:none;">${data.clienteTelefono}</a>
+      </p>
+      <p style="margin:0;font-size:14px;color:#334155;font-family:Arial,Helvetica,sans-serif;">
+        &#9993; <a href="mailto:${data.clienteEmail}" style="color:${ORANGE};font-weight:600;text-decoration:none;">${data.clienteEmail}</a>
+      </p>
+    </td></tr>
+  </table>
+
+  ${cta(`${SITE}/dashboard`, 'Vai alla dashboard →')}
+
+  <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
+    Questa richiesta è stata ceduta direttamente a te da un collega di Maestranze.com.
+  </p>`
+
+  return layout(`Richiesta ceduta: ${data.categoriaLabel} a ${data.citta}`, body)
+}
+
+// ─── TEMPLATE 8 — NOTIFICA CLIENTE: RICHIESTA PRESA IN CARICO ───────────────
+
+export type LeadTransferredToClientData = {
+  clienteNome: string
+  collegaName: string
+  categoriaLabel: string
+  citta: string
+  proId: string
+}
+
+export function buildLeadTransferredToClientEmailHtml(data: LeadTransferredToClientData): string {
+  const profileUrl = `${SITE}/professionisti/${data.proId}`
+
+  const body = `
+  <div style="text-align:center;margin-bottom:24px;">
+    <span style="display:inline-block;width:64px;height:64px;background-color:#dbeafe;border-radius:50%;text-align:center;line-height:64px;font-size:28px;">👷</span>
+  </div>
+  <h1 style="margin:0 0 8px;font-size:22px;font-weight:800;color:${DARK};text-align:center;font-family:Arial,Helvetica,sans-serif;">
+    Il tuo preventivo è in buone mani!
+  </h1>
+  <p style="margin:0 0 28px;font-size:15px;color:${SLATE};line-height:1.6;text-align:center;font-family:Arial,Helvetica,sans-serif;">
+    Ciao <strong>${data.clienteNome}</strong>, la tua richiesta di <strong>${data.categoriaLabel}</strong>
+    a <strong>${data.citta}</strong> è stata presa in carico da
+    <strong>${data.collegaName}</strong> su Maestranze.com.
+    Ti contatterà al più presto con un preventivo.
+  </p>
+
+  ${cta(profileUrl, `Vedi il profilo di ${data.collegaName} →`)}
+
+  <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
+    Hai ricevuto questa email perché hai inviato una richiesta di preventivo su Maestranze.com.
+  </p>`
+
+  return layout(`Il tuo preventivo è stato preso in carico — Maestranze`, body)
+}
