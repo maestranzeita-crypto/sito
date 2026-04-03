@@ -22,8 +22,8 @@ export function AvailabilityToggle({ initialAvailable }: { initialAvailable: boo
       title={available ? 'Clicca per mettere in pausa il profilo' : 'Clicca per tornare disponibile'}
       className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl border transition-colors disabled:opacity-60 ${
         available
-          ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100'
-          : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'
+          ? 'bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-950/60'
+          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
       }`}
     >
       {isPending ? (
