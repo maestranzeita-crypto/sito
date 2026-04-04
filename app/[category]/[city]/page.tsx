@@ -5,7 +5,16 @@ import Link from 'next/link'
 import { CheckCircle2, ArrowRight, MapPin, Euro, Star, Users, Briefcase, Loader2 } from 'lucide-react'
 import { CATEGORIES, CITIES, getCategoryBySlug, getCityBySlug } from '@/lib/categories'
 import { SITE_URL } from '@/lib/utils'
-import { createClient } from '@/lib/supabase/server'
+import { createServerClient } from '@supabase/ssr'
+import type { Database } from '@/lib/database.types'
+
+function createPublicClient() {
+  return createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => [], setAll: () => {} } }
+  )
+}
 import type { Professional } from '@/lib/database.types'
 import ServiceSchema from '@/components/category/ServiceSchema'
 import FaqAccordion from '@/components/category/FaqAccordion'
@@ -116,15 +125,20 @@ export default async function CategoryCityPage({
   const city = getCityBySlug(params.city)
   if (!cat || !city) notFound()
 
-  const supabase = await createClient()
-  const { data: pros } = await supabase
-    .from('professionals')
-    .select('*')
-    .contains('categorie', [cat.slug])
-    .eq('citta', city.slug)
-    .eq('status', 'active')
-
-  const rankedPros: Professional[] = rankProfessionals(pros ?? [])
+  let rankedPros: Professional[] = []
+  try {
+    const supabase = createPublicClient()
+    const { data: pros, error } = await supabase
+      .from('professionals')
+      .select('*')
+      .contains('categorie', [cat.slug])
+      .eq('citta', city.slug)
+      .eq('status', 'active')
+    if (error) console.error('[CategoryCityPage] Supabase error:', error.message)
+    rankedPros = rankProfessionals(pros ?? [])
+  } catch (err) {
+    console.error('[CategoryCityPage] createClient/query failed:', err)
+  }
 
   const otherCities = CITIES.filter((c) => c.slug !== city.slug).slice(0, 15)
   const otherCategories = CATEGORIES.filter((c) => c.slug !== cat.slug)
