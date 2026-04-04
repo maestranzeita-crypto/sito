@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, Star, Users, Briefcase, Shield, Zap, TrendingUp } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Star, Shield, Zap, TrendingUp } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { SITE_DESCRIPTION } from '@/lib/utils'
 import CategoryCard from '@/components/home/CategoryCard'
@@ -39,12 +39,6 @@ function HomeJsonLd() {
   )
 }
 
-const STATS = [
-  { label: 'Professionisti Verificati', value: '2.400+', icon: Users },
-  { label: 'Lavori Completati', value: '18.000+', icon: Briefcase },
-  { label: 'Valutazione Media', value: '4.8/5', icon: Star },
-  { label: 'Province Coperte', value: '107', icon: Shield },
-]
 
 const HOW_IT_WORKS_CLIENT = [
   {
@@ -146,20 +140,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── STATS ────────────────────────────────────────────── */}
-      <section className="bg-white border-b border-slate-100 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {STATS.map(({ label, value, icon: Icon }) => (
-              <div key={label} className="flex flex-col items-center gap-2">
-                <Icon className="w-6 h-6 text-orange-500" />
-                <span className="text-3xl font-extrabold text-slate-900">{value}</span>
-                <span className="text-sm text-slate-500">{label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ─── CATEGORIE SERVIZI ────────────────────────────────── */}
       <section className="py-16 bg-slate-50">
