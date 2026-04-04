@@ -256,7 +256,11 @@ export default async function CategoryCityPage({
               </div>
             }
           >
-            <ResultsClient pros={rankedPros} category={cat} city={city} />
+            <ResultsClient
+              pros={rankedPros}
+              category={{ slug: cat.slug, nameShort: cat.nameShort, services: cat.services }}
+              city={city}
+            />
           </Suspense>
         </div>
       </section>

@@ -5,11 +5,18 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Star, MapPin, CheckCircle2, Lock, Unlock, ArrowRight, Loader2, PauseCircle } from 'lucide-react'
 import type { Professional } from '@/lib/database.types'
-import type { Category, City } from '@/lib/categories'
+import type { City } from '@/lib/categories'
+
+// Solo i campi serializzabili (no icon che è una funzione)
+type SerializableCategory = {
+  slug: string
+  nameShort: string
+  services: string[]
+}
 
 type Props = {
   pros: Professional[]
-  category: Category
+  category: SerializableCategory
   city: City
 }
 
