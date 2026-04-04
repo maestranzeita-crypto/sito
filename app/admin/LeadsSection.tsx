@@ -182,6 +182,12 @@ function LeadsTable({
               Cliente
             </th>
             <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              Email
+            </th>
+            <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              Telefono
+            </th>
+            <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">
               Servizio
             </th>
             <th className="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">
@@ -208,6 +214,12 @@ function LeadsTable({
               <tr key={lead.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
                   {lead.nome}
+                </td>
+                <td className="px-4 py-3 text-gray-600 whitespace-nowrap text-xs">
+                  {lead.email}
+                </td>
+                <td className="px-4 py-3 text-gray-600 whitespace-nowrap text-xs">
+                  {lead.telefono}
                 </td>
                 <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{lead.categoria}</td>
                 <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{lead.citta}</td>

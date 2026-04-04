@@ -27,6 +27,8 @@ export type Database = {
           contacted_at: string | null
           unlocked: boolean
           assigned_professional_id: string | null
+          job_details: Record<string, string> | null
+          request_type: string
         }
         Insert: {
           id?: string
@@ -43,6 +45,8 @@ export type Database = {
           contacted_at?: string | null
           unlocked?: boolean
           assigned_professional_id?: string | null
+          job_details?: Record<string, string> | null
+          request_type?: string
         }
         Update: Partial<Database['public']['Tables']['lead_requests']['Insert']>
         Relationships: []
