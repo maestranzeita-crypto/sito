@@ -175,6 +175,7 @@ interface Props {
 
 export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
   const [step, setStep] = useState(1)
+  const [selectedMode, setSelectedMode] = useState<SubmitMode>(null)
   const [submitMode, setSubmitMode] = useState<SubmitMode>(null)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -453,35 +454,79 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
     <div>
       {progressBar}
 
-      <div className="flex items-center gap-2 mb-5">
+      <div className="flex items-center gap-3 mb-5">
         <button
-          onClick={() => setStep(1)}
+          onClick={() => { setStep(1); setSelectedMode(null) }}
           className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" /> Indietro
+          <ArrowLeft className="w-4 h-4" />
+          {selectedMode ? (
+            <span onClick={(e) => { e.stopPropagation(); setSelectedMode(null) }}>Cambia modalità</span>
+          ) : 'Indietro'}
         </button>
-        <h2 className="text-xl font-extrabold text-slate-900">Come vuoi i preventivi?</h2>
+        <h2 className="text-xl font-extrabold text-slate-900">
+          {selectedMode ? (selectedMode === 'online' ? 'Preventivi online' : 'Ti chiamiamo noi') : 'Come vuoi i preventivi?'}
+        </h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* ── Card 1: Online ── */}
-        <div className="border-2 border-slate-200 rounded-2xl p-5 flex flex-col gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <FileText className="w-4 h-4 text-green-600" />
+      {/* ── Fase 2a: scelta card ── */}
+      {!selectedMode && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Card online */}
+          <button
+            type="button"
+            onClick={() => setSelectedMode('online')}
+            className="border-2 border-slate-200 hover:border-green-400 rounded-2xl p-6 flex flex-col gap-3 text-left transition-all hover:shadow-md group"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <FileText className="w-5 h-5 text-green-600" />
               </div>
-              <h3 className="font-bold text-slate-900 text-sm">Ricevi preventivi online</h3>
-              <span className="ml-auto bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">
+              <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">
                 Gratuito
               </span>
             </div>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              I professionisti verificati della tua zona ti contattano entro 24 ore.
-            </p>
-          </div>
+            <div>
+              <h3 className="font-bold text-slate-900 text-base mb-1">Ricevi preventivi online</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                I professionisti verificati della tua zona ti contattano entro 24 ore.
+              </p>
+            </div>
+            <span className="flex items-center gap-1 text-sm font-semibold text-green-600 group-hover:gap-2 transition-all mt-1">
+              Scegli <ArrowRight className="w-4 h-4" />
+            </span>
+          </button>
 
-          {/* Campi contatto */}
+          {/* Card callback */}
+          <button
+            type="button"
+            onClick={() => setSelectedMode('callback')}
+            className="border-2 border-slate-200 hover:border-orange-400 rounded-2xl p-6 flex flex-col gap-3 text-left transition-all hover:shadow-md group"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <PhoneCall className="w-5 h-5 text-orange-600" />
+              </div>
+              <span className="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded-full">
+                Entro 24 ore
+              </span>
+            </div>
+            <div>
+              <h3 className="font-bold text-slate-900 text-base mb-1">Ti chiamiamo noi</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                Ti chiamiamo noi per capire esattamente cosa ti serve.
+              </p>
+            </div>
+            <span className="flex items-center gap-1 text-sm font-semibold text-orange-600 group-hover:gap-2 transition-all mt-1">
+              Scegli <ArrowRight className="w-4 h-4" />
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* ── Fase 2b: form online ── */}
+      {selectedMode === 'online' && (
+        <div className="border-2 border-green-200 rounded-2xl p-5 flex flex-col gap-4">
           <div className="space-y-3">
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">
@@ -527,7 +572,6 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
             </div>
           </div>
 
-          {/* Domande dinamiche */}
           {questions.length > 0 && (
             <div className="space-y-3 border-t border-slate-100 pt-3">
               {questions.map((q) => (
@@ -565,10 +609,7 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
 
           <p className="text-xs text-slate-400 leading-relaxed">
             Inviando accetti la nostra{' '}
-            <a href="/privacy" className="underline hover:text-slate-600">
-              Privacy Policy
-            </a>
-            .
+            <a href="/privacy" className="underline hover:text-slate-600">Privacy Policy</a>.
           </p>
 
           <button
@@ -583,24 +624,11 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
             )}
           </button>
         </div>
+      )}
 
-        {/* ── Card 2: Callback ── */}
-        <div className="border-2 border-slate-200 rounded-2xl p-5 flex flex-col gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <PhoneCall className="w-4 h-4 text-orange-600" />
-              </div>
-              <h3 className="font-bold text-slate-900 text-sm">Ti chiamiamo noi</h3>
-              <span className="ml-auto bg-orange-100 text-orange-700 text-xs font-bold px-2 py-0.5 rounded-full">
-                Entro 24 ore
-              </span>
-            </div>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Ti chiamiamo noi per capire esattamente cosa ti serve.
-            </p>
-          </div>
-
+      {/* ── Fase 2b: form callback ── */}
+      {selectedMode === 'callback' && (
+        <div className="border-2 border-orange-200 rounded-2xl p-5 flex flex-col gap-4">
           <div className="space-y-3">
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">
@@ -662,16 +690,13 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
 
           <p className="text-xs text-slate-400 leading-relaxed">
             Inviando accetti la nostra{' '}
-            <a href="/privacy" className="underline hover:text-slate-600">
-              Privacy Policy
-            </a>
-            .
+            <a href="/privacy" className="underline hover:text-slate-600">Privacy Policy</a>.
           </p>
 
           <button
             onClick={() => handleSubmit('callback')}
             disabled={!callbackValid || loading}
-            className="w-full min-h-[44px] px-4 py-3 bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white font-semibold text-sm rounded-xl transition-colors flex items-center justify-center gap-2 mt-auto"
+            className="w-full min-h-[44px] px-4 py-3 bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white font-semibold text-sm rounded-xl transition-colors flex items-center justify-center gap-2"
           >
             {loading ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Invio…</>
@@ -680,7 +705,7 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
             )}
           </button>
         </div>
-      </div>
+      )}
     </div>
   )
 }
