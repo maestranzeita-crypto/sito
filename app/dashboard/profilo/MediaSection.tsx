@@ -28,7 +28,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    if (file.size > 5 * 1024 * 1024) { setAvatarError('Dimensione massima: 5 MB'); return }
+    if (file.size > 15 * 1024 * 1024) { setAvatarError('Dimensione massima: 15 MB'); return }
     setAvatarError('')
     const fd = new FormData()
     fd.append('file', file)
@@ -65,7 +65,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
     startPortfolioTransition(async () => {
       const added: string[] = []
       for (const file of files) {
-        if (file.size > 5 * 1024 * 1024) continue
+        if (file.size > 15 * 1024 * 1024) continue
         const fd = new FormData()
         fd.append('file', file)
         try {
@@ -97,7 +97,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
 
       {/* ── FOTO PROFILO ── */}
       <div id="foto">
-        <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-4">
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4">
           Foto profilo
         </h3>
         <div className="flex items-start gap-5 flex-wrap">
@@ -123,7 +123,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
               type="button"
               onClick={() => avatarInputRef.current?.click()}
               disabled={avatarPending}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold border border-slate-300 rounded-xl text-slate-700 hover:border-orange-400 hover:text-orange-600 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-3 text-sm font-semibold border border-slate-300 dark:border-slate-600 rounded-xl text-slate-700 dark:text-slate-300 hover:border-orange-400 hover:text-orange-600 dark:hover:border-orange-500 dark:hover:text-orange-400 transition-colors disabled:opacity-50 min-h-[44px]"
             >
               <Camera className="w-4 h-4" />
               {avatarUrl ? 'Cambia foto' : 'Carica foto'}
@@ -133,13 +133,13 @@ export default function MediaSection({ pro }: { pro: Professional }) {
                 type="button"
                 onClick={handleDeleteAvatar}
                 disabled={avatarPending}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium border border-red-200 rounded-xl text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-3 text-sm font-medium border border-red-200 dark:border-red-900 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors disabled:opacity-50 min-h-[44px]"
               >
                 <Trash2 className="w-4 h-4" />
                 Elimina foto
               </button>
             )}
-            <p className="text-xs text-slate-400">JPG, PNG o WebP · Max 5 MB</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500">JPG, PNG o WebP · Max 15 MB</p>
           </div>
         </div>
 
@@ -157,17 +157,17 @@ export default function MediaSection({ pro }: { pro: Professional }) {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               Foto dei lavori
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">{portfolio.length}/10 foto caricate</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{portfolio.length}/10 foto caricate</p>
           </div>
           {portfolio.length < 10 && (
             <button
               type="button"
               onClick={() => portfolioInputRef.current?.click()}
               disabled={portfolioPending}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-orange-50 border border-orange-200 text-orange-600 rounded-xl hover:bg-orange-100 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400 rounded-xl hover:bg-orange-100 dark:hover:bg-orange-950/60 transition-colors disabled:opacity-50"
             >
               {portfolioPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -193,7 +193,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
             type="button"
             onClick={() => portfolioInputRef.current?.click()}
             disabled={portfolioPending}
-            className="w-full border-2 border-dashed border-slate-200 rounded-2xl p-8 flex flex-col items-center gap-3 text-slate-400 hover:border-orange-300 hover:text-orange-400 transition-colors"
+            className="w-full border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center gap-3 text-slate-400 dark:text-slate-500 hover:border-orange-300 dark:hover:border-orange-700 hover:text-orange-400 transition-colors"
           >
             <ImageIcon className="w-8 h-8" />
             <span className="text-sm font-medium">Clicca per aggiungere le prime foto dei tuoi lavori</span>
@@ -201,14 +201,14 @@ export default function MediaSection({ pro }: { pro: Professional }) {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {portfolio.map((url) => (
-              <div key={url} className="relative aspect-square rounded-xl overflow-hidden group bg-slate-100">
+              <div key={url} className="relative aspect-square rounded-xl overflow-hidden group bg-slate-100 dark:bg-slate-800">
                 <Image src={url} alt="Foto lavoro" fill className="object-cover" unoptimized />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/20 sm:bg-black/0 sm:group-hover:bg-black/40 transition-colors flex items-center justify-center">
                   <button
                     type="button"
                     onClick={() => handleDeletePortfolio(url)}
                     disabled={portfolioPending}
-                    className="opacity-0 group-hover:opacity-100 p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all shadow"
+                    className="sm:opacity-0 sm:group-hover:opacity-100 p-2.5 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all shadow min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
                     {deletingUrl === url ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -221,7 +221,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
             ))}
 
             {portfolio.length < 10 && portfolioPending && (
-              <div className="aspect-square rounded-xl bg-slate-100 flex items-center justify-center">
+              <div className="aspect-square rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                 <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
               </div>
             )}
