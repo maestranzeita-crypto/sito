@@ -71,8 +71,10 @@ export default async function RootLayout({
   const hideChrome = pathname.startsWith('/dashboard') || pathname.startsWith('/accedi')
 
   return (
-    <html lang="it">
+    <html lang="it" suppressHydrationWarning>
       <body className={`${inter.className} antialiased bg-white text-slate-900`}>
+        {/* Anti-FOUC: apply stored theme before first paint */}
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('maestranze-theme');if(t==='dark'||(t===null&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}` }} />
         {!hideChrome && <Header />}
         {hideChrome ? children : <main>{children}</main>}
         {!hideChrome && <Footer />}
