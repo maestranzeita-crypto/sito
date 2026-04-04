@@ -4,24 +4,16 @@ import { useRef, useState, useTransition } from 'react'
 import Image from 'next/image'
 import { Camera, Loader2, Trash2, Plus, ImageIcon } from 'lucide-react'
 import type { Professional } from '@/lib/database.types'
-import {
-  uploadAvatar,
-  deleteAvatar,
-  uploadPortfolioPhoto,
-  deletePortfolioPhoto,
-} from '../actions'
+import { uploadAvatar, deleteAvatar, uploadPortfolioPhoto, deletePortfolioPhoto } from '../actions'
 
 export default function MediaSection({ pro }: { pro: Professional }) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(pro.foto_url)
   const [portfolio, setPortfolio] = useState<string[]>(pro.foto_lavori ?? [])
-
   const [avatarPending, startAvatarTransition] = useTransition()
   const [portfolioPending, startPortfolioTransition] = useTransition()
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null)
-
   const [avatarError, setAvatarError] = useState('')
   const [portfolioError, setPortfolioError] = useState('')
-
   const avatarInputRef = useRef<HTMLInputElement>(null)
   const portfolioInputRef = useRef<HTMLInputElement>(null)
 
@@ -33,24 +25,16 @@ export default function MediaSection({ pro }: { pro: Professional }) {
     const fd = new FormData()
     fd.append('file', file)
     startAvatarTransition(async () => {
-      try {
-        const url = await uploadAvatar(fd)
-        setAvatarUrl(url)
-      } catch (err: unknown) {
-        setAvatarError(err instanceof Error ? err.message : 'Errore upload')
-      }
+      try { setAvatarUrl(await uploadAvatar(fd)) }
+      catch (err: unknown) { setAvatarError(err instanceof Error ? err.message : 'Errore upload') }
     })
   }
 
   function handleDeleteAvatar() {
     setAvatarError('')
     startAvatarTransition(async () => {
-      try {
-        await deleteAvatar()
-        setAvatarUrl(null)
-      } catch (err: unknown) {
-        setAvatarError(err instanceof Error ? err.message : 'Errore eliminazione')
-      }
+      try { await deleteAvatar(); setAvatarUrl(null) }
+      catch (err: unknown) { setAvatarError(err instanceof Error ? err.message : 'Errore eliminazione') }
     })
   }
 
@@ -68,10 +52,8 @@ export default function MediaSection({ pro }: { pro: Professional }) {
         if (file.size > 15 * 1024 * 1024) continue
         const fd = new FormData()
         fd.append('file', file)
-        try {
-          const url = await uploadPortfolioPhoto(fd)
-          added.push(url)
-        } catch { /* skip single failed upload */ }
+        try { added.push(await uploadPortfolioPhoto(fd)) }
+        catch { /* skip single failed upload */ }
       }
       setPortfolio((prev) => [...prev, ...added])
     })
@@ -81,14 +63,9 @@ export default function MediaSection({ pro }: { pro: Professional }) {
   function handleDeletePortfolio(url: string) {
     setDeletingUrl(url)
     startPortfolioTransition(async () => {
-      try {
-        await deletePortfolioPhoto(url)
-        setPortfolio((prev) => prev.filter((u) => u !== url))
-      } catch (err: unknown) {
-        setPortfolioError(err instanceof Error ? err.message : 'Errore eliminazione')
-      } finally {
-        setDeletingUrl(null)
-      }
+      try { await deletePortfolioPhoto(url); setPortfolio((prev) => prev.filter((u) => u !== url)) }
+      catch (err: unknown) { setPortfolioError(err instanceof Error ? err.message : 'Errore eliminazione') }
+      finally { setDeletingUrl(null) }
     })
   }
 
@@ -97,11 +74,8 @@ export default function MediaSection({ pro }: { pro: Professional }) {
 
       {/* ── FOTO PROFILO ── */}
       <div id="foto">
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4">
-          Foto profilo
-        </h3>
+        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Foto profilo</h3>
         <div className="flex items-start gap-5 flex-wrap">
-          {/* Preview */}
           <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-orange-400 to-orange-600 flex-shrink-0 shadow">
             {avatarUrl ? (
               <Image src={avatarUrl} alt="Foto profilo" fill className="object-cover" unoptimized />
@@ -117,13 +91,12 @@ export default function MediaSection({ pro }: { pro: Professional }) {
             )}
           </div>
 
-          {/* Azioni */}
           <div className="flex flex-col gap-2">
             <button
               type="button"
               onClick={() => avatarInputRef.current?.click()}
               disabled={avatarPending}
-              className="flex items-center gap-2 px-4 py-3 text-sm font-semibold border border-slate-300 dark:border-slate-600 rounded-xl text-slate-700 dark:text-slate-300 hover:border-orange-400 hover:text-orange-600 dark:hover:border-orange-500 dark:hover:text-orange-400 transition-colors disabled:opacity-50 min-h-[44px]"
+              className="flex items-center gap-2 px-4 py-3 text-sm font-semibold border border-slate-300 rounded-xl text-slate-700 hover:border-orange-400 hover:text-orange-600 transition-colors disabled:opacity-50 min-h-[44px]"
             >
               <Camera className="w-4 h-4" />
               {avatarUrl ? 'Cambia foto' : 'Carica foto'}
@@ -133,23 +106,15 @@ export default function MediaSection({ pro }: { pro: Professional }) {
                 type="button"
                 onClick={handleDeleteAvatar}
                 disabled={avatarPending}
-                className="flex items-center gap-2 px-4 py-3 text-sm font-medium border border-red-200 dark:border-red-900 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors disabled:opacity-50 min-h-[44px]"
+                className="flex items-center gap-2 px-4 py-3 text-sm font-medium border border-red-200 rounded-xl text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50 min-h-[44px]"
               >
-                <Trash2 className="w-4 h-4" />
-                Elimina foto
+                <Trash2 className="w-4 h-4" />Elimina foto
               </button>
             )}
-            <p className="text-xs text-slate-400 dark:text-slate-500">JPG, PNG o WebP · Max 15 MB</p>
+            <p className="text-xs text-slate-400">JPG, PNG o WebP · Max 15 MB</p>
           </div>
         </div>
-
-        <input
-          ref={avatarInputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={handleAvatarChange}
-        />
+        <input ref={avatarInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handleAvatarChange} />
         {avatarError && <p className="text-sm text-red-500 mt-2">{avatarError}</p>}
       </div>
 
@@ -157,43 +122,30 @@ export default function MediaSection({ pro }: { pro: Professional }) {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-              Foto dei lavori
-            </h3>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{portfolio.length}/10 foto caricate</p>
+            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Foto dei lavori</h3>
+            <p className="text-xs text-slate-400 mt-0.5">{portfolio.length}/10 foto caricate</p>
           </div>
           {portfolio.length < 10 && (
             <button
               type="button"
               onClick={() => portfolioInputRef.current?.click()}
               disabled={portfolioPending}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400 rounded-xl hover:bg-orange-100 dark:hover:bg-orange-950/60 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-3 text-sm font-semibold bg-orange-50 border border-orange-200 text-orange-600 rounded-xl hover:bg-orange-100 transition-colors disabled:opacity-50 min-h-[44px]"
             >
-              {portfolioPending ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Plus className="w-4 h-4" />
-              )}
+              {portfolioPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
               Aggiungi foto
             </button>
           )}
         </div>
 
-        <input
-          ref={portfolioInputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          multiple
-          className="hidden"
-          onChange={handlePortfolioChange}
-        />
+        <input ref={portfolioInputRef} type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={handlePortfolioChange} />
 
         {portfolio.length === 0 ? (
           <button
             type="button"
             onClick={() => portfolioInputRef.current?.click()}
             disabled={portfolioPending}
-            className="w-full border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center gap-3 text-slate-400 dark:text-slate-500 hover:border-orange-300 dark:hover:border-orange-700 hover:text-orange-400 transition-colors"
+            className="w-full border-2 border-dashed border-slate-200 rounded-2xl p-8 flex flex-col items-center gap-3 text-slate-400 hover:border-orange-300 hover:text-orange-400 transition-colors"
           >
             <ImageIcon className="w-8 h-8" />
             <span className="text-sm font-medium">Clicca per aggiungere le prime foto dei tuoi lavori</span>
@@ -201,33 +153,28 @@ export default function MediaSection({ pro }: { pro: Professional }) {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {portfolio.map((url) => (
-              <div key={url} className="relative aspect-square rounded-xl overflow-hidden group bg-slate-100 dark:bg-slate-800">
+              <div key={url} className="relative aspect-square rounded-xl overflow-hidden bg-slate-100">
                 <Image src={url} alt="Foto lavoro" fill className="object-cover" unoptimized />
-                <div className="absolute inset-0 bg-black/20 sm:bg-black/0 sm:group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                {/* Bottone elimina sempre visibile su mobile, hover su desktop */}
+                <div className="absolute inset-0 bg-black/20 sm:bg-black/0 sm:hover:bg-black/40 transition-colors flex items-center justify-center">
                   <button
                     type="button"
                     onClick={() => handleDeletePortfolio(url)}
                     disabled={portfolioPending}
-                    className="sm:opacity-0 sm:group-hover:opacity-100 p-2.5 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all shadow min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    className="sm:opacity-0 sm:group-hover:opacity-100 min-h-[44px] min-w-[44px] flex items-center justify-center p-2 bg-red-500 hover:bg-red-600 rounded-full text-white shadow"
                   >
-                    {deletingUrl === url ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Trash2 className="w-4 h-4" />
-                    )}
+                    {deletingUrl === url ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
             ))}
-
             {portfolio.length < 10 && portfolioPending && (
-              <div className="aspect-square rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+              <div className="aspect-square rounded-xl bg-slate-100 flex items-center justify-center">
                 <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
               </div>
             )}
           </div>
         )}
-
         {portfolioError && <p className="text-sm text-red-500 mt-2">{portfolioError}</p>}
       </div>
     </div>

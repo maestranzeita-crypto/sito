@@ -11,23 +11,15 @@ function StarRow({ rating, size = 4 }: { rating: number; size?: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`w-${size} h-${size} ${
-            i < rating ? 'fill-amber-400 text-amber-400' : 'fill-slate-100 text-slate-200'
-          }`}
+          className={`w-${size} h-${size} ${i < rating ? 'fill-amber-400 text-amber-400' : 'fill-slate-100 text-slate-200'}`}
         />
       ))}
     </div>
   )
 }
 
-export function ReviewsSection({
-  reviews,
-  avgRating,
-  proName,
-}: {
-  reviews: Review[]
-  avgRating: number | null
-  proName: string
+export function ReviewsSection({ reviews, avgRating, proName }: {
+  reviews: Review[]; avgRating: number | null; proName: string
 }) {
   const [replyModal, setReplyModal] = useState<Review | null>(null)
   const [replyText, setReplyText] = useState('')
@@ -42,30 +34,15 @@ export function ReviewsSection({
     `Se sei rimasto/a soddisfatto/a del mio lavoro, ti chiederei gentilmente di lasciarmi ` +
     `una breve recensione su Maestranze.com. Grazie di cuore! 🙏`
 
-  function openReply(review: Review) {
-    setReplyModal(review)
-    setReplyText(review.risposta_professionista ?? '')
-    setError('')
-  }
-
-  function closeModal() {
-    if (isPending) return
-    setReplyModal(null)
-  }
+  function openReply(review: Review) { setReplyModal(review); setReplyText(review.risposta_professionista ?? ''); setError('') }
+  function closeModal() { if (isPending) return; setReplyModal(null) }
 
   function handleSubmit() {
-    if (!replyModal || !replyText.trim()) {
-      setError('Scrivi una risposta prima di inviare.')
-      return
-    }
+    if (!replyModal || !replyText.trim()) { setError('Scrivi una risposta prima di inviare.'); return }
     setError('')
     startTransition(async () => {
-      try {
-        await replyToReview(replyModal.id, replyText)
-        setReplyModal(null)
-      } catch {
-        setError('Errore durante il salvataggio. Riprova.')
-      }
+      try { await replyToReview(replyModal.id, replyText); setReplyModal(null) }
+      catch { setError('Errore durante il salvataggio. Riprova.') }
     })
   }
 
@@ -77,22 +54,17 @@ export function ReviewsSection({
 
   return (
     <section>
-      <h2 className="text-lg font-bold text-slate-900 mb-4">Recensioni</h2>
+      <h2 className="text-lg font-bold text-slate-800 mb-4">Recensioni</h2>
 
-      {/* ── MEDIA STELLE ──────────────────────────────────────── */}
       {avgRating !== null ? (
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 mb-4 flex items-center gap-6">
+        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5 mb-4 flex items-center gap-6">
           <div className="text-center">
-            <div className="text-5xl font-extrabold text-slate-900 leading-none">
-              {avgRating.toFixed(1)}
-            </div>
+            <div className="text-5xl font-extrabold text-slate-800 leading-none">{avgRating.toFixed(1)}</div>
             <div className="text-xs text-slate-400 mt-1">su 5</div>
           </div>
           <div>
             <StarRow rating={Math.round(avgRating)} size={5} />
-            <p className="text-sm text-slate-500 mt-1">
-              {reviews.length} recension{reviews.length === 1 ? 'e' : 'i'}
-            </p>
+            <p className="text-sm text-slate-500 mt-1">{reviews.length} recension{reviews.length === 1 ? 'e' : 'i'}</p>
           </div>
         </div>
       ) : (
@@ -101,18 +73,11 @@ export function ReviewsSection({
         </div>
       )}
 
-      {/* ── BANNER WHATSAPP ───────────────────────────────────── */}
       {showWhatsAppBanner && (
         <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-4">
-          <p className="text-sm font-semibold text-green-800 mb-1">
-            La tua media è bassa — chiedi recensioni ai clienti precedenti
-          </p>
-          <p className="text-xs text-green-700 mb-3">
-            Copia e invia questo messaggio via WhatsApp ai tuoi clienti soddisfatti:
-          </p>
-          <div className="bg-white border border-green-100 rounded-xl p-3 text-sm text-slate-600 mb-3">
-            {whatsappText}
-          </div>
+          <p className="text-sm font-semibold text-green-800 mb-1">La tua media è bassa — chiedi recensioni ai clienti precedenti</p>
+          <p className="text-xs text-green-700 mb-3">Copia e invia questo messaggio via WhatsApp:</p>
+          <div className="bg-white border border-green-100 rounded-xl p-3 text-sm text-slate-600 mb-3">{whatsappText}</div>
           <button
             onClick={copyWhatsApp}
             className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors"
@@ -123,45 +88,34 @@ export function ReviewsSection({
         </div>
       )}
 
-      {/* ── LISTA RECENSIONI ──────────────────────────────────── */}
       {reviews.length > 0 && (
         <div className="space-y-3">
           {reviews.map((review) => (
             <div key={review.id} className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5">
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div>
-                  <p className="font-semibold text-slate-900 text-sm">{review.nome_cliente}</p>
+                  <p className="font-semibold text-slate-800 text-sm">{review.nome_cliente}</p>
                   <StarRow rating={review.rating} size={4} />
                 </div>
                 <span className="text-xs text-slate-400 flex-shrink-0">
-                  {new Date(review.created_at).toLocaleDateString('it-IT', {
-                    day: 'numeric', month: 'short', year: 'numeric',
-                  })}
+                  {new Date(review.created_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </span>
               </div>
-
               <p className="text-sm text-slate-600 mb-3">{review.testo}</p>
-
               {review.risposta_professionista ? (
                 <div className="bg-orange-50 border border-orange-100 rounded-xl p-3 text-sm">
-                  <span className="text-xs font-semibold text-orange-700 block mb-1">
-                    La tua risposta
-                  </span>
+                  <span className="text-xs font-semibold text-orange-700 block mb-1">La tua risposta</span>
                   <p className="text-slate-700">{review.risposta_professionista}</p>
-                  <button
-                    onClick={() => openReply(review)}
-                    className="text-xs text-orange-600 hover:underline mt-2 block"
-                  >
+                  <button onClick={() => openReply(review)} className="text-xs text-orange-600 hover:underline mt-2 block">
                     Modifica risposta
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={() => openReply(review)}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-orange-600 hover:text-orange-700 transition-colors"
+                  className="flex items-center gap-1.5 text-xs font-semibold text-orange-500 hover:text-orange-600 transition-colors"
                 >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  Rispondi alla recensione
+                  <MessageSquare className="w-3.5 h-3.5" />Rispondi alla recensione
                 </button>
               )}
             </div>
@@ -169,7 +123,6 @@ export function ReviewsSection({
         </div>
       )}
 
-      {/* ── MODAL RISPOSTA ────────────────────────────────────── */}
       {replyModal && (
         <div
           className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
@@ -177,12 +130,11 @@ export function ReviewsSection({
         >
           <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl">
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-              <h3 className="font-bold text-slate-900">Rispondi alla recensione</h3>
+              <h3 className="font-bold text-slate-800">Rispondi alla recensione</h3>
               <button onClick={closeModal} className="text-slate-400 hover:text-slate-600 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
-
             <div className="p-5">
               <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 mb-4 text-sm text-slate-600">
                 <div className="flex items-center gap-2 mb-1.5">
@@ -191,24 +143,18 @@ export function ReviewsSection({
                 </div>
                 <p>{replyModal.testo}</p>
               </div>
-
               <textarea
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 rows={4}
                 placeholder="Scrivi la tua risposta pubblica alla recensione..."
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none bg-white text-slate-800 placeholder:text-slate-400"
                 autoFocus
               />
               {error && <p className="text-xs text-red-600 mt-1.5">{error}</p>}
             </div>
-
             <div className="px-5 pb-5 flex gap-3 justify-end">
-              <button
-                onClick={closeModal}
-                disabled={isPending}
-                className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
-              >
+              <button onClick={closeModal} disabled={isPending} className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
                 Annulla
               </button>
               <button

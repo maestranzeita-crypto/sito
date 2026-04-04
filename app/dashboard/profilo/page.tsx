@@ -24,10 +24,8 @@ export default async function DashboardProfiloPage() {
     .eq('email', user.email!)
     .single()
   const pro = proData as Professional | null
-
   if (!pro) redirect('/dashboard')
 
-  // Ultime recensioni
   const { data: reviewsData } = await supabase
     .from('reviews')
     .select('*')
@@ -39,7 +37,7 @@ export default async function DashboardProfiloPage() {
   return (
     <div className="max-w-3xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-extrabold text-slate-900">Il mio profilo</h1>
+        <h1 className="text-2xl font-extrabold text-slate-800">Il mio profilo</h1>
         <p className="text-slate-500 text-sm mt-0.5">
           Le informazioni qui aggiornate sono visibili ai clienti nella tua scheda profilo.
         </p>
@@ -51,40 +49,35 @@ export default async function DashboardProfiloPage() {
           <div className="text-sm">
             <p className="font-semibold text-amber-900 mb-0.5">Profilo in attesa di verifica</p>
             <p className="text-amber-800">
-              Il tuo profilo è in fase di revisione da parte del nostro team. Riceverai una conferma via email entro 24 ore.
+              Il tuo profilo è in fase di revisione. Riceverai una conferma via email entro 24 ore.
             </p>
           </div>
         </div>
       )}
 
-      {/* ── PARTE 1: FOTO PROFILO E LAVORI ── */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-6">
-        <h2 className="font-extrabold text-slate-900 mb-6">Foto profilo e lavori</h2>
+        <h2 className="font-extrabold text-slate-800 mb-6">Foto profilo e lavori</h2>
         <MediaSection pro={pro} />
       </div>
 
-      {/* ── FORM DATI ── */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-6">
         <ProfileForm pro={pro} />
       </div>
 
-      {/* ── PARTE 2: CERTIFICAZIONI ── */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-6">
-        <h2 className="font-extrabold text-slate-900 mb-6">Certificazioni</h2>
+        <h2 className="font-extrabold text-slate-800 mb-6">Certificazioni</h2>
         <CertificazioniSection pro={pro} />
       </div>
 
-      {/* ── PARTE 3: GOOGLE MY BUSINESS ── */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-8">
-        <h2 className="font-extrabold text-slate-900 mb-6">Google My Business</h2>
+        <h2 className="font-extrabold text-slate-800 mb-6">Google My Business</h2>
         <GmbSection pro={pro} />
       </div>
 
-      {/* ── RECENSIONI ── */}
       {reviews && reviews.length > 0 && (
         <div className="bg-white rounded-2xl border border-slate-200 p-6">
-          <h2 className="font-extrabold text-slate-900 mb-4 flex items-center gap-2">
-            <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+          <h2 className="font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+            <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
             Ultime recensioni ({pro.review_count} totali · {pro.rating_avg?.toFixed(1) ?? '–'}/5)
           </h2>
           <div className="space-y-4">
@@ -93,10 +86,7 @@ export default async function DashboardProfiloPage() {
                 <div className="flex items-center gap-2 mb-1.5">
                   <div className="flex">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-3.5 h-3.5 ${i < r.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-200 fill-slate-200'}`}
-                      />
+                      <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'text-amber-400 fill-amber-400' : 'text-slate-200 fill-slate-200'}`} />
                     ))}
                   </div>
                   <span className="text-xs font-semibold text-slate-700">{r.nome_cliente}</span>
