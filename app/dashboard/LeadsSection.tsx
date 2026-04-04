@@ -177,14 +177,14 @@ export function LeadsSection({ leads }: { leads: LeadRequest[] }) {
                   <div className="flex items-center gap-2 flex-wrap">
                     <button
                       onClick={() => openModal(lead)}
-                      className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors"
+                      className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-4 py-3 rounded-xl transition-colors min-h-[44px]"
                     >
                       <MessageSquare className="w-4 h-4" />
                       Rispondi
                     </button>
                     <button
                       onClick={() => openCediModal(lead)}
-                      className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 font-semibold text-sm px-4 py-2 rounded-xl transition-colors"
+                      className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 font-semibold text-sm px-4 py-3 rounded-xl transition-colors min-h-[44px]"
                     >
                       <ArrowLeftRight className="w-4 h-4" />
                       Cedi a un collega
