@@ -188,6 +188,8 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
     descrizione: '',
   })
 
+  const [altroMode, setAltroMode] = useState<Record<string, boolean>>({})
+
   const [online, setOnline] = useState<OnlineData>({
     nome: '',
     email: '',
@@ -198,7 +200,7 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
   const [callback, setCallback] = useState<CallbackData>({
     nome: '',
     telefono: '',
-    orario: 'mattina',
+    orario: 'Durante la settimana',
   })
 
   const setS1 = (field: keyof Step1Data, value: string) =>
@@ -216,8 +218,7 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
   // Validazioni
   const step1Valid =
     step1.categoria !== '' &&
-    step1.citta.trim().length >= 2 &&
-    step1.descrizione.trim().length >= 10
+    step1.citta.trim().length >= 2
 
   const questions = DYNAMIC_QUESTIONS[step1.categoria] ?? []
   const requiredQuestions = questions.filter((q) => q.required)
@@ -225,6 +226,7 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
     online.nome.trim().length >= 2 &&
     /^[+\d\s\-()\u202F]{8,}$/.test(online.telefono) &&
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(online.email) &&
+    step1.descrizione.trim().length >= 10 &&
     requiredQuestions.every((q) => !!online.jobDetails[q.key])
 
   const callbackValid =
@@ -422,25 +424,6 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
             </div>
           </div>
 
-          {/* Descrizione */}
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
-              Descrizione breve <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              value={step1.descrizione}
-              onChange={(e) => {
-                if (e.target.value.length <= 300) setS1('descrizione', e.target.value)
-              }}
-              placeholder="Es. Devo installare un impianto fotovoltaico da 6kw su tetto a falde"
-              rows={4}
-              className="w-full px-4 py-3 border border-slate-300 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none"
-            />
-            <p className="text-xs mt-1 text-slate-400 text-right">
-              {step1.descrizione.length}/300
-            </p>
-          </div>
-
           <Button onClick={() => setStep(2)} disabled={!step1Valid} size="lg" className="w-full min-h-[44px]">
             Continua <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
@@ -572,32 +555,83 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
             </div>
           </div>
 
+          <div className="border-t border-slate-100 pt-3">
+            <label className="block text-xs font-semibold text-slate-600 mb-1">
+              <FileText className="w-3.5 h-3.5 inline mr-1 text-orange-500" />
+              Descrizione <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              value={step1.descrizione}
+              onChange={(e) => {
+                if (e.target.value.length <= 300) setS1('descrizione', e.target.value)
+              }}
+              placeholder="Es. Devo installare un impianto fotovoltaico da 6kw su tetto a falde"
+              rows={3}
+              className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+            />
+            <p className="text-xs mt-0.5 text-slate-400 text-right">{step1.descrizione.length}/300</p>
+          </div>
+
           {questions.length > 0 && (
             <div className="space-y-3 border-t border-slate-100 pt-3">
-              {questions.map((q) => (
-                <div key={q.key}>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">
-                    {q.label}
-                    {q.required && <span className="text-red-500 ml-0.5">*</span>}
-                  </label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {q.options.map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => setJobDetail(q.key, opt)}
-                        className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all min-h-[34px] ${
-                          online.jobDetails[q.key] === opt
-                            ? 'border-orange-500 bg-orange-50 text-orange-700'
-                            : 'border-slate-200 text-slate-600 hover:border-slate-300'
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
+              {questions.map((q) => {
+                const isMq = q.key.includes('mq')
+                const isAltroSelected = altroMode[q.key]
+                const mqFreeValue = isMq && !q.options.includes(online.jobDetails[q.key] ?? '') ? (online.jobDetails[q.key] ?? '') : ''
+                return (
+                  <div key={q.key}>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">
+                      {q.label}
+                      {q.required && <span className="text-red-500 ml-0.5">*</span>}
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {q.options.map((opt) => (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => {
+                            if (opt === 'Altro') {
+                              setAltroMode((p) => ({ ...p, [q.key]: true }))
+                              setJobDetail(q.key, '')
+                            } else {
+                              setAltroMode((p) => ({ ...p, [q.key]: false }))
+                              setJobDetail(q.key, opt)
+                            }
+                          }}
+                          className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all min-h-[34px] ${
+                            (opt === 'Altro' && isAltroSelected) || (!isAltroSelected && !isMq && online.jobDetails[q.key] === opt) || (!isAltroSelected && isMq && online.jobDetails[q.key] === opt)
+                              ? 'border-orange-500 bg-orange-50 text-orange-700'
+                              : 'border-slate-200 text-slate-600 hover:border-slate-300'
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                    {isAltroSelected && (
+                      <textarea
+                        value={online.jobDetails[q.key] ?? ''}
+                        onChange={(e) => setJobDetail(q.key, e.target.value)}
+                        placeholder="Descrivi brevemente…"
+                        rows={2}
+                        className="w-full mt-2 px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+                      />
+                    )}
+                    {isMq && (
+                      <input
+                        type="text"
+                        value={mqFreeValue}
+                        onChange={(e) => {
+                          setAltroMode((p) => ({ ...p, [q.key]: false }))
+                          setJobDetail(q.key, e.target.value)
+                        }}
+                        placeholder="Oppure scrivi i mq precisi (es. 45 mq)"
+                        className="w-full mt-2 px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 min-h-[40px]"
+                      />
+                    )}
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
 
@@ -661,15 +695,15 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">
                 <Clock className="w-3.5 h-3.5 inline mr-1 text-orange-500" />
-                Orario preferito
+                Quando vuoi essere contattato?
               </label>
-              <div className="flex gap-2">
-                {['mattina', 'pomeriggio', 'sera'].map((o) => (
+              <div className="flex flex-wrap gap-2">
+                {['Durante la settimana', 'Nel weekend', 'Mattina', 'Pomeriggio', 'Sera'].map((o) => (
                   <button
                     key={o}
                     type="button"
                     onClick={() => setCb('orario', o)}
-                    className={`flex-1 min-h-[44px] px-2 py-2 rounded-xl text-xs font-medium border capitalize transition-all ${
+                    className={`min-h-[40px] px-3 py-2 rounded-xl text-xs font-medium border transition-all ${
                       callback.orario === o
                         ? 'border-orange-500 bg-orange-50 text-orange-700'
                         : 'border-slate-200 text-slate-600 hover:border-slate-300'
@@ -679,6 +713,22 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
                   </button>
                 ))}
               </div>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">
+                <FileText className="w-3.5 h-3.5 inline mr-1 text-orange-500" />
+                Descrizione (facoltativa)
+              </label>
+              <textarea
+                value={step1.descrizione}
+                onChange={(e) => {
+                  if (e.target.value.length <= 300) setS1('descrizione', e.target.value)
+                }}
+                placeholder="Es. Devo installare un impianto fotovoltaico da 6kw su tetto a falde"
+                rows={3}
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+              />
+              <p className="text-xs mt-0.5 text-slate-400 text-right">{step1.descrizione.length}/300</p>
             </div>
           </div>
 
