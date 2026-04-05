@@ -80,7 +80,7 @@ export default async function ProfessionistiPage() {
 
       <ProfessionistiClient
         professionals={professionals}
-        categories={CATEGORIES}
+        categories={CATEGORIES.map(({ slug, nameShort }) => ({ slug, nameShort }))}
         cities={cities}
       />
     </>

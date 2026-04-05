@@ -5,13 +5,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Star, MapPin, Shield, Search } from 'lucide-react'
 import type { Professional } from '@/lib/database.types'
-import type { Category } from '@/lib/categories'
 
 type ProWithCats = Professional & { categoryLabels: string[] }
 
 interface Props {
   professionals: ProWithCats[]
-  categories: Category[]
+  categories: { slug: string; nameShort: string }[]
   cities: string[]
 }
 
