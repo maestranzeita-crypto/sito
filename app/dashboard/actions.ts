@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/database.types'
 import { getStripe } from '@/lib/stripe'
 import { SITE_URL } from '@/lib/utils'
@@ -280,8 +281,7 @@ export async function transferLead(leadId: string, toProfessionalId: string) {
 
 // ── Storage client (service role per upload/delete) ──────────────────────────
 function createStorageClient() {
-  const { createClient } = require('@supabase/supabase-js')
-  return createClient(
+  return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     { auth: { autoRefreshToken: false, persistSession: false } }
@@ -310,7 +310,7 @@ export async function uploadAvatar(formData: FormData): Promise<string> {
   const service = createServiceClient()
   await service.from('professionals').update({ foto_url: publicUrl }).eq('id', pro.id)
 
-  revalidatePath('/dashboard')
+  revalidatePath('/dashboard/profilo')
   return publicUrl
 }
 
@@ -334,7 +334,7 @@ export async function deleteAvatar(): Promise<void> {
   }
 
   await service.from('professionals').update({ foto_url: null }).eq('id', pro.id)
-  revalidatePath('/dashboard')
+  revalidatePath('/dashboard/profilo')
 }
 
 // ── Upload foto lavori (portfolio) ────────────────────────────────────────────
