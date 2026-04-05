@@ -1,38 +1,62 @@
-import { redirect } from 'next/navigation'
-import type { Metadata } from 'next'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Star, AlertCircle } from 'lucide-react'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/client'
 import type { Professional, Review } from '@/lib/database.types'
 import ProfileForm from './ProfileForm'
 import MediaSection from './MediaSection'
 import CertificazioniSection from './CertificazioniSection'
 import GmbSection from './GmbSection'
 
-export const metadata: Metadata = {
-  title: 'Il mio profilo — Dashboard Maestranze',
-  robots: { index: false, follow: false },
-}
+export default function DashboardProfiloPage() {
+  const router = useRouter()
+  const [pro, setPro] = useState<Professional | null>(null)
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [loading, setLoading] = useState(true)
 
-export default async function DashboardProfiloPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/accedi')
+  useEffect(() => {
+    const supabase = createClient()
 
-  const { data: proData } = await supabase
-    .from('professionals')
-    .select('*')
-    .eq('email', user.email!)
-    .single()
-  const pro = proData as Professional | null
-  if (!pro) redirect('/dashboard')
+    async function load() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) { router.push('/accedi'); return }
 
-  const { data: reviewsData } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('professional_id', pro.id)
-    .order('created_at', { ascending: false })
-    .limit(5)
-  const reviews = reviewsData as Review[] | null
+      const { data: proData } = await supabase
+        .from('professionals')
+        .select('*')
+        .eq('email', user.email!)
+        .single()
+
+      if (!proData) { router.push('/dashboard'); return }
+      setPro(proData as Professional)
+
+      const { data: reviewsData } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('professional_id', proData.id)
+        .order('created_at', { ascending: false })
+        .limit(5)
+      setReviews((reviewsData as Review[]) ?? [])
+      setLoading(false)
+    }
+
+    load()
+  }, [router])
+
+  if (loading) {
+    return (
+      <div className="max-w-3xl animate-pulse space-y-6">
+        <div className="h-8 bg-slate-200 rounded-lg w-48" />
+        <div className="h-64 bg-slate-100 rounded-2xl" />
+        <div className="h-64 bg-slate-100 rounded-2xl" />
+        <div className="h-48 bg-slate-100 rounded-2xl" />
+      </div>
+    )
+  }
+
+  if (!pro) return null
 
   return (
     <div className="max-w-3xl">
@@ -74,7 +98,7 @@ export default async function DashboardProfiloPage() {
         <GmbSection pro={pro} />
       </div>
 
-      {reviews && reviews.length > 0 && (
+      {reviews.length > 0 && (
         <div className="bg-white rounded-2xl border border-slate-200 p-6">
           <h2 className="font-extrabold text-slate-800 mb-4 flex items-center gap-2">
             <Star className="w-5 h-5 text-amber-400 fill-amber-400" />

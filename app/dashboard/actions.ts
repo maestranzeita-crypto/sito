@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createServerClient } from '@supabase/ssr'
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+
 import type { Database } from '@/lib/database.types'
 import { getStripe } from '@/lib/stripe'
 import { SITE_URL } from '@/lib/utils'
@@ -279,119 +279,6 @@ export async function transferLead(leadId: string, toProfessionalId: string) {
   revalidatePath('/dashboard')
 }
 
-// ── Storage client (service role per upload/delete) ──────────────────────────
-function createStorageClient() {
-  return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  )
-}
-
-// ── URL firmato per upload avatar (upload diretto dal browser a Supabase) ────
-export async function getAvatarUploadUrl(filename: string): Promise<{ path: string; token: string }> {
-  const pro = await getAuthenticatedPro()
-  const ext = filename.split('.').pop()?.toLowerCase() ?? 'jpg'
-  const path = `${pro.id}/avatar.${ext}`
-
-  const storage = createStorageClient()
-  const { data, error } = await storage.storage.from('avatars').createSignedUploadUrl(path, { upsert: true })
-  if (error || !data) throw new Error(error?.message ?? 'Impossibile generare URL di upload')
-
-  return { path: data.path, token: data.token }
-}
-
-// ── Salva URL avatar nel DB dopo upload diretto ───────────────────────────────
-export async function finalizeAvatarUpload(path: string): Promise<string> {
-  const pro = await getAuthenticatedPro()
-  const storage = createStorageClient()
-  const { data: { publicUrl } } = storage.storage.from('avatars').getPublicUrl(path)
-
-  const service = createServiceClient()
-  await service.from('professionals').update({ foto_url: publicUrl }).eq('id', pro.id)
-  revalidatePath('/dashboard/profilo')
-  return publicUrl
-}
-
-// ── Elimina foto profilo ──────────────────────────────────────────────────────
-export async function deleteAvatar(): Promise<void> {
-  const pro = await getAuthenticatedPro()
-  const service = createServiceClient()
-
-  const { data: proData } = await service
-    .from('professionals')
-    .select('foto_url')
-    .eq('id', pro.id)
-    .single()
-
-  if (proData?.foto_url) {
-    const pathPart = proData.foto_url.split('/avatars/')[1]
-    if (pathPart) {
-      const storage = createStorageClient()
-      await storage.storage.from('avatars').remove([pathPart])
-    }
-  }
-
-  await service.from('professionals').update({ foto_url: null }).eq('id', pro.id)
-  revalidatePath('/dashboard/profilo')
-}
-
-// ── URL firmato per upload foto portfolio (upload diretto dal browser) ───────
-export async function getPortfolioUploadUrl(filename: string): Promise<{ path: string; token: string }> {
-  const pro = await getAuthenticatedPro()
-  const service = createServiceClient()
-  const { data: proData } = await service.from('professionals').select('foto_lavori').eq('id', pro.id).single()
-  const current: string[] = (proData?.foto_lavori as string[]) ?? []
-  if (current.length >= 10) throw new Error('Massimo 10 foto nel portfolio')
-
-  const ext = filename.split('.').pop()?.toLowerCase() ?? 'jpg'
-  const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-  const path = `${pro.id}/${uniqueName}`
-
-  const storage = createStorageClient()
-  const { data, error } = await storage.storage.from('portfolio').createSignedUploadUrl(path)
-  if (error || !data) throw new Error(error?.message ?? 'Impossibile generare URL di upload')
-
-  return { path: data.path, token: data.token }
-}
-
-// ── Salva URL foto portfolio nel DB dopo upload diretto ───────────────────────
-export async function finalizePortfolioUpload(path: string): Promise<string> {
-  const pro = await getAuthenticatedPro()
-  const storage = createStorageClient()
-  const { data: { publicUrl } } = storage.storage.from('portfolio').getPublicUrl(path)
-
-  const service = createServiceClient()
-  const { data: proData } = await service.from('professionals').select('foto_lavori').eq('id', pro.id).single()
-  const current: string[] = (proData?.foto_lavori as string[]) ?? []
-  const updated = [...current, publicUrl]
-  await service.from('professionals').update({ foto_lavori: updated }).eq('id', pro.id)
-  revalidatePath('/dashboard')
-  return publicUrl
-}
-
-// ── Elimina foto lavori ───────────────────────────────────────────────────────
-export async function deletePortfolioPhoto(photoUrl: string): Promise<void> {
-  const pro = await getAuthenticatedPro()
-  const service = createServiceClient()
-
-  const { data: proData } = await service
-    .from('professionals')
-    .select('foto_lavori')
-    .eq('id', pro.id)
-    .single()
-  const current: string[] = (proData?.foto_lavori as string[]) ?? []
-
-  const pathPart = photoUrl.split('/portfolio/')[1]
-  if (pathPart) {
-    const storage = createStorageClient()
-    await storage.storage.from('portfolio').remove([pathPart])
-  }
-
-  const updated = current.filter((u) => u !== photoUrl)
-  await service.from('professionals').update({ foto_lavori: updated }).eq('id', pro.id)
-  revalidatePath('/dashboard')
-}
 
 // ── Salva certificazioni ──────────────────────────────────────────────────────
 export async function saveCertificazioni(certificazioni: string[]): Promise<void> {

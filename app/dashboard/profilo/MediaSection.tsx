@@ -5,14 +5,6 @@ import Image from 'next/image'
 import { Camera, Loader2, Trash2, Plus, ImageIcon } from 'lucide-react'
 import type { Professional } from '@/lib/database.types'
 import { createClient } from '@/lib/supabase/client'
-import {
-  getAvatarUploadUrl,
-  finalizeAvatarUpload,
-  deleteAvatar,
-  getPortfolioUploadUrl,
-  finalizePortfolioUpload,
-  deletePortfolioPhoto,
-} from '../actions'
 
 export default function MediaSection({ pro }: { pro: Professional }) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(pro.foto_url)
@@ -32,17 +24,24 @@ export default function MediaSection({ pro }: { pro: Professional }) {
     setAvatarError('')
     startAvatarTransition(async () => {
       try {
-        // 1. Ottieni URL firmato dal server (nessun file passa per Vercel)
-        const { path, token } = await getAvatarUploadUrl(file.name)
-        // 2. Carica direttamente da browser a Supabase Storage
         const supabase = createClient()
-        const { error } = await supabase.storage
+        const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
+        const path = `${pro.id}/avatar.${ext}`
+
+        const { error: uploadError } = await supabase.storage
           .from('avatars')
-          .uploadToSignedUrl(path, token, file, { contentType: file.type, upsert: true })
-        if (error) throw new Error(error.message)
-        // 3. Aggiorna il DB e ottieni l'URL pubblico
-        const url = await finalizeAvatarUpload(path)
-        setAvatarUrl(url)
+          .upload(path, file, { upsert: true, contentType: file.type })
+        if (uploadError) throw new Error(uploadError.message)
+
+        const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
+
+        const { error: dbError } = await supabase
+          .from('professionals')
+          .update({ foto_url: publicUrl })
+          .eq('id', pro.id)
+        if (dbError) throw new Error(dbError.message)
+
+        setAvatarUrl(publicUrl)
       } catch (err: unknown) {
         setAvatarError(err instanceof Error ? err.message : 'Errore upload')
       }
@@ -52,8 +51,17 @@ export default function MediaSection({ pro }: { pro: Professional }) {
   function handleDeleteAvatar() {
     setAvatarError('')
     startAvatarTransition(async () => {
-      try { await deleteAvatar(); setAvatarUrl(null) }
-      catch (err: unknown) { setAvatarError(err instanceof Error ? err.message : 'Errore eliminazione') }
+      try {
+        const supabase = createClient()
+        if (avatarUrl) {
+          const pathPart = avatarUrl.split('/avatars/')[1]
+          if (pathPart) await supabase.storage.from('avatars').remove([pathPart])
+        }
+        await supabase.from('professionals').update({ foto_url: null }).eq('id', pro.id)
+        setAvatarUrl(null)
+      } catch (err: unknown) {
+        setAvatarError(err instanceof Error ? err.message : 'Errore eliminazione')
+      }
     })
   }
 
@@ -66,24 +74,32 @@ export default function MediaSection({ pro }: { pro: Professional }) {
     }
     setPortfolioError('')
     startPortfolioTransition(async () => {
-      const added: string[] = []
       const supabase = createClient()
+      const added: string[] = []
+
       for (const file of files) {
         if (file.size > 15 * 1024 * 1024) continue
         try {
-          // 1. URL firmato
-          const { path, token } = await getPortfolioUploadUrl(file.name)
-          // 2. Upload diretto dal browser
-          const { error } = await supabase.storage
+          const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
+          const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+          const path = `${pro.id}/${uniqueName}`
+
+          const { error: uploadError } = await supabase.storage
             .from('portfolio')
-            .uploadToSignedUrl(path, token, file, { contentType: file.type })
-          if (error) throw new Error(error.message)
-          // 3. Aggiorna DB
-          const url = await finalizePortfolioUpload(path)
-          added.push(url)
+            .upload(path, file, { contentType: file.type })
+          if (uploadError) throw new Error(uploadError.message)
+
+          const { data: { publicUrl } } = supabase.storage.from('portfolio').getPublicUrl(path)
+          added.push(publicUrl)
         } catch { /* salta foto singola fallita */ }
       }
-      setPortfolio((prev) => [...prev, ...added])
+
+      if (added.length > 0) {
+        const newPortfolio = [...portfolio, ...added]
+        const supabase2 = createClient()
+        await supabase2.from('professionals').update({ foto_lavori: newPortfolio }).eq('id', pro.id)
+        setPortfolio(newPortfolio)
+      }
     })
     e.target.value = ''
   }
@@ -91,9 +107,19 @@ export default function MediaSection({ pro }: { pro: Professional }) {
   function handleDeletePortfolio(url: string) {
     setDeletingUrl(url)
     startPortfolioTransition(async () => {
-      try { await deletePortfolioPhoto(url); setPortfolio((prev) => prev.filter((u) => u !== url)) }
-      catch (err: unknown) { setPortfolioError(err instanceof Error ? err.message : 'Errore eliminazione') }
-      finally { setDeletingUrl(null) }
+      try {
+        const supabase = createClient()
+        const pathPart = url.split('/portfolio/')[1]
+        if (pathPart) await supabase.storage.from('portfolio').remove([pathPart])
+
+        const newPortfolio = portfolio.filter((u) => u !== url)
+        await supabase.from('professionals').update({ foto_lavori: newPortfolio }).eq('id', pro.id)
+        setPortfolio(newPortfolio)
+      } catch (err: unknown) {
+        setPortfolioError(err instanceof Error ? err.message : 'Errore eliminazione')
+      } finally {
+        setDeletingUrl(null)
+      }
     })
   }
 
@@ -183,7 +209,6 @@ export default function MediaSection({ pro }: { pro: Professional }) {
             {portfolio.map((url) => (
               <div key={url} className="relative aspect-square rounded-xl overflow-hidden bg-slate-100">
                 <Image src={url} alt="Foto lavoro" fill className="object-cover" unoptimized />
-                {/* Bottone elimina sempre visibile su mobile, hover su desktop */}
                 <div className="absolute inset-0 bg-black/20 sm:bg-black/0 sm:hover:bg-black/40 transition-colors flex items-center justify-center">
                   <button
                     type="button"
