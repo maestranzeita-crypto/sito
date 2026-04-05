@@ -56,6 +56,12 @@ export default function Header() {
                 </div>
               )}
             </div>
+            <Link href="/professionisti" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
+              Professionisti
+            </Link>
+            <Link href="/manodopera" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
+              Manodopera
+            </Link>
             <Link href="/calcolatore" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
               Calcolatori
             </Link>
@@ -107,6 +113,8 @@ export default function Header() {
             </Link>
           ))}
           <div className="border-t border-slate-100 pt-3 mt-3 space-y-2">
+            <Link href="/professionisti" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Professionisti</Link>
+            <Link href="/manodopera" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Manodopera</Link>
             <Link href="/calcolatore" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Calcolatori</Link>
             <Link href="/lavoro" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Trova Lavoro</Link>
             <Link href="/blog" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Guide</Link>
