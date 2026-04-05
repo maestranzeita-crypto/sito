@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, Star, Shield, Zap, TrendingUp } from 'lucide-react'
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { SITE_DESCRIPTION } from '@/lib/utils'
 import CategoryCard from '@/components/home/CategoryCard'
@@ -76,28 +76,6 @@ const HOW_IT_WORKS_PRO = [
   },
 ]
 
-const FEATURES = [
-  {
-    icon: Shield,
-    title: 'Verificati sul serio',
-    desc: 'Ogni professionista viene controllato manualmente. P.IVA attiva, polizza RC, certificazioni di settore. Non basta registrarsi.',
-  },
-  {
-    icon: Zap,
-    title: 'Zero commissioni',
-    desc: 'I professionisti non pagano per ogni contatto ricevuto. Solo un abbonamento opzionale se vogliono più visibilità.',
-  },
-  {
-    icon: Star,
-    title: 'Solo edilizia e fotovoltaico',
-    desc: 'Non siamo un portale generalista. Conosciamo il settore, i suoi standard e le certificazioni specifiche — dal DM 37/08 al CEI 82-25.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Per privati e imprese',
-    desc: 'Trova l\'installatore fotovoltaico per casa tua, o trova manodopera qualificata per il tuo cantiere. Una sola piattaforma.',
-  },
-]
 
 export default function HomePage() {
   return (
@@ -301,6 +279,41 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── NON BASTA REGISTRARSI ────────────────────────────── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
+              Non basta registrarsi.
+            </h2>
+            <p className="text-slate-500 max-w-2xl mx-auto">
+              Ogni professionista su Maestranze viene verificato manualmente dal nostro team prima di essere visibile ai clienti.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {[
+              { n: '01', title: 'P.IVA attiva', desc: 'Verifichiamo che la partita IVA sia attiva e intestata all\'azienda registrata.' },
+              { n: '02', title: 'Documenti di settore', desc: 'Polizza RC, certificazioni specifiche — DM 37/08 per elettricisti, abilitazioni per installatori fotovoltaico, DURC per le imprese.' },
+              { n: '03', title: 'Controllo manuale', desc: 'Una persona reale legge ogni richiesta. Se qualcosa non torna, chiediamo chiarimenti prima di attivare il profilo.' },
+              { n: '04', title: 'Badge Verificato', desc: 'Solo dopo aver superato tutti i controlli il professionista riceve il badge Maestranze Verificato sul profilo pubblico.' },
+            ].map(({ n, title, desc }) => (
+              <div key={n} className="text-center">
+                <div className="w-12 h-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 text-lg font-extrabold shadow-md">
+                  {n}
+                </div>
+                <h3 className="font-bold text-slate-900 mb-2">{title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link href="/come-funziona" className="inline-flex items-center gap-1 text-sm font-medium text-orange-600 hover:text-orange-700">
+              Scopri come funziona la verifica <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ─── PER CHI CERCA LAVORO ─────────────────────────────── */}
       <section className="py-16 bg-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -329,32 +342,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── PERCHÉ SCEGLIERE MAESTRANZE ──────────────────────── */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
-              Perché scegliere Maestranze
-            </h2>
-            <p className="text-slate-500 max-w-xl mx-auto">
-              Qualità, affidabilità e trasparenza in ogni fase del lavoro.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURES.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="text-center p-6 rounded-2xl bg-slate-50 border border-slate-100">
-                <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <Icon className="w-6 h-6 text-orange-500" />
-                </div>
-                <h3 className="font-bold text-slate-900 mb-2">{title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ─── CTA FINALE ───────────────────────────────────────── */}
+{/* ─── CTA FINALE ───────────────────────────────────────── */}
       <section className="py-16 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">

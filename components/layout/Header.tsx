@@ -71,9 +71,6 @@ export default function Header() {
             <Link href="/blog" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
               Guide
             </Link>
-            <Link href="/come-funziona" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
-              Come Funziona
-            </Link>
           </nav>
 
           {/* CTA buttons */}
@@ -118,7 +115,6 @@ export default function Header() {
             <Link href="/calcolatore" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Calcolatori</Link>
             <Link href="/lavoro" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Trova Lavoro</Link>
             <Link href="/blog" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Guide</Link>
-            <Link href="/come-funziona" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Come Funziona</Link>
           </div>
           <div className="border-t border-slate-100 pt-3 mt-3 flex flex-col gap-2">
             <Link href="/accedi" onClick={() => setMobileOpen(false)}>
