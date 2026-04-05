@@ -63,7 +63,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-slate-800 mt-10 pt-6 text-center text-xs text-slate-500">
-          © {new Date().getFullYear()} {SITE_NAME}.com — Tutti i diritti riservati — P.IVA IT00000000000
+          © {new Date().getFullYear()} {SITE_NAME}.com — Tutti i diritti riservati
         </div>
       </div>
     </footer>

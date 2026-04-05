@@ -41,104 +41,33 @@ type Question = {
   key: string
   label: string
   options: string[]
-  required?: boolean
+  hasAltro?: boolean
 }
 
 const DYNAMIC_QUESTIONS: Record<string, Question[]> = {
   fotovoltaico: [
-    {
-      key: 'tipo_immobile',
-      label: 'Tipo immobile',
-      options: ['Casa singola', 'Appartamento', 'Condominio', 'Azienda'],
-      required: true,
-    },
-    {
-      key: 'mq_tetto',
-      label: 'Mq tetto disponibile',
-      options: ['Sotto 30 mq', '30–60 mq', '60–100 mq', 'Oltre 100 mq'],
-    },
-    {
-      key: 'consumo_mensile',
-      label: 'Consumo medio mensile',
-      options: ['Sotto 200 kWh', '200–400 kWh', 'Oltre 400 kWh'],
-    },
-    {
-      key: 'sistema_accumulo',
-      label: 'Sistema di accumulo (batterie)?',
-      options: ['Sì', 'No', 'Non so'],
-    },
+    { key: 'tipo_immobile', label: 'Per quale tipo di immobile?', options: ['Casa singola', 'Condominio', 'Azienda o capannone'] },
+    { key: 'bolletta', label: 'Hai una bolletta elettrica superiore a €100 al mese?', options: ['Sì', 'No', 'Non so'] },
+    { key: 'accumulo', label: 'Ti interessa anche il sistema di accumulo?', options: ['Sì', 'No', 'Dimmi tu cosa conviene'] },
   ],
   elettricista: [
-    {
-      key: 'tipo_intervento',
-      label: 'Tipo intervento',
-      options: ['Nuovo impianto', 'Riparazione guasto', 'Messa a norma', 'Aggiunta punti luce'],
-      required: true,
-    },
-    {
-      key: 'numero_vani',
-      label: 'Numero vani',
-      options: ['1–2 vani', '3–4 vani', '5 o più'],
-    },
-    {
-      key: 'anno_costruzione',
-      label: 'Anno costruzione immobile',
-      options: ['Prima del 1990', '1990–2010', 'Dopo il 2010'],
-    },
+    { key: 'tipo_intervento', label: 'Di cosa hai bisogno?', options: ['Riparazione o guasto', 'Messa a norma', 'Nuovo impianto', 'Aggiunta prese o punti luce'] },
+    { key: 'tipo_immobile', label: "L'immobile è?", options: ['Abitazione', 'Ufficio o negozio', 'Cantiere nuovo'] },
+    { key: 'urgenza_lavoro', label: 'Quanto è urgente?', options: ["È un'emergenza", 'Entro questa settimana', 'Non ho fretta'] },
   ],
   idraulico: [
-    {
-      key: 'tipo_intervento',
-      label: 'Tipo intervento',
-      options: ['Perdita o guasto', 'Nuovo impianto', 'Sostituzione caldaia', 'Ristrutturazione bagno'],
-      required: true,
-    },
-    {
-      key: 'piano_immobile',
-      label: "Piano dell'immobile",
-      options: ['Piano terra', 'Primo o secondo', 'Terzo o superiore'],
-    },
-    {
-      key: 'preventivo_confronto',
-      label: 'Hai già un preventivo da confrontare?',
-      options: ['Sì', 'No'],
-    },
+    { key: 'tipo_intervento', label: 'Di cosa hai bisogno?', options: ["C'è una perdita o un guasto", 'Voglio sostituire la caldaia', 'Ristrutturazione bagno', 'Nuovo impianto'] },
+    { key: 'urgenza_lavoro', label: 'Quanto è urgente?', options: ["È un'emergenza", 'Entro questa settimana', 'Non ho fretta'] },
   ],
   muratore: [
-    {
-      key: 'tipo_lavoro',
-      label: 'Tipo lavoro',
-      options: ['Tinteggiatura', 'Piccole riparazioni', 'Pavimentazione', 'Altro'],
-      required: true,
-    },
-    {
-      key: 'mq_coinvolti',
-      label: 'Mq coinvolti',
-      options: ['Sotto 20 mq', '20–50 mq', 'Oltre 50 mq'],
-    },
-    {
-      key: 'interno_esterno',
-      label: 'Interno o esterno',
-      options: ['Interno', 'Esterno', 'Entrambi'],
-    },
+    { key: 'tipo_lavoro', label: 'Che tipo di lavoro devi fare?', options: ['Tinteggiatura', 'Piccole riparazioni', 'Pavimentazione', 'Altro'], hasAltro: true },
+    { key: 'interno_esterno', label: 'Dove si trova il lavoro?', options: ['Interno', 'Esterno', 'Entrambi'] },
+    { key: 'mq_coinvolti', label: 'Più o meno quanti mq sono coinvolti?', options: ['Meno di 20mq', '20–60mq', 'Oltre 60mq'] },
   ],
   ristrutturazione: [
-    {
-      key: 'cosa_ristrutturare',
-      label: 'Cosa vuoi ristrutturare',
-      options: ['Bagno', 'Cucina', 'Intera casa', 'Facciata esterna', 'Altro'],
-      required: true,
-    },
-    {
-      key: 'mq_coinvolti',
-      label: 'Mq coinvolti',
-      options: ['Sotto 50 mq', '50–100 mq', 'Oltre 100 mq'],
-    },
-    {
-      key: 'stato_attuale',
-      label: 'Stato attuale',
-      options: ['Da demolire e rifare', 'Solo finiture', 'Struttura già pronta'],
-    },
+    { key: 'cosa_ristrutturare', label: 'Cosa vuoi ristrutturare?', options: ['Bagno', 'Cucina', 'Intera casa o appartamento', 'Facciata o esterno'] },
+    { key: 'stato_progetto', label: 'A che punto sei?', options: ['Ho già un progetto', 'Devo ancora decidere', 'Ho bisogno di un sopralluogo'] },
+    { key: 'budget', label: 'Budget indicativo?', options: ['Sotto €10.000', '€10.000–30.000', 'Oltre €30.000', 'Preferisco non indicarlo'] },
   ],
 }
 
@@ -221,13 +150,16 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
     step1.citta.trim().length >= 2
 
   const questions = DYNAMIC_QUESTIONS[step1.categoria] ?? []
-  const requiredQuestions = questions.filter((q) => q.required)
   const onlineValid =
     online.nome.trim().length >= 2 &&
     /^[+\d\s\-()\u202F]{8,}$/.test(online.telefono) &&
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(online.email) &&
-    step1.descrizione.trim().length >= 10 &&
-    requiredQuestions.every((q) => !!online.jobDetails[q.key])
+    step1.descrizione.trim().length >= 10
+
+  // Una domanda è "risposta" per lo sblocco progressivo
+  function isAnswered(key: string): boolean {
+    return altroMode[key] === true || !!online.jobDetails[key]
+  }
 
   const callbackValid =
     callback.nome.trim().length >= 2 &&
@@ -573,60 +505,51 @@ export default function QuoteForm({ defaultCategory, defaultCity }: Props) {
           </div>
 
           {questions.length > 0 && (
-            <div className="space-y-3 border-t border-slate-100 pt-3">
-              {questions.map((q) => {
-                const isMq = q.key.includes('mq')
+            <div className="space-y-4 border-t border-slate-100 pt-3">
+              <style>{`@keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.q-enter{animation:fadeInUp 0.25s ease-out both}`}</style>
+              {questions.map((q, qi) => {
+                const visible = qi === 0 || isAnswered(questions[qi - 1].key)
+                if (!visible) return null
                 const isAltroSelected = altroMode[q.key]
-                const mqFreeValue = isMq && !q.options.includes(online.jobDetails[q.key] ?? '') ? (online.jobDetails[q.key] ?? '') : ''
                 return (
-                  <div key={q.key}>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">
-                      {q.label}
-                      {q.required && <span className="text-red-500 ml-0.5">*</span>}
-                    </label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {q.options.map((opt) => (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => {
-                            if (opt === 'Altro') {
-                              setAltroMode((p) => ({ ...p, [q.key]: true }))
-                              setJobDetail(q.key, '')
-                            } else {
-                              setAltroMode((p) => ({ ...p, [q.key]: false }))
-                              setJobDetail(q.key, opt)
-                            }
-                          }}
-                          className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all min-h-[34px] ${
-                            (opt === 'Altro' && isAltroSelected) || (!isAltroSelected && !isMq && online.jobDetails[q.key] === opt) || (!isAltroSelected && isMq && online.jobDetails[q.key] === opt)
-                              ? 'border-orange-500 bg-orange-50 text-orange-700'
-                              : 'border-slate-200 text-slate-600 hover:border-slate-300'
-                          }`}
-                        >
-                          {opt}
-                        </button>
-                      ))}
+                  <div key={q.key} className="q-enter">
+                    <p className="text-sm font-semibold text-slate-700 mb-2">{q.label}</p>
+                    <div className="flex flex-col gap-2">
+                      {q.options.map((opt) => {
+                        const selected = opt === 'Altro'
+                          ? isAltroSelected
+                          : !isAltroSelected && online.jobDetails[q.key] === opt
+                        return (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => {
+                              if (opt === 'Altro') {
+                                setAltroMode((p) => ({ ...p, [q.key]: true }))
+                                setJobDetail(q.key, 'Altro')
+                              } else {
+                                setAltroMode((p) => ({ ...p, [q.key]: false }))
+                                setJobDetail(q.key, opt)
+                              }
+                            }}
+                            className={`w-full px-4 py-3 rounded-xl text-sm font-medium border transition-all text-left min-h-[48px] ${
+                              selected
+                                ? 'border-orange-500 bg-orange-50 text-orange-700 font-semibold'
+                                : 'border-slate-200 text-slate-700 hover:border-orange-300 hover:bg-orange-50/40'
+                            }`}
+                          >
+                            {opt}
+                          </button>
+                        )
+                      })}
                     </div>
                     {isAltroSelected && (
                       <textarea
-                        value={online.jobDetails[q.key] ?? ''}
-                        onChange={(e) => setJobDetail(q.key, e.target.value)}
+                        value={online.jobDetails[q.key] === 'Altro' ? '' : (online.jobDetails[q.key] ?? '')}
+                        onChange={(e) => setJobDetail(q.key, e.target.value || 'Altro')}
                         placeholder="Descrivi brevemente…"
                         rows={2}
                         className="w-full mt-2 px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
-                      />
-                    )}
-                    {isMq && (
-                      <input
-                        type="text"
-                        value={mqFreeValue}
-                        onChange={(e) => {
-                          setAltroMode((p) => ({ ...p, [q.key]: false }))
-                          setJobDetail(q.key, e.target.value)
-                        }}
-                        placeholder="Oppure scrivi i mq precisi (es. 45 mq)"
-                        className="w-full mt-2 px-3 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 min-h-[40px]"
                       />
                     )}
                   </div>
