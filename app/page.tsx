@@ -79,23 +79,23 @@ const HOW_IT_WORKS_PRO = [
 const FEATURES = [
   {
     icon: Shield,
-    title: 'Professionisti Verificati',
-    desc: 'Ogni professionista passa attraverso la verifica di partita IVA, certificazioni e assicurazioni.',
+    title: 'Verificati sul serio',
+    desc: 'Ogni professionista viene controllato manualmente. P.IVA attiva, polizza RC, certificazioni di settore. Non basta registrarsi.',
   },
   {
     icon: Zap,
-    title: 'Risposta Rapida',
-    desc: 'Ricevi i primi preventivi entro 24 ore dalla tua richiesta.',
+    title: 'Zero commissioni',
+    desc: 'I professionisti non pagano per ogni contatto ricevuto. Solo un abbonamento opzionale se vogliono più visibilità.',
   },
   {
     icon: Star,
-    title: 'Recensioni Reali',
-    desc: 'Solo chi ha effettivamente usato il servizio può lasciare una recensione verificata.',
+    title: 'Solo edilizia e fotovoltaico',
+    desc: 'Non siamo un portale generalista. Conosciamo il settore, i suoi standard e le certificazioni specifiche — dal DM 37/08 al CEI 82-25.',
   },
   {
     icon: TrendingUp,
-    title: 'Prezzi Trasparenti',
-    desc: 'Confronta più offerte e scegli in piena trasparenza, senza sorprese.',
+    title: 'Per privati e imprese',
+    desc: 'Trova l\'installatore fotovoltaico per casa tua, o trova manodopera qualificata per il tuo cantiere. Una sola piattaforma.',
   },
 ]
 
@@ -157,6 +157,61 @@ export default function HomePage() {
             {CATEGORIES.map((cat) => (
               <CategoryCard key={cat.slug} cat={cat} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── MANODOPERA PROMO ─────────────────────────────────── */}
+      <section className="py-20" style={{ background: '#f8fafc' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Colonna sinistra */}
+            <div>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
+                Hai un cantiere che parte e ti manca personale?
+              </h2>
+              <p className="text-slate-500 text-lg mb-8 leading-relaxed">
+                Trova artigiani qualificati e disponibili nella tua zona in 48 ore. Senza agenzie, senza intermediari, senza costi per contatto.
+              </p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  'Installatori fotovoltaico, elettricisti, idraulici, muratori e cartongessisti pronti a lavorare',
+                  'DURC in corso di validità e certificazioni sicurezza verificate',
+                  'Disponibili anche per una sola giornata o settimana',
+                  'Ogni collaborazione viene recensita da entrambe le parti',
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-slate-700">
+                    <CheckCircle2 className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="/manodopera">
+                  <Button size="lg">Cerca un artigiano</Button>
+                </Link>
+                <Link href="/manodopera">
+                  <Button size="lg" variant="outline" className="border-slate-800 text-slate-800 hover:bg-slate-900 hover:text-white">
+                    Pubblica una richiesta
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            {/* Colonna destra — card stats */}
+            <div className="flex flex-col gap-4">
+              {[
+                { stat: '48 ore', desc: 'Tempo medio per trovare un artigiano disponibile nella tua zona' },
+                { stat: 'Verificati', desc: 'P.IVA attiva, DURC e certificazioni controllate prima dell\'attivazione' },
+                { stat: 'Zero commissioni', desc: 'Paghi solo se vuoi più visibilità — nessuna percentuale sui lavori' },
+              ].map(({ stat, desc }) => (
+                <div key={stat} className="flex items-start gap-4 bg-white border border-slate-200 rounded-2xl p-6 border-l-4 border-l-orange-500">
+                  <div>
+                    <p className="text-2xl font-extrabold text-slate-900 mb-1">{stat}</p>
+                    <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
