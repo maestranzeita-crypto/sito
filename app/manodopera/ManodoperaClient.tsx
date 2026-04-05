@@ -391,7 +391,15 @@ function FormArtigiano() {
 
 // ─── Main page client ─────────────────────────────────────────────────────────
 
-export default function ManodoperaClient() {
+export default function ManodoperaClient({
+  artigianiCount,
+  cantieriCount,
+}: {
+  artigianiCount: number
+  cantieriCount: number
+}) {
+  const showStats = artigianiCount > 0 || cantieriCount > 0
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
@@ -415,9 +423,13 @@ export default function ManodoperaClient() {
               Sono disponibile
             </a>
           </div>
-          <p className="text-slate-400 text-sm">
-            127 artigiani disponibili questa settimana · 34 cantieri cercano personale
-          </p>
+          {showStats && (
+            <p className="text-slate-400 text-sm">
+              {artigianiCount > 0 && `${artigianiCount} artigiani disponibili`}
+              {artigianiCount > 0 && cantieriCount > 0 && ' · '}
+              {cantieriCount > 0 && `${cantieriCount} cantieri cercano personale`}
+            </p>
+          )}
         </div>
       </section>
 
