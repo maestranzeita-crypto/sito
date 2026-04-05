@@ -4,7 +4,15 @@ import { useRef, useState, useTransition } from 'react'
 import Image from 'next/image'
 import { Camera, Loader2, Trash2, Plus, ImageIcon } from 'lucide-react'
 import type { Professional } from '@/lib/database.types'
-import { uploadAvatar, deleteAvatar, uploadPortfolioPhoto, deletePortfolioPhoto } from '../actions'
+import { createClient } from '@/lib/supabase/client'
+import {
+  getAvatarUploadUrl,
+  finalizeAvatarUpload,
+  deleteAvatar,
+  getPortfolioUploadUrl,
+  finalizePortfolioUpload,
+  deletePortfolioPhoto,
+} from '../actions'
 
 export default function MediaSection({ pro }: { pro: Professional }) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(pro.foto_url)
@@ -22,11 +30,22 @@ export default function MediaSection({ pro }: { pro: Professional }) {
     if (!file) return
     if (file.size > 15 * 1024 * 1024) { setAvatarError('Dimensione massima: 15 MB'); return }
     setAvatarError('')
-    const fd = new FormData()
-    fd.append('file', file)
     startAvatarTransition(async () => {
-      try { setAvatarUrl(await uploadAvatar(fd)) }
-      catch (err: unknown) { setAvatarError(err instanceof Error ? err.message : 'Errore upload') }
+      try {
+        // 1. Ottieni URL firmato dal server (nessun file passa per Vercel)
+        const { path, token } = await getAvatarUploadUrl(file.name)
+        // 2. Carica direttamente da browser a Supabase Storage
+        const supabase = createClient()
+        const { error } = await supabase.storage
+          .from('avatars')
+          .uploadToSignedUrl(path, token, file, { contentType: file.type, upsert: true })
+        if (error) throw new Error(error.message)
+        // 3. Aggiorna il DB e ottieni l'URL pubblico
+        const url = await finalizeAvatarUpload(path)
+        setAvatarUrl(url)
+      } catch (err: unknown) {
+        setAvatarError(err instanceof Error ? err.message : 'Errore upload')
+      }
     })
   }
 
@@ -48,12 +67,21 @@ export default function MediaSection({ pro }: { pro: Professional }) {
     setPortfolioError('')
     startPortfolioTransition(async () => {
       const added: string[] = []
+      const supabase = createClient()
       for (const file of files) {
         if (file.size > 15 * 1024 * 1024) continue
-        const fd = new FormData()
-        fd.append('file', file)
-        try { added.push(await uploadPortfolioPhoto(fd)) }
-        catch { /* skip single failed upload */ }
+        try {
+          // 1. URL firmato
+          const { path, token } = await getPortfolioUploadUrl(file.name)
+          // 2. Upload diretto dal browser
+          const { error } = await supabase.storage
+            .from('portfolio')
+            .uploadToSignedUrl(path, token, file, { contentType: file.type })
+          if (error) throw new Error(error.message)
+          // 3. Aggiorna DB
+          const url = await finalizePortfolioUpload(path)
+          added.push(url)
+        } catch { /* salta foto singola fallita */ }
       }
       setPortfolio((prev) => [...prev, ...added])
     })
