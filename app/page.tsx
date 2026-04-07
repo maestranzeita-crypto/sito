@@ -234,7 +234,6 @@ export default function HomePage() {
                   'Profilo verificato con badge di qualità',
                   'Clienti qualificati nella tua zona',
                   'Gestione preventivi e comunicazione',
-                  'Bacheca offerte di lavoro per dipendenti',
                   'Statistiche e analisi del tuo profilo',
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-slate-300">
@@ -302,34 +301,6 @@ export default function HomePage() {
             <Link href="/come-funziona" className="inline-flex items-center gap-1 text-sm font-medium text-orange-600 hover:text-orange-700">
               Scopri come funziona la verifica <ArrowRight className="w-4 h-4" />
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── PER CHI CERCA LAVORO ─────────────────────────────── */}
-      <section className="py-16 bg-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <span className="text-sm font-semibold text-blue-600 uppercase tracking-wider">Bacheca Lavoro</span>
-            <h2 className="mt-3 text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-              Cerchi lavoro nel settore edile?
-            </h2>
-            <p className="text-slate-600 text-lg mb-6 leading-relaxed">
-              Imprese ed artigiani pubblicano offerte di lavoro ogni giorno. Trova posizioni da elettricista,
-              idraulico, muratore, operaio specializzato e molto altro.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link href="/lavoro">
-                <Button size="lg" variant="secondary">
-                  Vedi le Offerte di Lavoro <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-              <Link href="/pubblica-offerta">
-                <Button size="lg" variant="outline">
-                  Pubblica un&apos;Offerta
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
