@@ -4,7 +4,6 @@ import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { SITE_DESCRIPTION } from '@/lib/utils'
 import CategoryCard from '@/components/home/CategoryCard'
-import HomeSearchForm from '@/components/home/HomeSearchForm'
 import HeroImage from '@/components/home/HeroImage'
 import { CATEGORIES } from '@/lib/categories'
 
@@ -91,7 +90,7 @@ export default function HomePage() {
         {/* Overlay scuro per leggibilità del testo */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/30 z-10" />
 
-        {/* Testo e search bar sopra all'overlay */}
+        {/* Testo sopra all'overlay */}
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="max-w-xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6 drop-shadow-lg">
@@ -105,11 +104,7 @@ export default function HomePage() {
               Professionisti verificati, preventivi gratuiti, recensioni reali.
             </p>
 
-            <div className="mt-8">
-              <HomeSearchForm />
-            </div>
-
-            <p className="mt-4 text-sm text-white/70">
+            <p className="mt-8 text-sm text-white/70">
               ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
             </p>
           </div>
