@@ -35,9 +35,11 @@ export async function updateSession(request: NextRequest) {
       }
     )
 
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user }, error } = await supabase.auth.getUser()
 
-    if (!user) {
+    // Redirige solo se non c'è sessione E non ci sono errori di rete/timeout
+    // Evita logout involontari quando Supabase è temporaneamente lento
+    if (!user && !error) {
       const url = request.nextUrl.clone()
       url.pathname = '/accedi'
       url.searchParams.set('redirect', request.nextUrl.pathname)
