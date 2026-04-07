@@ -1,0 +1,70 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+
+const IMAGES = [
+  { src: 'https://images.pexels.com/photos/9875408/pexels-photo-9875408.jpeg', alt: 'Impianti Fotovoltaici' },
+  { src: 'https://images.pexels.com/photos/34054464/pexels-photo-34054464.jpeg', alt: 'Elettricista' },
+  { src: 'https://images.pexels.com/photos/8581897/pexels-photo-8581897.jpeg', alt: 'Idraulico' },
+  { src: 'https://images.pexels.com/photos/11429199/pexels-photo-11429199.jpeg', alt: 'Muratore' },
+  { src: 'https://images.pexels.com/photos/15798783/pexels-photo-15798783.jpeg', alt: 'Impresa Edile' },
+]
+
+export default function HeroImage() {
+  const [current, setCurrent] = useState(0)
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setVisible(false)
+      setTimeout(() => {
+        setCurrent((prev) => (prev + 1) % IMAGES.length)
+        setVisible(true)
+      }, 400)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [])
+
+  function goTo(index: number) {
+    if (index === current) return
+    setVisible(false)
+    setTimeout(() => {
+      setCurrent(index)
+      setVisible(true)
+    }, 400)
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      <div
+        className="relative w-full rounded-2xl overflow-hidden shadow-lg"
+        style={{ aspectRatio: '4/3' }}
+      >
+        <Image
+          src={IMAGES[current].src}
+          alt={IMAGES[current].alt}
+          fill
+          className="object-cover"
+          style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.4s ease' }}
+          sizes="40vw"
+          priority
+        />
+      </div>
+
+      {/* Dots */}
+      <div className="flex gap-2 mt-4">
+        {IMAGES.map((img, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            aria-label={`Mostra ${img.alt}`}
+            className={`w-3 h-3 rounded-full border-2 border-orange-500 transition-all duration-200 ${
+              i === current ? 'bg-orange-500' : 'bg-transparent'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}

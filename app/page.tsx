@@ -5,6 +5,8 @@ import Button from '@/components/ui/Button'
 import { SITE_DESCRIPTION } from '@/lib/utils'
 import CategoryCard from '@/components/home/CategoryCard'
 import HomeSearchForm from '@/components/home/HomeSearchForm'
+import HeroImage from '@/components/home/HeroImage'
+import SectorsCarousel from '@/components/home/SectorsCarousel'
 import { CATEGORIES } from '@/lib/categories'
 
 export const metadata: Metadata = {
@@ -96,28 +98,41 @@ export default function HomePage() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
-              Trova il professionista
-              <span className="text-orange-400"> giusto </span>
-              per la tua casa
-            </h1>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+            {/* Colonna sinistra — 60% */}
+            <div className="lg:col-span-3">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
+                Trova il professionista
+                <span className="text-orange-400"> giusto </span>
+                per la tua casa
+              </h1>
 
-            <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed max-w-2xl">
-              Elettricisti, idraulici, muratori, installatori fotovoltaico e molto altro.
-              Professionisti verificati, preventivi gratuiti, recensioni reali.
-            </p>
+              <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl">
+                Elettricisti, idraulici, muratori, installatori fotovoltaico e molto altro.
+                Professionisti verificati, preventivi gratuiti, recensioni reali.
+              </p>
 
-            {/* Search box */}
-            <HomeSearchForm />
+              {/* Search box */}
+              <div className="mt-8">
+                <HomeSearchForm />
+              </div>
 
-            <p className="mt-4 text-sm text-slate-400">
-              ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
-            </p>
+              <p className="mt-4 text-sm text-slate-400">
+                ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
+              </p>
+            </div>
+
+            {/* Colonna destra — 40% — nascosta su mobile */}
+            <div className="hidden lg:block lg:col-span-2">
+              <HeroImage />
+            </div>
           </div>
         </div>
       </section>
 
+
+      {/* ─── CAROSELLO SETTORI ───────────────────────────────── */}
+      <SectorsCarousel />
 
       {/* ─── CATEGORIE SERVIZI ────────────────────────────────── */}
       <section className="py-16 bg-slate-50">
