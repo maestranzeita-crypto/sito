@@ -308,31 +308,25 @@ export default function HomePage() {
       </section>
 
 
-{/* ─── CTA FINALE ───────────────────────────────────────── */}
-      <section className="py-16 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+{/* ─── COLLABORAZIONI ───────────────────────────────────── */}
+      <section className="py-16 bg-slate-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-5 uppercase tracking-wider">
+            Collaborazioni
+          </span>
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-            Pronto a iniziare?
+            Vuoi collaborare con noi?
           </h2>
-          <p className="text-orange-100 text-lg mb-8 max-w-2xl mx-auto">
-            Unisciti a migliaia di clienti e professionisti che si sono già affidati a Maestranze.
-            È gratuito e ci vogliono solo 2 minuti.
+          <p className="text-slate-400 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+            Siamo aperti a partnership con associazioni di categoria, piattaforme di settore, media specializzati e realtà che condividono la nostra missione. Scrivici e valutiamo insieme.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/richiedi-preventivo">
-              <Button size="lg" variant="secondary">
-                Richiedi un Preventivo
-              </Button>
-            </Link>
-            <Link href="/registrati">
-              <Button
-                size="lg"
-                className="bg-white text-orange-600 hover:bg-orange-50 shadow-md"
-              >
-                Sei un Professionista? Registrati
-              </Button>
-            </Link>
-          </div>
+          <a
+            href="mailto:info@maestranze.com"
+            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-xl transition-colors text-base shadow-lg"
+          >
+            info@maestranze.com
+            <ArrowRight className="w-5 h-5" />
+          </a>
         </div>
       </section>
     </>
