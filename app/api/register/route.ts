@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import type { Database, ProfessionalStatus } from '@/lib/database.types'
+import { normalizeCity } from '@/lib/utils'
 
 function createServiceClient() {
   return createServerClient<Database>(
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
 
   const { error } = await supabase.from('professionals').insert({
     categorie: categorie as string[],
-    citta: String(citta).toLowerCase().replace(/\s+/g, '-'),
+    citta: normalizeCity(citta),
     raggio_km: String(raggio_km ?? '50'),
     ragione_sociale: String(ragione_sociale),
     piva: String(piva),

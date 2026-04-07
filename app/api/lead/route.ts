@@ -4,6 +4,7 @@ import type { Database } from '@/lib/database.types'
 import type { Professional, UrgenzaType } from '@/lib/database.types'
 import { getCategoryBySlug } from '@/lib/categories'
 import { buildLeadEmailHtml, buildConfirmEmailHtml, sendEmail } from '@/lib/emails'
+import { normalizeCity } from '@/lib/utils'
 
 function createServiceClient() {
   return createServerClient<Database>(
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
   }
 
   const supabase = createServiceClient()
-  const cittaNorm = citta.toLowerCase().replace(/\s+/g, '-')
+  const cittaNorm = normalizeCity(citta)
   const cat = getCategoryBySlug(categoria)
   const categoriaLabel = cat?.nameShort ?? categoria
 
