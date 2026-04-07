@@ -12,4 +12,5 @@ export function getStripe(): Stripe {
   return _stripe
 }
 
-export const UNLOCK_PRICE_CENTS = 609 // €4,99 + IVA 22% = €6,09
+export const UNLOCK_PRICE_CENTS = 609  // €4,99 + IVA 22% = €6,09
+export const PRO_PLAN_PRICE_CENTS = 2900 // €29,00/mese

@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { createServerClient } from '@supabase/ssr'
 
 import type { Database } from '@/lib/database.types'
-import { getStripe } from '@/lib/stripe'
+import { getStripe, PRO_PLAN_PRICE_CENTS } from '@/lib/stripe'
 import { SITE_URL } from '@/lib/utils'
 import {
   sendEmail,
@@ -315,7 +315,7 @@ export async function createProUpgradeCheckout() {
         price_data: {
           currency: 'eur',
           recurring: { interval: 'month' },
-          unit_amount: 2900,
+          unit_amount: PRO_PLAN_PRICE_CENTS,
           product_data: {
             name: 'Piano Pro — Maestranze',
             description: 'Richieste illimitate, badge Pro verificato, statistiche avanzate',
