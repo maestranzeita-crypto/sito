@@ -68,7 +68,7 @@ export default async function RootLayout({
 }) {
   const headersList = await headers()
   const pathname = headersList.get('x-pathname') ?? ''
-  const hideChrome = pathname.startsWith('/dashboard') || pathname.startsWith('/accedi')
+  const hideChrome = pathname.startsWith('/dashboard') || pathname.startsWith('/accedi') || pathname.startsWith('/admin')
 
   return (
     <html lang="it" suppressHydrationWarning>
