@@ -85,38 +85,28 @@ export default function HomePage() {
       <HomeJsonLd />
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden min-h-[520px] md:min-h-[600px]">
-        {/* Background texture */}
-        <div className="absolute inset-0 opacity-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle at 25% 25%, #f97316 0%, transparent 50%), radial-gradient(circle at 75% 75%, #3b82f6 0%, transparent 50%)',
-            }}
-          />
-        </div>
+      <section className="relative text-white overflow-hidden min-h-[560px] md:min-h-[680px]">
+        {/* Immagine di sfondo rotante — full cover, desktop e mobile */}
+        <HeroImage />
 
-        {/* Immagine rotante — destra, full-height, solo desktop */}
-        <div className="hidden lg:block absolute inset-y-0 right-0 w-[42%]">
-          <HeroImage />
-        </div>
+        {/* Overlay scuro per leggibilità del testo */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/30 z-10" />
 
-        {/* Testo — sinistra */}
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        {/* Testo sopra all'overlay */}
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="max-w-xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6 drop-shadow-lg">
               Trova il professionista
               <span className="text-orange-400"> giusto </span>
               per la tua casa
             </h1>
 
-            <p className="text-lg md:text-xl text-slate-300 leading-relaxed">
+            <p className="text-lg md:text-xl text-white/90 leading-relaxed drop-shadow">
               Elettricisti, idraulici, muratori, installatori fotovoltaico e molto altro.
               Professionisti verificati, preventivi gratuiti, recensioni reali.
             </p>
 
-            <p className="mt-8 text-sm text-slate-400">
+            <p className="mt-8 text-sm text-white/70">
               ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
             </p>
           </div>

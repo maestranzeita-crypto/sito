@@ -21,8 +21,8 @@ export default function HeroImage() {
       setTimeout(() => {
         setCurrent((prev) => (prev + 1) % IMAGES.length)
         setVisible(true)
-      }, 400)
-    }, 4000)
+      }, 500)
+    }, 6000)
     return () => clearInterval(timer)
   }, [])
 
@@ -32,35 +32,35 @@ export default function HeroImage() {
     setTimeout(() => {
       setCurrent(index)
       setVisible(true)
-    }, 400)
+    }, 500)
   }
 
   return (
-    <div className="relative h-full w-full">
-      {/* Immagine che riempie tutta l'altezza */}
+    <>
+      {/* Sfondo full-cover */}
       <Image
         src={IMAGES[current].src}
         alt={IMAGES[current].alt}
         fill
         className="object-cover"
-        style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.4s ease' }}
-        sizes="42vw"
+        style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.5s ease' }}
+        sizes="100vw"
         priority
       />
 
-      {/* Dots di navigazione in basso */}
-      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-10">
+      {/* Dots — sopra testo e overlay */}
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-30">
         {IMAGES.map((img, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
             aria-label={`Mostra ${img.alt}`}
-            className={`w-3 h-3 rounded-full border-2 border-orange-500 transition-all duration-200 ${
-              i === current ? 'bg-orange-500' : 'bg-transparent'
+            className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-200 ${
+              i === current ? 'bg-white' : 'bg-transparent'
             }`}
           />
         ))}
       </div>
-    </div>
+    </>
   )
 }
