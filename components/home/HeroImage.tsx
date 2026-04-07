@@ -48,19 +48,6 @@ export default function HeroImage() {
         priority
       />
 
-      {/* Dots — sopra testo e overlay */}
-      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-30">
-        {IMAGES.map((img, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            aria-label={`Mostra ${img.alt}`}
-            className={`w-3 h-3 rounded-full border-2 border-white transition-all duration-200 ${
-              i === current ? 'bg-white' : 'bg-transparent'
-            }`}
-          />
-        ))}
-      </div>
     </>
   )
 }
