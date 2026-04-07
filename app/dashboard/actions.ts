@@ -330,6 +330,93 @@ export async function saveGmbLink(gmbLink: string): Promise<void> {
   revalidatePath(`/professionisti/${pro.id}`)
 }
 
+// ── Manodopera: pubblica richiesta impresa ────────────────────────────────────
+export async function publishManodoperaRequest(data: {
+  specializzazione: string
+  zona_cantiere: string
+  periodo_da: string
+  periodo_a: string
+  tipo_ingaggio: string
+  compenso: string
+  requisiti: string[]
+}): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const { createClient: createSrv } = await import('@/lib/supabase/server')
+  const supabase = await createSrv()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Non autenticato')
+
+  const service = createServiceClient()
+  const { data: proFull } = await service
+    .from('professionals')
+    .select('ragione_sociale, telefono, email')
+    .eq('id', pro.id)
+    .single()
+
+  if (!proFull) throw new Error('Profilo non trovato')
+
+  const { error } = await service.from('manodopera_requests').insert({
+    nome: proFull.ragione_sociale,
+    email: proFull.email,
+    telefono: proFull.telefono,
+    ...data,
+  })
+  if (error) throw new Error(error.message)
+  revalidatePath('/dashboard/manodopera')
+}
+
+// ── Manodopera: pubblica disponibilità artigiano ──────────────────────────────
+export async function publishManodoperaAvailability(data: {
+  specializzazione: string
+  zona_operativa: string
+  disponibile_da: string
+  disponibile_a: string
+  tipo_collaborazione: string[]
+  tariffa: string
+  attrezzatura_propria: boolean
+  durc_valido: boolean
+}): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+
+  const { data: proFull } = await service
+    .from('professionals')
+    .select('ragione_sociale, telefono, email')
+    .eq('id', pro.id)
+    .single()
+
+  if (!proFull) throw new Error('Profilo non trovato')
+
+  const { error } = await service.from('manodopera_availability').insert({
+    nome: proFull.ragione_sociale,
+    email: proFull.email,
+    telefono: proFull.telefono,
+    ...data,
+  })
+  if (error) throw new Error(error.message)
+  revalidatePath('/dashboard/manodopera')
+}
+
+// ── Manodopera: elimina richiesta ─────────────────────────────────────────────
+export async function deleteManodoperaRequest(id: string): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  const { data: proFull } = await service.from('professionals').select('email').eq('id', pro.id).single()
+  const { error } = await service.from('manodopera_requests').delete().eq('id', id).eq('email', proFull!.email)
+  if (error) throw new Error(error.message)
+  revalidatePath('/dashboard/manodopera')
+}
+
+// ── Manodopera: elimina disponibilità ────────────────────────────────────────
+export async function deleteManodoperaAvailability(id: string): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  const { data: proFull } = await service.from('professionals').select('email').eq('id', pro.id).single()
+  const { error } = await service.from('manodopera_availability').delete().eq('id', id).eq('email', proFull!.email)
+  if (error) throw new Error(error.message)
+  revalidatePath('/dashboard/manodopera')
+}
+
 export async function createProUpgradeCheckout() {
   const pro = await getAuthenticatedPro()
 

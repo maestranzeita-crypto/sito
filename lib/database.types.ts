@@ -245,6 +245,74 @@ export type Database = {
         ]
       }
 
+      manodopera_requests: {
+        Row: {
+          id: string
+          created_at: string
+          nome: string
+          email: string
+          telefono: string
+          specializzazione: string
+          zona_cantiere: string
+          periodo_da: string
+          periodo_a: string
+          tipo_ingaggio: string
+          compenso: string
+          requisiti: string[]
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          nome: string
+          email: string
+          telefono: string
+          specializzazione: string
+          zona_cantiere: string
+          periodo_da: string
+          periodo_a: string
+          tipo_ingaggio: string
+          compenso: string
+          requisiti?: string[]
+        }
+        Update: Partial<Database['public']['Tables']['manodopera_requests']['Insert']>
+        Relationships: []
+      }
+
+      manodopera_availability: {
+        Row: {
+          id: string
+          created_at: string
+          nome: string
+          email: string
+          telefono: string
+          specializzazione: string
+          zona_operativa: string
+          disponibile_da: string
+          disponibile_a: string
+          tipo_collaborazione: string[]
+          tariffa: string
+          attrezzatura_propria: boolean
+          durc_valido: boolean
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          nome: string
+          email: string
+          telefono: string
+          specializzazione: string
+          zona_operativa: string
+          disponibile_da: string
+          disponibile_a: string
+          tipo_collaborazione?: string[]
+          tariffa: string
+          attrezzatura_propria?: boolean
+          durc_valido?: boolean
+        }
+        Update: Partial<Database['public']['Tables']['manodopera_availability']['Insert']>
+        Relationships: []
+      }
+
       waitlist: {
         Row: {
           id: string
@@ -291,3 +359,5 @@ export type JobApplication = Database['public']['Tables']['job_applications']['R
 export type Review = Database['public']['Tables']['reviews']['Row']
 export type ProfileView = Database['public']['Tables']['profile_views']['Row']
 export type Waitlist = Database['public']['Tables']['waitlist']['Row']
+export type ManodoperaRequest = Database['public']['Tables']['manodopera_requests']['Row']
+export type ManodoperaAvailability = Database['public']['Tables']['manodopera_availability']['Row']
