@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Camera, Loader2, Trash2, Plus, ImageIcon } from 'lucide-react'
 import type { Professional } from '@/lib/database.types'
 import { createClient } from '@/lib/supabase/client'
+import { saveFotoUrl, saveFotoLavori } from '@/app/dashboard/actions'
 
 export default function MediaSection({ pro }: { pro: Professional }) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(pro.foto_url)
@@ -35,12 +36,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
 
         const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
 
-        const { error: dbError } = await supabase
-          .from('professionals')
-          .update({ foto_url: publicUrl })
-          .eq('id', pro.id)
-        if (dbError) throw new Error(dbError.message)
-
+        await saveFotoUrl(publicUrl)
         setAvatarUrl(publicUrl)
       } catch (err: unknown) {
         setAvatarError(err instanceof Error ? err.message : 'Errore upload')
@@ -57,7 +53,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
           const pathPart = avatarUrl.split('/avatars/')[1]
           if (pathPart) await supabase.storage.from('avatars').remove([pathPart])
         }
-        await supabase.from('professionals').update({ foto_url: null }).eq('id', pro.id)
+        await saveFotoUrl(null)
         setAvatarUrl(null)
       } catch (err: unknown) {
         setAvatarError(err instanceof Error ? err.message : 'Errore eliminazione')
@@ -78,7 +74,10 @@ export default function MediaSection({ pro }: { pro: Professional }) {
       const added: string[] = []
 
       for (const file of files) {
-        if (file.size > 15 * 1024 * 1024) continue
+        if (file.size > 15 * 1024 * 1024) {
+          setPortfolioError(`File "${file.name}" troppo grande (max 15 MB)`)
+          continue
+        }
         try {
           const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
           const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
@@ -91,13 +90,14 @@ export default function MediaSection({ pro }: { pro: Professional }) {
 
           const { data: { publicUrl } } = supabase.storage.from('portfolio').getPublicUrl(path)
           added.push(publicUrl)
-        } catch { /* salta foto singola fallita */ }
+        } catch (err: unknown) {
+          setPortfolioError(err instanceof Error ? err.message : 'Errore upload foto')
+        }
       }
 
       if (added.length > 0) {
         const newPortfolio = [...portfolio, ...added]
-        const supabase2 = createClient()
-        await supabase2.from('professionals').update({ foto_lavori: newPortfolio }).eq('id', pro.id)
+        await saveFotoLavori(newPortfolio)
         setPortfolio(newPortfolio)
       }
     })
@@ -113,7 +113,7 @@ export default function MediaSection({ pro }: { pro: Professional }) {
         if (pathPart) await supabase.storage.from('portfolio').remove([pathPart])
 
         const newPortfolio = portfolio.filter((u) => u !== url)
-        await supabase.from('professionals').update({ foto_lavori: newPortfolio }).eq('id', pro.id)
+        await saveFotoLavori(newPortfolio)
         setPortfolio(newPortfolio)
       } catch (err: unknown) {
         setPortfolioError(err instanceof Error ? err.message : 'Errore eliminazione')

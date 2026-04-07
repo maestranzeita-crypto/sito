@@ -280,6 +280,32 @@ export async function transferLead(leadId: string, toProfessionalId: string) {
 }
 
 
+// ── Salva foto profilo ────────────────────────────────────────────────────────
+export async function saveFotoUrl(fotoUrl: string | null): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  const { error } = await service
+    .from('professionals')
+    .update({ foto_url: fotoUrl })
+    .eq('id', pro.id)
+  if (error) throw new Error(error.message)
+  revalidatePath('/dashboard')
+  revalidatePath(`/professionisti/${pro.id}`)
+}
+
+// ── Salva foto lavori ─────────────────────────────────────────────────────────
+export async function saveFotoLavori(fotoLavori: string[]): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  const { error } = await service
+    .from('professionals')
+    .update({ foto_lavori: fotoLavori })
+    .eq('id', pro.id)
+  if (error) throw new Error(error.message)
+  revalidatePath('/dashboard')
+  revalidatePath(`/professionisti/${pro.id}`)
+}
+
 // ── Salva certificazioni ──────────────────────────────────────────────────────
 export async function saveCertificazioni(certificazioni: string[]): Promise<void> {
   const pro = await getAuthenticatedPro()
