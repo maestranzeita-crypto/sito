@@ -85,7 +85,7 @@ export default function HomePage() {
       <HomeJsonLd />
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden min-h-[520px] md:min-h-[600px]">
         {/* Background texture */}
         <div className="absolute inset-0 opacity-10">
           <div
@@ -97,35 +97,28 @@ export default function HomePage() {
           />
         </div>
 
+        {/* Immagine rotante — destra, full-height, solo desktop */}
+        <div className="hidden lg:block absolute inset-y-0 right-0 w-[42%]">
+          <HeroImage />
+        </div>
+
+        {/* Testo — sinistra */}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
-            {/* Colonna sinistra — 60% */}
-            <div className="lg:col-span-3">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
-                Trova il professionista
-                <span className="text-orange-400"> giusto </span>
-                per la tua casa
-              </h1>
+          <div className="max-w-xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6">
+              Trova il professionista
+              <span className="text-orange-400"> giusto </span>
+              per la tua casa
+            </h1>
 
-              <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-2xl">
-                Elettricisti, idraulici, muratori, installatori fotovoltaico e molto altro.
-                Professionisti verificati, preventivi gratuiti, recensioni reali.
-              </p>
+            <p className="text-lg md:text-xl text-slate-300 leading-relaxed">
+              Elettricisti, idraulici, muratori, installatori fotovoltaico e molto altro.
+              Professionisti verificati, preventivi gratuiti, recensioni reali.
+            </p>
 
-              {/* Search box */}
-              <div className="mt-8">
-                <HomeSearchForm />
-              </div>
-
-              <p className="mt-4 text-sm text-slate-400">
-                ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
-              </p>
-            </div>
-
-            {/* Colonna destra — 40% — nascosta su mobile */}
-            <div className="hidden lg:block lg:col-span-2">
-              <HeroImage />
-            </div>
+            <p className="mt-8 text-sm text-slate-400">
+              ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
+            </p>
           </div>
         </div>
       </section>

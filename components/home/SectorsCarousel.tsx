@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import HomeSearchForm from '@/components/home/HomeSearchForm'
 
 const SECTORS = [
   {
@@ -33,6 +34,13 @@ export default function SectorsCarousel() {
   return (
     <section className="py-10 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Search bar — spostata dall'hero */}
+        <div className="flex justify-center mb-10">
+          <div className="w-full max-w-2xl">
+            <HomeSearchForm />
+          </div>
+        </div>
+
         <p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6">
           I settori in cui operiamo
         </p>

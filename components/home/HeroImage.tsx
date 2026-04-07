@@ -36,24 +36,23 @@ export default function HeroImage() {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <div
-        className="relative w-full rounded-2xl overflow-hidden shadow-lg"
-        style={{ aspectRatio: '4/3' }}
-      >
-        <Image
-          src={IMAGES[current].src}
-          alt={IMAGES[current].alt}
-          fill
-          className="object-cover"
-          style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.4s ease' }}
-          sizes="40vw"
-          priority
-        />
-      </div>
+    <div className="relative h-full w-full">
+      {/* Immagine che riempie tutta l'altezza */}
+      <Image
+        src={IMAGES[current].src}
+        alt={IMAGES[current].alt}
+        fill
+        className="object-cover"
+        style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.4s ease' }}
+        sizes="42vw"
+        priority
+      />
 
-      {/* Dots */}
-      <div className="flex gap-2 mt-4">
+      {/* Sfumatura sul bordo sinistro per blend con l'hero scuro */}
+      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-900 to-transparent pointer-events-none" />
+
+      {/* Dots di navigazione in basso */}
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-10">
         {IMAGES.map((img, i) => (
           <button
             key={i}
