@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { LogOut, Eye } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import type { Professional } from '@/lib/database.types'
@@ -35,9 +36,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         {/* Logo */}
         <div className="px-5 py-5 border-b border-slate-800">
           <Link href="/" className="block mb-1">
-            <span className="text-xl font-extrabold text-white tracking-tight">
-              Maest<span className="text-orange-500">ranze</span>
-            </span>
+            <Image src="/logo.svg" alt="Maestranze" width={140} height={29} className="h-7 w-auto brightness-0 invert" />
           </Link>
           <span className="text-xs text-slate-500">Dashboard Professionista</span>
         </div>
@@ -96,9 +95,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         {/* Topbar mobile */}
         <header className="md:hidden bg-slate-900 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
           <Link href="/">
-            <span className="text-lg font-extrabold text-white">
-              Maest<span className="text-orange-500">ranze</span>
-            </span>
+            <Image src="/logo.svg" alt="Maestranze" width={120} height={25} className="h-6 w-auto brightness-0 invert" />
           </Link>
           <div className="flex items-center gap-1">
             {pro?.id && (
