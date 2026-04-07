@@ -83,7 +83,7 @@ export default function HomePage() {
       <HomeJsonLd />
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative text-white overflow-hidden min-h-screen flex flex-col justify-center">
+      <section className="relative text-white overflow-hidden min-h-screen">
         {/* Immagine di sfondo rotante — full cover, desktop e mobile */}
         <HeroImage />
 
