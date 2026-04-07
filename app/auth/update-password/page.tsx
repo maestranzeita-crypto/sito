@@ -28,13 +28,13 @@ export default function UpdatePasswordPage() {
       supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
         .then(({ error }) => {
           if (error) {
-            setError('Link non valido o scaduto. Contatta info@maestranze.it.')
+            setError('Link non valido o scaduto. Contatta info@maestranze.com.')
           } else {
             setReady(true)
           }
         })
     } else {
-      setError('Link non valido. Contatta info@maestranze.it.')
+      setError('Link non valido. Contatta info@maestranze.com.')
     }
   }, [supabase])
 

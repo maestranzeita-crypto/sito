@@ -150,8 +150,8 @@ export default function ComeFunzionaPage() {
           </Link>
           <p className="text-orange-100 text-sm mt-4">
             Hai domande? Scrivici a{' '}
-            <a href="mailto:info@maestranze.it" className="underline hover:text-white font-medium">
-              info@maestranze.it
+            <a href="mailto:info@maestranze.com" className="underline hover:text-white font-medium">
+              info@maestranze.com
             </a>
           </p>
         </div>

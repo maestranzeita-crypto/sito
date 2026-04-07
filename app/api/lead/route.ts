@@ -17,7 +17,7 @@ function createServiceClient() {
   )
 }
 
-const ADMIN_EMAIL = 'info@maestranze.it'
+const ADMIN_EMAIL = 'info@maestranze.com'
 
 export async function POST(request: Request) {
   let body: unknown

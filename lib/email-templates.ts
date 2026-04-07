@@ -129,7 +129,7 @@ export function buildWelcomeEmailHtml(data: WelcomeEmailData): string {
 
   <p style="margin:28px 0 0;font-size:14px;color:${SLATE};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
     Per qualsiasi domanda scrivi a
-    <a href="mailto:info@maestranze.it" style="color:${ORANGE};text-decoration:none;font-weight:600;">info@maestranze.it</a>.<br><br>
+    <a href="mailto:info@maestranze.com" style="color:${ORANGE};text-decoration:none;font-weight:600;">info@maestranze.com</a>.<br><br>
     A presto,<br>
     <strong>Alonzo — Team Maestranze</strong>
   </p>`
@@ -197,7 +197,7 @@ export function buildRejectionEmailHtml(data: RejectionEmailData): string {
   <p style="margin:0 0 28px;font-size:15px;color:${SLATE};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
     Se pensi ci sia un errore o vuoi fornire ulteriori informazioni, scrivici direttamente — siamo felici di rivalutare la tua richiesta.
   </p>
-  ${cta('mailto:info@maestranze.it', 'Scrivi a info@maestranze.it →')}
+  ${cta('mailto:info@maestranze.com', 'Scrivi a info@maestranze.com →')}
   <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
     Grazie per aver scelto Maestranze.com.<br>
     <strong>Team Maestranze</strong>
@@ -357,7 +357,7 @@ export function buildPasswordSetupEmailHtml(data: PasswordSetupEmailData): strin
 
   <p style="margin:0 0 24px;font-size:13px;color:${MUTED};line-height:1.6;font-family:Arial,Helvetica,sans-serif;">
     Il link è valido per 24 ore. Se scade, scrivici a
-    <a href="mailto:info@maestranze.it" style="color:${ORANGE};text-decoration:none;">info@maestranze.it</a>
+    <a href="mailto:info@maestranze.com" style="color:${ORANGE};text-decoration:none;">info@maestranze.com</a>
     e ne generiamo uno nuovo.
   </p>
 
