@@ -31,7 +31,12 @@ export default function LoginForm() {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
-      setError('Email o password non corretti.')
+      const isCredentials = error.message?.toLowerCase().includes('invalid') ||
+        error.message?.toLowerCase().includes('credentials') ||
+        error.status === 400
+      setError(isCredentials
+        ? 'Email o password non corretti.'
+        : 'Errore di connessione. Controlla la rete e riprova.')
       setLoading(false)
       return
     }
