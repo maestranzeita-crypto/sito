@@ -107,6 +107,9 @@ export default function HomePage() {
             <p className="mt-8 text-sm text-white/70">
               ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
             </p>
+            <Link href="/professionisti" className="sm:hidden mt-6 inline-flex items-center gap-1 text-white/80 text-sm font-medium underline underline-offset-4 hover:text-white transition-colors">
+              Scopri di più <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -163,9 +166,6 @@ export default function HomePage() {
               </button>
             </Link>
           </div>
-          <Link href="/professionisti" className="sm:hidden inline-flex items-center gap-1 text-white/80 text-sm font-medium underline underline-offset-4 mb-8 hover:text-white transition-colors">
-            Scopri di più <ArrowRight className="w-4 h-4" />
-          </Link>
           <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-xs sm:max-w-sm mx-auto">
             <div>
               <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">48h</p>
