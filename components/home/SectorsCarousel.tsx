@@ -11,7 +11,7 @@ const SECTORS = [
   {
     name: 'Elettricista',
     slug: 'elettricista',
-    img: 'https://images.pexels.com/photos/34054464/pexels-photo-34054464.jpeg',
+    img: 'https://images.pexels.com/photos/7359566/pexels-photo-7359566.jpeg',
   },
   {
     name: 'Idraulico',

@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 const IMAGES = [
   { src: 'https://images.pexels.com/photos/9875408/pexels-photo-9875408.jpeg', alt: 'Impianti Fotovoltaici' },
-  { src: 'https://images.pexels.com/photos/34054464/pexels-photo-34054464.jpeg', alt: 'Elettricista' },
+  { src: 'https://images.pexels.com/photos/7359566/pexels-photo-7359566.jpeg', alt: 'Elettricista' },
   { src: 'https://images.pexels.com/photos/8581897/pexels-photo-8581897.jpeg', alt: 'Idraulico' },
   { src: 'https://images.pexels.com/photos/11429199/pexels-photo-11429199.jpeg', alt: 'Muratore' },
   { src: 'https://images.pexels.com/photos/15798783/pexels-photo-15798783.jpeg', alt: 'Impresa Edile' },
@@ -47,9 +47,6 @@ export default function HeroImage() {
         sizes="42vw"
         priority
       />
-
-      {/* Sfumatura sul bordo sinistro per blend con l'hero scuro */}
-      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-900 to-transparent pointer-events-none" />
 
       {/* Dots di navigazione in basso */}
       <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 z-10">
