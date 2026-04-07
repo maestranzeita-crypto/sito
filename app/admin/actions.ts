@@ -129,6 +129,35 @@ export async function rejectProfessional(id: string, email: string, ragioneSocia
   revalidatePath('/admin')
 }
 
+export async function resendPasswordEmail(email: string, ragioneSociale: string) {
+  await getAdminUser()
+
+  let passwordResetUrl = 'https://maestranze.com/accedi'
+  try {
+    const adminAuth = createAdminClient()
+    const { data: linkData, error: linkError } = await adminAuth.auth.admin.generateLink({
+      type: 'recovery',
+      email,
+      options: { redirectTo: 'https://maestranze.com/auth/update-password' },
+    })
+    if (linkError) {
+      console.error('[resendPasswordEmail] generateLink error:', linkError.message)
+    } else if (linkData?.properties?.action_link) {
+      passwordResetUrl = linkData.properties.action_link
+    }
+  } catch (err) {
+    console.error('[resendPasswordEmail] errore generazione link:', err)
+  }
+
+  const sent = await sendEmail({
+    to: email,
+    subject: 'Imposta la tua password — Maestranze',
+    html: buildPasswordSetupEmailHtml({ ragioneSociale, passwordResetUrl }),
+  })
+
+  if (!sent) console.error('[resendPasswordEmail] Email non inviata a', email)
+}
+
 export async function suspendProfessional(id: string) {
   await getAdminUser()
   const supabase = createServiceClient()

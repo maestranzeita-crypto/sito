@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createServerClient } from '@supabase/ssr'
 import type { Database, Professional, LeadRequest } from '@/lib/database.types'
-import { approveProfessional, rejectProfessional, suspendProfessional } from './actions'
+import { approveProfessional, rejectProfessional, suspendProfessional, resendPasswordEmail } from './actions'
 import LeadsSection from './LeadsSection'
 
 const ADMIN_EMAIL = 'info@maestranze.com'
@@ -180,14 +180,24 @@ function ProfessionalCard({ pro, mode }: { pro: Professional; mode: 'pending' | 
             </>
           )}
           {mode === 'active' && (
-            <form action={suspendProfessional.bind(null, pro.id)}>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors"
-              >
-                Sospendi
-              </button>
-            </form>
+            <>
+              <form action={resendPasswordEmail.bind(null, pro.email, pro.ragione_sociale)}>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Reinvia email password
+                </button>
+              </form>
+              <form action={suspendProfessional.bind(null, pro.id)}>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Sospendi
+                </button>
+              </form>
+            </>
           )}
         </div>
 
