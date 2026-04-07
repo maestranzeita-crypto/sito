@@ -1,13 +1,18 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Clock, Calendar, ChevronRight, AlertCircle, Newspaper } from 'lucide-react'
-import { BLOG_POSTS, getPostBySlug, getRelatedPosts, type BlogSection } from '@/lib/blog'
+import { BLOG_POSTS, getPostBySlugHybrid, getAllPosts, type BlogSection } from '@/lib/blog'
 import { CATEGORIES } from '@/lib/categories'
 import { SITE_URL } from '@/lib/utils'
 
-export function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }))
+export const revalidate = 3600
+export const dynamicParams = true
+
+export async function generateStaticParams() {
+  const allPosts = await getAllPosts()
+  return allPosts.map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({
@@ -15,7 +20,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
-  const post = getPostBySlug(params.slug)
+  const post = await getPostBySlugHybrid(params.slug)
   if (!post) return {}
 
   const title = `${post.title} | Maestranze`
@@ -65,10 +70,19 @@ function RenderSection({ section }: { section: BlogSection }) {
           <p className="text-sm text-slate-700 leading-relaxed">{section.text}</p>
         </div>
       )
+    case 'html':
+      // Contenuto generato da AI — trusted, non user input
+      return (
+        <p
+          className="text-slate-700 leading-relaxed [&_a]:text-orange-600 [&_a]:font-medium [&_a:hover]:underline"
+          dangerouslySetInnerHTML={{ __html: section.content }}
+        />
+      )
   }
 }
 
-function ArticleJsonLd({ post }: { post: ReturnType<typeof getPostBySlug> }) {
+import type { BlogPost } from '@/lib/blog'
+function ArticleJsonLd({ post }: { post: BlogPost | null }) {
   if (!post) return null
   return (
     <script
@@ -99,12 +113,15 @@ const CATEGORY_LABELS: Record<string, string> = {
   generale: 'Generale',
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug)
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const post = await getPostBySlugHybrid(params.slug)
   if (!post) notFound()
 
   const cat = CATEGORIES.find((c) => c.slug === post.category)
-  const related = getRelatedPosts(post)
+  const allPosts = await getAllPosts()
+  const related = allPosts
+    .filter((p) => p.slug !== post.slug && (p.category === post.category || p.tags.some((t) => post.tags.includes(t))))
+    .slice(0, 3)
 
   return (
     <>
@@ -148,6 +165,15 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           </div>
         </div>
       </section>
+
+      {/* ── IMMAGINE HERO (solo post con immagine) ────────────── */}
+      {post.imageUrl && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
+          <div className="relative h-56 md:h-80 rounded-2xl overflow-hidden shadow-lg">
+            <Image src={post.imageUrl} alt={post.imageAlt ?? post.title} fill className="object-cover" unoptimized />
+          </div>
+        </div>
+      )}
 
       {/* ── CONTENUTO ─────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

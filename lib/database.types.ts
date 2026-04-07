@@ -245,6 +245,45 @@ export type Database = {
         ]
       }
 
+      blog_posts: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          excerpt: string
+          category: string
+          tags: string[]
+          published_at: string
+          reading_time: number
+          author_name: string
+          sections: unknown
+          image_url: string | null
+          image_alt: string | null
+          status: string
+          seo_title: string | null
+          seo_description: string | null
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          excerpt: string
+          category?: string
+          tags?: string[]
+          published_at?: string
+          reading_time?: number
+          author_name?: string
+          sections?: unknown
+          image_url?: string | null
+          image_alt?: string | null
+          status?: string
+          seo_title?: string | null
+          seo_description?: string | null
+        }
+        Update: Partial<Database['public']['Tables']['blog_posts']['Insert']>
+        Relationships: []
+      }
+
       manodopera_requests: {
         Row: {
           id: string
@@ -359,5 +398,6 @@ export type JobApplication = Database['public']['Tables']['job_applications']['R
 export type Review = Database['public']['Tables']['reviews']['Row']
 export type ProfileView = Database['public']['Tables']['profile_views']['Row']
 export type Waitlist = Database['public']['Tables']['waitlist']['Row']
+export type BlogPostRow = Database['public']['Tables']['blog_posts']['Row']
 export type ManodoperaRequest = Database['public']['Tables']['manodopera_requests']['Row']
 export type ManodoperaAvailability = Database['public']['Tables']['manodopera_availability']['Row']

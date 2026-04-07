@@ -4,17 +4,91 @@ export type BlogSection =
   | { type: 'p'; text: string }
   | { type: 'ul'; items: string[] }
   | { type: 'callout'; title: string; text: string }
+  | { type: 'html'; content: string }   // paragrafo con link HTML interni (generato da AI)
 
 export type BlogPost = {
   slug: string
   title: string
   excerpt: string
-  category: string          // slug categoria o 'generale'
+  category: string
   tags: string[]
-  publishedAt: string       // ISO date
-  readingTime: number       // minuti
+  publishedAt: string
+  readingTime: number
   author: { name: string; role: string }
   sections: BlogSection[]
+  imageUrl?: string
+  imageAlt?: string
+}
+
+import { createServerClient } from '@supabase/ssr'
+import type { Database } from '@/lib/database.types'
+
+function createServiceClient() {
+  return createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => [], setAll: () => {} }, auth: { persistSession: false } }
+  )
+}
+
+function rowToPost(row: Database['public']['Tables']['blog_posts']['Row']): BlogPost {
+  return {
+    slug: row.slug,
+    title: row.title,
+    excerpt: row.excerpt,
+    category: row.category,
+    tags: row.tags,
+    publishedAt: row.published_at,
+    readingTime: row.reading_time,
+    author: { name: row.author_name, role: 'Redazione' },
+    sections: (row.sections as BlogSection[]) ?? [],
+    imageUrl: row.image_url ?? undefined,
+    imageAlt: row.image_alt ?? undefined,
+  }
+}
+
+export async function getDbPosts(): Promise<BlogPost[]> {
+  try {
+    const service = createServiceClient()
+    const { data } = await service
+      .from('blog_posts')
+      .select('*')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false })
+      .limit(50)
+    return (data ?? []).map(rowToPost)
+  } catch {
+    return []
+  }
+}
+
+export async function getDbPostBySlug(slug: string): Promise<BlogPost | null> {
+  try {
+    const service = createServiceClient()
+    const { data } = await service
+      .from('blog_posts')
+      .select('*')
+      .eq('slug', slug)
+      .eq('status', 'published')
+      .single()
+    return data ? rowToPost(data) : null
+  } catch {
+    return null
+  }
+}
+
+export async function getAllPosts(): Promise<BlogPost[]> {
+  const dbPosts = await getDbPosts()
+  // DB posts prima, poi statici (senza duplicati per slug)
+  const dbSlugs = new Set(dbPosts.map((p) => p.slug))
+  const staticFiltered = BLOG_POSTS.filter((p) => !dbSlugs.has(p.slug))
+  return [...dbPosts, ...staticFiltered]
+}
+
+export async function getPostBySlugHybrid(slug: string): Promise<BlogPost | null> {
+  const dbPost = await getDbPostBySlug(slug)
+  if (dbPost) return dbPost
+  return BLOG_POSTS.find((p) => p.slug === slug) ?? null
 }
 
 export const BLOG_POSTS: BlogPost[] = [

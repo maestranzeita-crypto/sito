@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Clock, Tag, Newspaper } from 'lucide-react'
-import { BLOG_POSTS } from '@/lib/blog'
+import { getAllPosts, BLOG_POSTS } from '@/lib/blog'
 import { CATEGORIES } from '@/lib/categories'
 import { SITE_URL } from '@/lib/utils'
+
+export const revalidate = 3600 // ISR: rigenera ogni ora
 
 export const metadata: Metadata = {
   title: 'Guide e Consigli per Ristrutturazioni, Impianti e Lavori di Casa | Maestranze',
@@ -27,9 +30,10 @@ const CATEGORY_LABELS: Record<string, string> = {
   generale: 'Generale',
 }
 
-export default function BlogPage() {
-  const featured = BLOG_POSTS[0]
-  const rest = BLOG_POSTS.slice(1)
+export default async function BlogPage() {
+  const allPosts = await getAllPosts()
+  const featured = allPosts[0] ?? BLOG_POSTS[0]
+  const rest = allPosts.slice(1)
   const FeaturedIcon = CATEGORIES.find((c) => c.slug === featured.category)?.icon ?? Newspaper
 
   return (
@@ -57,10 +61,15 @@ export default function BlogPage() {
           <Link href={`/blog/${featured.slug}`} className="block group">
             <article className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-orange-300 hover:shadow-lg transition-all">
               <div className="grid grid-cols-1 lg:grid-cols-2">
-                {/* Placeholder immagine */}
-                <div className={`h-48 lg:h-auto bg-gradient-to-br ${getCategoryGradient(featured.category)} flex items-center justify-center`}>
-                  <FeaturedIcon className="w-20 h-20 opacity-40 text-slate-500" />
-                </div>
+                {featured.imageUrl ? (
+                  <div className="h-48 lg:h-auto relative overflow-hidden">
+                    <Image src={featured.imageUrl} alt={featured.imageAlt ?? featured.title} fill className="object-cover" unoptimized />
+                  </div>
+                ) : (
+                  <div className={`h-48 lg:h-auto bg-gradient-to-br ${getCategoryGradient(featured.category)} flex items-center justify-center`}>
+                    <FeaturedIcon className="w-20 h-20 opacity-40 text-slate-500" />
+                  </div>
+                )}
                 <div className="p-6 lg:p-8 flex flex-col justify-center">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xs font-semibold bg-orange-100 text-orange-700 px-2.5 py-1 rounded-full">
@@ -105,10 +114,15 @@ export default function BlogPage() {
                 return (
                 <Link key={post.slug} href={`/blog/${post.slug}`} className="block group">
                   <article className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-orange-300 hover:shadow-md transition-all h-full flex flex-col">
-                    {/* Placeholder immagine piccola */}
-                    <div className={`h-32 bg-gradient-to-br ${getCategoryGradient(post.category)} flex items-center justify-center flex-shrink-0`}>
-                      <PostIcon className="w-14 h-14 opacity-40 text-slate-500" />
-                    </div>
+                    {post.imageUrl ? (
+                      <div className="h-32 relative overflow-hidden flex-shrink-0">
+                        <Image src={post.imageUrl} alt={post.imageAlt ?? post.title} fill className="object-cover" unoptimized />
+                      </div>
+                    ) : (
+                      <div className={`h-32 bg-gradient-to-br ${getCategoryGradient(post.category)} flex items-center justify-center flex-shrink-0`}>
+                        <PostIcon className="w-14 h-14 opacity-40 text-slate-500" />
+                      </div>
+                    )}
                     <div className="p-4 flex flex-col flex-1">
                       <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full self-start mb-2">
                         {CATEGORY_LABELS[post.category]}
@@ -142,7 +156,7 @@ export default function BlogPage() {
               <h3 className="font-bold text-slate-900 mb-4 text-sm">Argomenti</h3>
               <div className="space-y-1">
                 {CATEGORIES.map((cat) => {
-                  const count = BLOG_POSTS.filter((p) => p.category === cat.slug).length
+                  const count = allPosts.filter((p) => p.category === cat.slug).length
                   if (count === 0) return null
                   return (
                     <div key={cat.slug} className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-orange-50 transition-colors">
@@ -165,7 +179,7 @@ export default function BlogPage() {
                 <Tag className="w-4 h-4 text-orange-500" /> Tag popolari
               </h3>
               <div className="flex flex-wrap gap-2">
-                {Array.from(new Set(BLOG_POSTS.flatMap((p) => p.tags))).map((tag) => (
+                {Array.from(new Set(allPosts.flatMap((p) => p.tags))).map((tag) => (
                   <span
                     key={tag}
                     className="text-xs text-slate-600 bg-slate-100 hover:bg-orange-50 hover:text-orange-600 px-2.5 py-1 rounded-full cursor-default transition-colors"
