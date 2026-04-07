@@ -31,7 +31,7 @@ function createAdminClient() {
   )
 }
 
-const ADMIN_EMAIL = 'info@maestranze.com'
+const ADMIN_EMAIL = 'info@maestranze.it'
 
 async function getAdminUser() {
   const { createClient } = await import('@/lib/supabase/server')

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { sendEmail, buildAdminNotificationEmailHtml, buildWelcomeEmailHtml } from '@/lib/emails'
 
-const ADMIN_EMAIL = 'info@maestranze.com'
+const ADMIN_EMAIL = 'info@maestranze.it'
 
 export async function POST(request: Request) {
   try {

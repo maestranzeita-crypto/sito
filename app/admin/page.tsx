@@ -5,7 +5,7 @@ import type { Database, Professional, LeadRequest } from '@/lib/database.types'
 import { approveProfessional, rejectProfessional, suspendProfessional } from './actions'
 import LeadsSection from './LeadsSection'
 
-const ADMIN_EMAIL = 'info@maestranze.com'
+const ADMIN_EMAIL = 'info@maestranze.it'
 
 function createServiceClient() {
   return createServerClient<Database>(

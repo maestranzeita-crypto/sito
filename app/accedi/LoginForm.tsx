@@ -36,7 +36,7 @@ export default function LoginForm() {
       return
     }
 
-    const destination = data.user?.email === 'info@maestranze.com' ? '/admin' : redirectTo
+    const destination = data.user?.email === 'info@maestranze.it' ? '/admin' : redirectTo
     router.push(destination)
     router.refresh()
   }

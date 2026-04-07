@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { sendEmail } from '@/lib/emails'
 
-const ADMIN_EMAIL = 'maestranze.ita@gmail.com'
+const ADMIN_EMAIL = 'info@maestranze.it'
 
 function createServiceClient() {
   return createServerClient(

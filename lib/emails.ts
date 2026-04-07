@@ -75,7 +75,7 @@ export async function sendEmail({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Maestranze <info@maestranze.com>',
+        from: 'Maestranze <info@maestranze.it>',
         to,
         subject,
         html,
