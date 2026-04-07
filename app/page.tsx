@@ -309,15 +309,23 @@ export default function HomePage() {
 
 
 {/* ─── COLLABORAZIONI ───────────────────────────────────── */}
-      <section className="py-16 bg-slate-900 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative py-24 text-white overflow-hidden">
+        {/* Immagine di sfondo */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-slate-900/80" />
+        {/* Contenuto */}
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-5 uppercase tracking-wider">
             Collaborazioni
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
             Vuoi collaborare con noi?
           </h2>
-          <p className="text-slate-400 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-white/70 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
             Siamo aperti a partnership con associazioni di categoria, piattaforme di settore, media specializzati e realtà che condividono la nostra missione. Scrivici e valutiamo insieme.
           </p>
           <a
