@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import type { Category } from '@/lib/categories'
-import { MAIN_CITIES } from '@/lib/categories'
 
 export default function CategoryCard({ cat }: { cat: Category }) {
   return (
@@ -16,20 +15,6 @@ export default function CategoryCard({ cat }: { cat: Category }) {
         </div>
         <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-orange-500 group-hover:translate-x-1 transition-all" />
       </Link>
-
-      {/* Città principali */}
-      <div className="mt-4 flex flex-wrap gap-1.5">
-        {MAIN_CITIES.slice(0, 4).map((city) => (
-          <Link
-            key={city}
-            href={`/${cat.slug}/${city.toLowerCase()}`}
-            className="text-xs bg-slate-100 hover:bg-orange-100 hover:text-orange-700 text-slate-600 px-2.5 py-1 rounded-full transition-colors"
-          >
-            {city}
-          </Link>
-        ))}
-        <span className="text-xs text-slate-400 px-2 py-1">+altro</span>
-      </div>
     </div>
   )
 }
