@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { CATEGORIES } from '@/lib/categories'
 import Button from '@/components/ui/Button'
@@ -10,6 +10,16 @@ import Button from '@/components/ui/Button'
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function openServices() {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setServicesOpen(true)
+  }
+
+  function scheduleClose() {
+    closeTimer.current = setTimeout(() => setServicesOpen(false), 150)
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
@@ -32,16 +42,18 @@ export default function Header() {
             <div className="relative group">
               <button
                 className="flex items-center gap-1 text-slate-600 hover:text-slate-900 font-medium text-sm"
-                onMouseEnter={() => setServicesOpen(true)}
-                onMouseLeave={() => setServicesOpen(false)}
+                onMouseEnter={openServices}
+                onMouseLeave={scheduleClose}
+                aria-expanded={servicesOpen}
+                aria-haspopup="true"
               >
                 Servizi <ChevronDown className="w-4 h-4" />
               </button>
               {servicesOpen && (
                 <div
                   className="absolute top-full left-0 mt-1 w-56 bg-white border border-slate-200 rounded-xl shadow-lg py-2"
-                  onMouseEnter={() => setServicesOpen(true)}
-                  onMouseLeave={() => setServicesOpen(false)}
+                  onMouseEnter={openServices}
+                  onMouseLeave={scheduleClose}
                 >
                   {CATEGORIES.map((cat) => (
                     <Link
