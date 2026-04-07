@@ -51,7 +51,7 @@ function ProCard({
 }: {
   pro: Professional
   index: number
-  category: Category
+  category: SerializableCategory
   city: City
   blurred: boolean
 }) {
@@ -168,7 +168,7 @@ function UnlockBanner({
   city,
   hiddenCount,
 }: {
-  category: Category
+  category: SerializableCategory
   city: City
   hiddenCount: number
 }) {
