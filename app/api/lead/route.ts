@@ -105,10 +105,9 @@ export async function POST(request: Request) {
     .eq('available', true)
     .contains('categorie', [categoria])
     .eq('citta', cittaNorm)
-    .limit(10)
+    .limit(25)
 
-  const pros: Pick<Professional, 'ragione_sociale' | 'email' | 'categorie' | 'citta'>[] =
-    (prosData as typeof prosData & Pick<Professional, 'ragione_sociale' | 'email' | 'categorie' | 'citta'>[] | null) ?? []
+  const pros = prosData ?? []
 
   const proEmailPromises = pros.map((pro) =>
     sendEmail({
