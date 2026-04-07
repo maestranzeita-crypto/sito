@@ -132,9 +132,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── B2B FULL-WIDTH SECTION ───────────────────────────── */}
-      <section
-        className="relative flex items-center justify-center text-white h-[400px] md:h-[500px] overflow-hidden"
-      >
+      <section className="relative flex items-center justify-center text-white overflow-hidden py-16 md:py-24">
         {/* Immagine di sfondo */}
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -143,39 +141,39 @@ export default function HomePage() {
         {/* Overlay scuro */}
         <div className="absolute inset-0 bg-black/60" />
         {/* Contenuto */}
-        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto w-full">
           <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-5 uppercase tracking-wider">
             Per Imprese e Artigiani
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
-            Il cantiere non aspetta. La squadra giusta nemmeno.
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
+            Il cantiere non aspetta.<br className="sm:hidden" /> La squadra giusta nemmeno.
           </h2>
-          <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-white/85 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
             Sei un&apos;impresa con un cantiere aperto e ti manca personale qualificato? Sei un artigiano con tempo libero e vuoi lavorare? Maestranze connette entrambi — senza agenzie, senza intermediari.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            <Link href="/manodopera">
-              <button className="bg-white text-slate-900 font-semibold px-7 py-3 rounded-xl hover:bg-white/90 transition-colors text-sm md:text-base">
+            <Link href="/manodopera" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto bg-white text-slate-900 font-semibold px-6 py-3 rounded-xl hover:bg-white/90 transition-colors text-sm md:text-base">
                 Sono un&apos;impresa — cerco artigiani
               </button>
             </Link>
-            <Link href="/manodopera">
-              <button className="border-2 border-white text-white font-semibold px-7 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm md:text-base">
+            <Link href="/manodopera" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto border-2 border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm md:text-base">
                 Sono un artigiano — voglio lavorare
               </button>
             </Link>
           </div>
-          <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto">
+          <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-xs sm:max-w-sm mx-auto">
             <div>
-              <p className="text-2xl md:text-3xl font-extrabold">48h</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">48h</p>
               <p className="text-white/70 text-xs mt-1 leading-snug">per trovare un artigiano disponibile</p>
             </div>
             <div>
-              <p className="text-2xl md:text-3xl font-extrabold">100%</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">100%</p>
               <p className="text-white/70 text-xs mt-1 leading-snug">professionisti con DURC verificato</p>
             </div>
             <div>
-              <p className="text-2xl md:text-3xl font-extrabold">0€</p>
+              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">0€</p>
               <p className="text-white/70 text-xs mt-1 leading-snug">commissioni sui lavori</p>
             </div>
           </div>
