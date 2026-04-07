@@ -109,7 +109,7 @@ export default async function DashboardPage() {
     .select('*')
     .eq('email', user.email!)
     .single()
-  const pro = proData as Professional | null
+  const pro: Professional | null = proData ?? null
 
   if (!pro) {
     return (
@@ -140,7 +140,7 @@ export default async function DashboardPage() {
   const thisWeekStart  = startOfWeek(0)
   const lastWeekStart  = startOfWeek(-1)
 
-  const [leadsRes, reviewsRes, viewsThisWeekRes, viewsLastWeekRes] = await Promise.all([
+  const [leadsRes, reviewsRes, viewsRes] = await Promise.all([
     service
       .from('lead_requests')
       .select('*')
@@ -155,23 +155,19 @@ export default async function DashboardPage() {
       .eq('professional_id', pro.id)
       .order('created_at', { ascending: false })
       .limit(5),
+    // Unica query per entrambe le settimane — split in JS
     service
       .from('profile_views')
-      .select('id', { count: 'exact', head: true })
+      .select('viewed_at')
       .eq('professional_id', pro.id)
-      .gte('viewed_at', thisWeekStart),
-    service
-      .from('profile_views')
-      .select('id', { count: 'exact', head: true })
-      .eq('professional_id', pro.id)
-      .gte('viewed_at', lastWeekStart)
-      .lt('viewed_at', thisWeekStart),
+      .gte('viewed_at', lastWeekStart),
   ])
 
-  const leads: LeadRequest[] = (leadsRes.data as LeadRequest[] | null) ?? []
-  const reviews: Review[]    = (reviewsRes.data as Review[] | null) ?? []
-  const viewsThisWeek        = viewsThisWeekRes.count ?? 0
-  const viewsLastWeek        = viewsLastWeekRes.count ?? 0
+  const leads: LeadRequest[]  = leadsRes.data ?? []
+  const reviews: Review[]     = reviewsRes.data ?? []
+  const allViews              = viewsRes.data ?? []
+  const viewsThisWeek         = allViews.filter((v) => v.viewed_at >= thisWeekStart).length
+  const viewsLastWeek         = allViews.filter((v) => v.viewed_at >= lastWeekStart && v.viewed_at < thisWeekStart).length
 
   const nuoveRichieste = leads.filter((l) => getDisplayStatus(l) === 'nuovo').length
   const inAttesa       = leads.filter((l) => getDisplayStatus(l) === 'risposto').length
