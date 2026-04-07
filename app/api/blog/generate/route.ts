@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server'
 import { generateText } from 'ai'
-import { anthropic } from '@ai-sdk/anthropic'
 import { createServerClient } from '@supabase/ssr'
 import type { Database } from '@/lib/database.types'
 
 // ENV richieste:
-// ANTHROPIC_API_KEY   — chiave Claude
-// PEXELS_API_KEY      — chiave Pexels (gratuita su pexels.com/api)
-// CRON_SECRET         — segreto per proteggere l'endpoint (impostare su Vercel)
+// PEXELS_API_KEY  — chiave Pexels (gratuita su pexels.com/api)
+// CRON_SECRET     — segreto per proteggere l'endpoint (impostare su Vercel)
+// Auth AI         — OIDC automatico su Vercel (nessuna chiave manuale necessaria)
 
 function createServiceClient() {
   return createServerClient<Database>(
@@ -224,9 +223,9 @@ Rispondi SOLO con JSON valido (nessun testo fuori dal JSON):
 }`
 
   const { text } = await generateText({
-    model: anthropic('claude-sonnet-4.6'),
+    model: 'anthropic/claude-sonnet-4.6',
     prompt,
-    maxOutputTokens: 4096,
+    maxTokens: 4096,
   })
 
   // Estrai JSON dalla risposta (rimuove eventuale markdown ```json ... ```)
@@ -256,13 +255,13 @@ export async function GET(req: Request) {
 
     const existingSlugs = (existing ?? []).map((r) => r.slug)
 
-    // Controlla se è già stato pubblicato qualcosa questa settimana
+    // Controlla se sono già stati pubblicati 2 articoli questa settimana
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
     const publishedThisWeek = (existing ?? []).filter((r) => r.published_at > oneWeekAgo)
-    if (publishedThisWeek.length > 0) {
+    if (publishedThisWeek.length >= 2) {
       return NextResponse.json({
         ok: true,
-        message: 'Articolo già pubblicato questa settimana',
+        message: 'Già pubblicati 2 articoli questa settimana',
         slug: publishedThisWeek[0].slug,
       })
     }
