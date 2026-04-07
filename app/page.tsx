@@ -131,56 +131,52 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── MANODOPERA PROMO ─────────────────────────────────── */}
-      <section className="py-20" style={{ background: '#f8fafc' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Colonna sinistra */}
+      {/* ─── B2B FULL-WIDTH SECTION ───────────────────────────── */}
+      <section
+        className="relative flex items-center justify-center text-white h-[400px] md:h-[500px] overflow-hidden"
+      >
+        {/* Immagine di sfondo */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg)' }}
+        />
+        {/* Overlay scuro */}
+        <div className="absolute inset-0 bg-black/60" />
+        {/* Contenuto */}
+        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
+          <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-5 uppercase tracking-wider">
+            Per Imprese e Artigiani
+          </span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
+            Il cantiere non aspetta. La squadra giusta nemmeno.
+          </h2>
+          <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+            Sei un&apos;impresa con un cantiere aperto e ti manca personale qualificato? Sei un artigiano con tempo libero e vuoi lavorare? Maestranze connette entrambi — senza agenzie, senza intermediari.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
+            <Link href="/manodopera">
+              <button className="bg-white text-slate-900 font-semibold px-7 py-3 rounded-xl hover:bg-white/90 transition-colors text-sm md:text-base">
+                Sono un&apos;impresa — cerco artigiani
+              </button>
+            </Link>
+            <Link href="/manodopera">
+              <button className="border-2 border-white text-white font-semibold px-7 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm md:text-base">
+                Sono un artigiano — voglio lavorare
+              </button>
+            </Link>
+          </div>
+          <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto">
             <div>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight mb-4">
-                Hai un cantiere che parte e ti manca personale?
-              </h2>
-              <p className="text-slate-500 text-lg mb-8 leading-relaxed">
-                Trova artigiani qualificati e disponibili nella tua zona in 48 ore. Senza agenzie, senza intermediari, senza costi per contatto.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Installatori fotovoltaico, elettricisti, idraulici, muratori e cartongessisti pronti a lavorare',
-                  'DURC in corso di validità e certificazioni sicurezza verificate',
-                  'Disponibili anche per una sola giornata o settimana',
-                  'Ogni collaborazione viene recensita da entrambe le parti',
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-slate-700">
-                    <CheckCircle2 className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/manodopera">
-                  <Button size="lg">Cerca un artigiano</Button>
-                </Link>
-                <Link href="/manodopera">
-                  <Button size="lg" variant="outline" className="border-slate-800 text-slate-800 hover:bg-slate-900 hover:text-white">
-                    Pubblica una richiesta
-                  </Button>
-                </Link>
-              </div>
+              <p className="text-2xl md:text-3xl font-extrabold">48h</p>
+              <p className="text-white/70 text-xs mt-1 leading-snug">per trovare un artigiano disponibile</p>
             </div>
-            {/* Colonna destra — card stats */}
-            <div className="flex flex-col gap-4">
-              {[
-                { stat: '48 ore', desc: 'Tempo medio per trovare un artigiano disponibile nella tua zona' },
-                { stat: 'Verificati', desc: 'P.IVA attiva, DURC e certificazioni controllate prima dell\'attivazione' },
-                { stat: 'Zero commissioni', desc: 'Paghi solo se vuoi più visibilità — nessuna percentuale sui lavori' },
-              ].map(({ stat, desc }) => (
-                <div key={stat} className="flex items-start gap-4 bg-white border border-slate-200 rounded-2xl p-6 border-l-4 border-l-orange-500">
-                  <div>
-                    <p className="text-2xl font-extrabold text-slate-900 mb-1">{stat}</p>
-                    <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
-                  </div>
-                </div>
-              ))}
+            <div>
+              <p className="text-2xl md:text-3xl font-extrabold">100%</p>
+              <p className="text-white/70 text-xs mt-1 leading-snug">professionisti con DURC verificato</p>
+            </div>
+            <div>
+              <p className="text-2xl md:text-3xl font-extrabold">0€</p>
+              <p className="text-white/70 text-xs mt-1 leading-snug">commissioni sui lavori</p>
             </div>
           </div>
         </div>
