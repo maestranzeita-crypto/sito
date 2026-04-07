@@ -323,15 +323,10 @@ export default async function DashboardPage() {
               )}
             </div>
             {!isPro && (
-              <form action={createProUpgradeCheckout}>
-                <button
-                  type="submit"
-                  className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors shadow-sm min-h-[44px]"
-                >
-                  <Zap className="w-4 h-4" />
-                  Passa a Pro — €29/mese
-                </button>
-              </form>
+              <div className="flex items-center gap-2 bg-slate-200 text-slate-500 font-bold text-sm px-5 py-3 rounded-xl cursor-default select-none">
+                <Zap className="w-4 h-4" />
+                Prossimamente
+              </div>
             )}
           </div>
 
