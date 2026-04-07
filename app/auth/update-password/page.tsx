@@ -77,10 +77,10 @@ export default function UpdatePasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 text-black">
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 w-full max-w-md">
         <div className="mb-6 text-center">
-          <span className="text-2xl font-extrabold text-slate-900 tracking-tight">
+          <span className="text-2xl font-extrabold text-black tracking-tight">
             Maest<span className="text-orange-500">ranze</span>
           </span>
           <h1 className="text-xl font-extrabold text-slate-900 mt-4 mb-1">Imposta la tua password</h1>
