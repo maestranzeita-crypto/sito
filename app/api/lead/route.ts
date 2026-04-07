@@ -78,18 +78,21 @@ export async function POST(request: Request) {
   const leadId = (lead as { id: string } | null)?.id ?? ''
 
   if (isCallback) {
-    // 2a. Callback: email admin + conferma cliente
+    // 2a. Callback: una sola email all'admin (il cliente non fornisce email)
     const orario = job_details?.orario_preferito ?? 'non specificato'
-    const adminHtml = buildCallbackAdminEmail({ nome, telefono, orario, categoria: categoriaLabel, citta, urgenza: urgenza ?? 'settimana', descrizione: descrizione ?? '' })
-    const clientHtml = buildCallbackConfirmEmail({ nome, telefono })
+    const adminHtml = buildCallbackAdminEmail({
+      nome, telefono, orario,
+      categoria: categoriaLabel,
+      citta,
+      urgenza: urgenza ?? 'settimana',
+      descrizione: descrizione ?? '',
+    })
 
-    Promise.all([
-      sendEmail({ to: ADMIN_EMAIL, subject: `Richiesta callback — ${nome} (${categoriaLabel} a ${citta})`, html: adminHtml }),
-      sendEmail({ to: ADMIN_EMAIL, subject: `Richiesta callback — ${nome} (${categoriaLabel} a ${citta})`, html: adminHtml }),
-    ]).catch((err) => console.error('[API lead] Callback email error:', err))
-
-    // Conferma SMS-like via email (no email del cliente in callback)
-    void sendEmail({ to: ADMIN_EMAIL, subject: `[CALLBACK] ${nome} · ${telefono} · ${categoriaLabel} · ${citta}`, html: adminHtml })
+    void sendEmail({
+      to: ADMIN_EMAIL,
+      subject: `Nuova callback — ${nome} · ${telefono} · ${categoriaLabel} · ${citta}`,
+      html: adminHtml,
+    })
 
     return NextResponse.json({ ok: true, leadId })
   }
