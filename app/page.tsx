@@ -83,7 +83,7 @@ export default function HomePage() {
       <HomeJsonLd />
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative text-white overflow-hidden min-h-[100svh]">
+      <section className="relative text-white overflow-hidden h-[100svh]">
         {/* Immagine di sfondo rotante — full cover, desktop e mobile */}
         <HeroImage />
 
@@ -107,11 +107,16 @@ export default function HomePage() {
             <p className="mt-8 text-sm text-white/70">
               ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
             </p>
-            <Link href="/professionisti" className="sm:hidden mt-6 inline-flex items-center gap-1 text-white/80 text-sm font-medium underline underline-offset-4 hover:text-white transition-colors">
-              Scopri di più <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
+
+        {/* Scopri di più — solo mobile, in basso centrato */}
+        <Link
+          href="/professionisti"
+          className="sm:hidden absolute bottom-8 left-0 right-0 z-20 flex justify-center items-center gap-1 text-white/80 text-sm font-medium hover:text-white transition-colors"
+        >
+          Scopri di più <ArrowRight className="w-4 h-4" />
+        </Link>
       </section>
 
       {/* ─── CATEGORIE SERVIZI ────────────────────────────────── */}
