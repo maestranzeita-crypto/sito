@@ -35,8 +35,9 @@ export default function ContattiPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-orange-950 text-white py-16 px-4">
-        <div className="max-w-3xl mx-auto text-center">
+      <section className="relative bg-slate-900 text-white py-20 px-4 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-500/20 via-transparent to-transparent pointer-events-none" />
+        <div className="relative max-w-3xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
             Contattaci
           </h1>
@@ -52,8 +53,8 @@ export default function ContattiPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {TOPICS.map(({ icon: Icon, title, desc, email }) => (
               <div key={title} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-                <div className="w-11 h-11 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
-                  <Icon className="w-5 h-5 text-orange-600" />
+                <div className="w-11 h-11 bg-orange-50 rounded-xl flex items-center justify-center mb-4 border border-orange-100">
+                  <Icon className="w-5 h-5 text-orange-500" />
                 </div>
                 <h2 className="text-lg font-semibold text-slate-900 mb-2">{title}</h2>
                 <p className="text-sm text-slate-600 leading-relaxed mb-4 flex-1">{desc}</p>
@@ -71,10 +72,10 @@ export default function ContattiPage() {
       </section>
 
       {/* Tempi di risposta */}
-      <section className="bg-orange-50 py-12 px-4">
+      <section className="bg-slate-50 py-12 px-4">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-          <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center shrink-0">
-            <Clock className="w-6 h-6 text-orange-600" />
+          <div className="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center shrink-0 border border-orange-500/20">
+            <Clock className="w-6 h-6 text-orange-500" />
           </div>
           <div>
             <h3 className="text-lg font-semibold text-slate-900 mb-1">Tempi di risposta</h3>

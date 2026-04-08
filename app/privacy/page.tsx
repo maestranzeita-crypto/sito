@@ -10,11 +10,20 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Privacy Policy</h1>
-      <p className="text-sm text-slate-500 mb-10">Ultimo aggiornamento: 30 marzo 2025</p>
+    <>
+      <section className="relative bg-slate-900 text-white py-16 px-4 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-500/20 via-transparent to-transparent pointer-events-none" />
+        <div className="relative max-w-3xl mx-auto">
+          <h1 className="text-4xl font-extrabold tracking-tight mb-2">Privacy Policy</h1>
+          <p className="text-slate-400 text-sm">Ultimo aggiornamento: 30 marzo 2025</p>
+        </div>
+      </section>
 
-      <div className="prose prose-slate prose-sm sm:prose-base max-w-none">
+    <div className="max-w-3xl mx-auto px-4 py-14">
+      <div className="prose prose-slate prose-sm sm:prose-base max-w-none
+        prose-headings:text-slate-900 prose-headings:font-bold
+        prose-h2:text-lg prose-h2:border-l-4 prose-h2:border-orange-500 prose-h2:pl-3 prose-h2:mt-10
+        prose-a:text-orange-600 prose-a:no-underline hover:prose-a:underline">
 
         <h2>1. Titolare del trattamento</h2>
         <p>
@@ -102,5 +111,6 @@ export default function PrivacyPage() {
 
       </div>
     </div>
+    </>
   )
 }
