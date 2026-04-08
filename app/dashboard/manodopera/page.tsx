@@ -54,12 +54,13 @@ export default async function DashboardManodoperaPage() {
     { data: mieRichiesteRaw },
     { data: miaDisp },
   ] = await Promise.all([
-    // Artigiani disponibili con specializzazione compatibile, ancora attivi
+    // Artigiani disponibili con specializzazione compatibile, ancora attivi (escludo me stesso)
     service
       .from('manodopera_availability')
       .select('*')
       .in('specializzazione', specializzazioni.length > 0 ? specializzazioni : ['__nessuna__'])
       .gte('disponibile_a', today)
+      .neq('email', pro.email)
       .order('created_at', { ascending: false })
       .limit(50),
     // Richieste aperte con specializzazione compatibile
@@ -87,6 +88,17 @@ export default async function DashboardManodoperaPage() {
       .limit(5),
   ])
 
+  // Mappa email → professional_id per link ai profili
+  const artigianiEmails = (artigianiRaw ?? []).map((a) => a.email)
+  const emailToProId: Record<string, string> = {}
+  if (artigianiEmails.length > 0) {
+    const { data: proEmails } = await service
+      .from('professionals')
+      .select('id, email')
+      .in('email', artigianiEmails)
+    for (const p of proEmails ?? []) emailToProId[p.email] = p.id
+  }
+
   return (
     <ManodoperaSection
       pro={pro}
@@ -95,6 +107,7 @@ export default async function DashboardManodoperaPage() {
       richiesteAperte={(richiesteRaw ?? []) as ManodoperaRequest[]}
       mieRichieste={(mieRichiesteRaw ?? []) as ManodoperaRequest[]}
       miaDisponibilita={(miaDisp ?? []) as ManodoperaAvailability[]}
+      emailToProId={emailToProId}
     />
   )
 }

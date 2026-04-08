@@ -352,6 +352,27 @@ export type Database = {
         Relationships: []
       }
 
+      chat_messages: {
+        Row: {
+          id: string
+          created_at: string
+          sender_email: string
+          receiver_email: string
+          message: string
+          read_at: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          sender_email: string
+          receiver_email: string
+          message: string
+          read_at?: string | null
+        }
+        Update: Partial<Database['public']['Tables']['chat_messages']['Insert']>
+        Relationships: []
+      }
+
       waitlist: {
         Row: {
           id: string
@@ -401,3 +422,4 @@ export type Waitlist = Database['public']['Tables']['waitlist']['Row']
 export type BlogPostRow = Database['public']['Tables']['blog_posts']['Row']
 export type ManodoperaRequest = Database['public']['Tables']['manodopera_requests']['Row']
 export type ManodoperaAvailability = Database['public']['Tables']['manodopera_availability']['Row']
+export type ChatMessage = Database['public']['Tables']['chat_messages']['Row']

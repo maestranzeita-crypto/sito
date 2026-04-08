@@ -417,6 +417,92 @@ export async function deleteManodoperaAvailability(id: string): Promise<void> {
   revalidatePath('/dashboard/manodopera')
 }
 
+// ── Chat: invia messaggio ─────────────────────────────────────────────────────
+export async function sendChatMessage(receiverEmail: string, message: string): Promise<void> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  const { data: proFull } = await service.from('professionals').select('email').eq('id', pro.id).single()
+  if (!proFull) throw new Error('Profilo non trovato')
+  const { error } = await service.from('chat_messages').insert({
+    sender_email: proFull.email,
+    receiver_email: receiverEmail,
+    message: message.trim(),
+  })
+  if (error) throw new Error(error.message)
+}
+
+// ── Chat: fetch messaggi thread ───────────────────────────────────────────────
+export async function fetchChatThread(otherEmail: string): Promise<import('@/lib/database.types').ChatMessage[]> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  const { data: proFull } = await service.from('professionals').select('email').eq('id', pro.id).single()
+  if (!proFull) return []
+  const myEmail = proFull.email
+
+  const { data } = await service
+    .from('chat_messages')
+    .select('*')
+    .or(
+      `and(sender_email.eq.${myEmail},receiver_email.eq.${otherEmail}),and(sender_email.eq.${otherEmail},receiver_email.eq.${myEmail})`
+    )
+    .order('created_at', { ascending: true })
+    .limit(100)
+
+  // Marca come letti i messaggi ricevuti non ancora letti
+  const unread = (data ?? []).filter((m) => m.receiver_email === myEmail && !m.read_at).map((m) => m.id)
+  if (unread.length > 0) {
+    await service.from('chat_messages').update({ read_at: new Date().toISOString() }).in('id', unread)
+  }
+
+  return (data ?? []) as import('@/lib/database.types').ChatMessage[]
+}
+
+// ── Chat: lista conversazioni ─────────────────────────────────────────────────
+export type ChatConversation = {
+  otherEmail: string
+  otherNome: string
+  lastMessage: string
+  lastAt: string
+  unread: number
+}
+
+export async function fetchChatConversations(): Promise<ChatConversation[]> {
+  const pro = await getAuthenticatedPro()
+  const service = createServiceClient()
+  const { data: proFull } = await service.from('professionals').select('email').eq('id', pro.id).single()
+  if (!proFull) return []
+  const myEmail = proFull.email
+
+  const { data: msgs } = await service
+    .from('chat_messages')
+    .select('*')
+    .or(`sender_email.eq.${myEmail},receiver_email.eq.${myEmail}`)
+    .order('created_at', { ascending: false })
+    .limit(200)
+
+  const threads = new Map<string, ChatConversation>()
+  for (const m of msgs ?? []) {
+    const other = m.sender_email === myEmail ? m.receiver_email : m.sender_email
+    if (!threads.has(other)) {
+      threads.set(other, { otherEmail: other, otherNome: other, lastMessage: m.message, lastAt: m.created_at, unread: 0 })
+    }
+    if (m.receiver_email === myEmail && !m.read_at) {
+      threads.get(other)!.unread++
+    }
+  }
+
+  // Arricchisci con nomi dai professionisti
+  const emails = Array.from(threads.keys())
+  if (emails.length > 0) {
+    const { data: pros } = await service.from('professionals').select('email, ragione_sociale').in('email', emails)
+    for (const p of pros ?? []) {
+      if (threads.has(p.email)) threads.get(p.email)!.otherNome = p.ragione_sociale
+    }
+  }
+
+  return Array.from(threads.values()).sort((a, b) => b.lastAt.localeCompare(a.lastAt))
+}
+
 export async function createProUpgradeCheckout() {
   const pro = await getAuthenticatedPro()
 
