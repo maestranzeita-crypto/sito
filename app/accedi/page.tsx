@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Shield, Star, Users } from 'lucide-react'
 import { SITE_URL } from '@/lib/utils'
 import LoginForm from './LoginForm'
@@ -22,9 +23,13 @@ export default function AccediPage() {
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
             <div className="mb-7">
               <Link href="/" className="inline-block mb-6">
-                <span className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                  Maest<span className="text-orange-500">ranze</span>
-                </span>
+                <Image
+                  src="/logo-horizontal.svg"
+                  alt="Maestranze"
+                  width={160}
+                  height={40}
+                  priority
+                />
               </Link>
               <h1 className="text-2xl font-extrabold text-slate-900 mb-1">Accedi alla dashboard</h1>
               <p className="text-slate-500 text-sm">Gestisci il tuo profilo e le richieste di preventivo.</p>
