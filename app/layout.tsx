@@ -4,9 +4,12 @@ import { headers } from 'next/headers'
 import './globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -41,6 +44,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+  verification: googleSiteVerification ? { google: googleSiteVerification } : undefined,
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
@@ -73,6 +77,7 @@ export default async function RootLayout({
   return (
     <html lang="it" suppressHydrationWarning>
       <body className={`${inter.className} antialiased bg-white text-slate-900`}>
+        {gaMeasurementId ? <GoogleAnalytics measurementId={gaMeasurementId} /> : null}
         {/* Anti-FOUC: apply stored theme before first paint */}
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('maestranze-theme');if(t==='dark'||(t===null&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}` }} />
         {!hideChrome && <Header />}
