@@ -15,15 +15,17 @@ export default function PrivacyPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-500/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative max-w-3xl mx-auto">
           <h1 className="text-4xl font-extrabold tracking-tight mb-2">Privacy Policy</h1>
-          <p className="text-slate-400 text-sm">Ultimo aggiornamento: 30 marzo 2025</p>
+          <p className="text-slate-300 text-sm">Ultimo aggiornamento: 30 marzo 2025</p>
         </div>
       </section>
 
     <div className="max-w-3xl mx-auto px-4 py-14">
       <div className="prose prose-slate prose-sm sm:prose-base max-w-none
         prose-headings:text-slate-900 prose-headings:font-bold
-        prose-h2:text-lg prose-h2:border-l-4 prose-h2:border-orange-500 prose-h2:pl-3 prose-h2:mt-10
-        prose-a:text-orange-600 prose-a:no-underline hover:prose-a:underline">
+        prose-p:text-slate-700 prose-li:text-slate-700
+        prose-strong:text-slate-900
+        prose-a:text-orange-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
+        [&_h2]:border-l-4 [&_h2]:border-orange-500 [&_h2]:pl-3 [&_h2]:mt-10 [&_h2]:text-slate-900">
 
         <h2>1. Titolare del trattamento</h2>
         <p>

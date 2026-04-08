@@ -60,7 +60,7 @@ export default function ContattiPage() {
                 <p className="text-sm text-slate-600 leading-relaxed mb-4 flex-1">{desc}</p>
                 <a
                   href={`mailto:${email}`}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-orange-700 hover:text-orange-800 transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                   {email}
@@ -131,7 +131,7 @@ export default function ContattiPage() {
             Consulta la nostra pagina su come funziona Maestranze oppure scrivi direttamente al nostro team.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/come-funziona" className="inline-flex items-center justify-center font-semibold rounded-lg px-5 py-2.5 border-2 border-orange-500 text-orange-500 hover:bg-orange-50 transition-colors">Come funziona</Link>
+            <Link href="/come-funziona" className="inline-flex items-center justify-center font-semibold rounded-lg px-5 py-2.5 border-2 border-orange-600 text-orange-700 hover:bg-orange-50 transition-colors">Come funziona</Link>
             <a href="mailto:supporto@maestranze.com" className="inline-flex items-center justify-center font-semibold rounded-lg px-5 py-2.5 bg-orange-500 text-white hover:bg-orange-600 transition-colors shadow-md">Scrivici</a>
           </div>
         </div>
