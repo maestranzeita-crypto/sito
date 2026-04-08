@@ -8,8 +8,10 @@ import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })
-const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION
-const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+const GOOGLE_SITE_VERIFICATION_TOKEN = 'PcMoAB8jyXGRhp7_qd-tLcdDTCjhpKQqxW4m12e2pMY'
+const GA_MEASUREMENT_ID = 'G-7L1Z9GQV8F'
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION ?? GOOGLE_SITE_VERIFICATION_TOKEN
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? GA_MEASUREMENT_ID
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
