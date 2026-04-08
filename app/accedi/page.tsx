@@ -24,11 +24,12 @@ export default function AccediPage() {
             <div className="mb-7">
               <Link href="/" className="inline-block mb-6">
                 <Image
-                  src="/logo-horizontal.svg"
+                  src="/logo.svg"
                   alt="Maestranze"
-                  width={160}
+                  width={195}
                   height={40}
                   priority
+                  className="h-8 w-auto"
                 />
               </Link>
               <h1 className="text-2xl font-extrabold text-slate-900 mb-1">Accedi alla dashboard</h1>
