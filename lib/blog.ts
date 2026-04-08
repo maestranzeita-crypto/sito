@@ -1,3 +1,5 @@
+import { ensureBlogImage } from '@/lib/blog-images'
+
 export type BlogSection =
   | { type: 'h2'; text: string }
   | { type: 'h3'; text: string }
@@ -32,6 +34,12 @@ function createServiceClient() {
 }
 
 function rowToPost(row: Database['public']['Tables']['blog_posts']['Row']): BlogPost {
+  const image = ensureBlogImage(
+    { url: row.image_url ?? undefined, alt: row.image_alt ?? undefined },
+    row.category,
+    row.title
+  )
+
   return {
     slug: row.slug,
     title: row.title,
@@ -42,8 +50,8 @@ function rowToPost(row: Database['public']['Tables']['blog_posts']['Row']): Blog
     readingTime: row.reading_time,
     author: { name: row.author_name, role: 'Redazione' },
     sections: (row.sections as BlogSection[]) ?? [],
-    imageUrl: row.image_url ?? undefined,
-    imageAlt: row.image_alt ?? undefined,
+    imageUrl: image.url,
+    imageAlt: image.alt,
   }
 }
 

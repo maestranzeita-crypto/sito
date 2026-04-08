@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import type { Database } from '@/lib/database.types'
 import { BLOG_POSTS } from '@/lib/blog'
+import { ensureBlogImage } from '@/lib/blog-images'
 
 function createServiceClient() {
   return createServerClient<Database>(
@@ -53,7 +54,7 @@ export async function GET(req: Request) {
   for (const post of BLOG_POSTS) {
     try {
       const query = CATEGORY_PEXELS[post.category] ?? 'home renovation'
-      const image = await fetchPexelsImage(query)
+      const image = ensureBlogImage(await fetchPexelsImage(query), post.category, post.title)
 
       await service.from('blog_posts').upsert({
         slug: post.slug,
@@ -65,8 +66,8 @@ export async function GET(req: Request) {
         reading_time: post.readingTime,
         author_name: post.author.name,
         sections: post.sections as unknown as Database['public']['Tables']['blog_posts']['Insert']['sections'],
-        image_url: image?.url ?? null,
-        image_alt: image?.alt ?? post.title,
+        image_url: image.url,
+        image_alt: image.alt,
         status: 'published',
         seo_title: post.title,
         seo_description: post.excerpt.slice(0, 160),
@@ -88,8 +89,7 @@ export async function GET(req: Request) {
   for (const row of dbPosts ?? []) {
     try {
       const query = CATEGORY_PEXELS[row.category] ?? 'home renovation'
-      const image = await fetchPexelsImage(query)
-      if (!image) continue
+      const image = ensureBlogImage(await fetchPexelsImage(query), row.category, row.slug)
 
       await service
         .from('blog_posts')

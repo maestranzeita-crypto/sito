@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { generateText } from 'ai'
 import { createServerClient } from '@supabase/ssr'
 import type { Database } from '@/lib/database.types'
+import { ensureBlogImage } from '@/lib/blog-images'
 
 // ENV richieste:
 // PEXELS_API_KEY  — chiave Pexels (gratuita su pexels.com/api)
@@ -272,7 +273,11 @@ export async function GET(req: Request) {
     const postData = await generateBlogPost(topic, existingSlugs)
 
     // Immagine da Pexels
-    const image = await fetchPexelsImage(topic.pexels)
+    const image = ensureBlogImage(
+      await fetchPexelsImage(topic.pexels),
+      postData.category ?? topic.category,
+      postData.title
+    )
 
     // Salva su Supabase
     const { data: saved, error } = await service
@@ -286,8 +291,8 @@ export async function GET(req: Request) {
         reading_time: postData.reading_time ?? 6,
         author_name: 'Redazione Maestranze',
         sections: postData.sections,
-        image_url: image?.url ?? null,
-        image_alt: image?.alt ?? postData.title,
+        image_url: image.url,
+        image_alt: image.alt,
         status: 'published',
         seo_title: postData.seo_title ?? postData.title,
         seo_description: postData.seo_description ?? postData.excerpt,
