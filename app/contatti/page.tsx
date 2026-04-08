@@ -89,9 +89,9 @@ export default function ContattiPage() {
       </section>
 
       {/* FAQ rapida */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 bg-white dark:bg-slate-950">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">Domande frequenti</h2>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 text-center">Domande frequenti</h2>
           <div className="space-y-4">
             {[
               {
@@ -111,12 +111,12 @@ export default function ContattiPage() {
                 a: 'Per partnership, accordi commerciali o collaborazioni editoriali, scrivici a supporto@maestranze.com con oggetto "Collaborazione".',
               },
             ].map(({ q, a }) => (
-              <details key={q} className="group border border-slate-200 rounded-xl overflow-hidden">
-                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer font-medium text-slate-900 hover:bg-slate-50 transition-colors list-none">
+              <details key={q} className="group border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer font-medium text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors list-none">
                   {q}
                   <span className="ml-4 text-orange-500 group-open:rotate-45 transition-transform text-xl leading-none select-none">+</span>
                 </summary>
-                <div className="px-5 pb-4 text-sm text-slate-600 leading-relaxed">{a}</div>
+                <div className="px-5 pb-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{a}</div>
               </details>
             ))}
           </div>

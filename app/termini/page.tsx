@@ -3,7 +3,7 @@ import { SITE_URL } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'Termini di Servizio — Maestranze',
-  description: 'Termini e condizioni di utilizzo del marketplace Maestranze.com per clienti e professionisti.',
+  description: 'Termini e condizioni di utilizzo del marketplace Maestranze.com per artigiani, professionisti e aziende.',
   alternates: { canonical: `${SITE_URL}/termini` },
   robots: { index: true, follow: false },
 }
@@ -15,142 +15,241 @@ export default function TerminiPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-500/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative max-w-3xl mx-auto">
           <h1 className="text-4xl font-extrabold tracking-tight mb-2">Termini di Servizio</h1>
-          <p className="text-slate-300 text-sm">Ultimo aggiornamento: 30 marzo 2025</p>
+          <p className="text-slate-300 text-sm">Ultimo aggiornamento: 8 aprile 2025</p>
         </div>
       </section>
 
-    <div className="max-w-3xl mx-auto px-4 py-14">
-      <div className="prose prose-slate prose-sm sm:prose-base max-w-none
-        prose-headings:text-slate-900 prose-headings:font-bold
-        prose-p:text-slate-700 prose-li:text-slate-700
-        prose-strong:text-slate-900
-        prose-a:text-orange-700 prose-a:font-medium prose-a:no-underline hover:prose-a:underline
-        [&_h2]:border-l-4 [&_h2]:border-orange-500 [&_h2]:pl-3 [&_h2]:mt-10 [&_h2]:text-slate-900">
+      <div className="bg-white dark:bg-slate-950 min-h-screen">
+        <div className="max-w-3xl mx-auto px-4 py-14">
+          <div className="space-y-10 text-slate-700 dark:text-slate-300 leading-relaxed">
 
-        <h2>1. Accettazione dei termini</h2>
-        <p>
-          L&apos;accesso e l&apos;utilizzo della piattaforma <strong>Maestranze.com</strong> (di seguito &quot;Piattaforma&quot; o &quot;Maestranze&quot;) comportano l&apos;accettazione integrale dei presenti Termini di Servizio. Se non si accettano le condizioni qui descritte, si prega di non utilizzare la Piattaforma.
-        </p>
-        <p>
-          Maestranze si riserva il diritto di modificare i presenti termini in qualsiasi momento. Le modifiche saranno comunicate tramite email o avviso in piattaforma. L&apos;utilizzo continuato del servizio costituisce accettazione delle condizioni aggiornate.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">1. Definizioni e parti del contratto</h2>
+              <p>Ai fini dei presenti Termini si intende per:</p>
+              <ul className="mt-3 space-y-2 list-disc pl-5">
+                <li><strong className="text-slate-900 dark:text-white">«Piattaforma»:</strong> il sito web e i servizi digitali accessibili all&apos;indirizzo maestranze.com, gestiti da Maestranze.com.</li>
+                <li><strong className="text-slate-900 dark:text-white">«Maestranze»:</strong> il gestore della Piattaforma, titolare del servizio di marketplace digitale.</li>
+                <li><strong className="text-slate-900 dark:text-white">«Professionista»:</strong> artigiano, impresa individuale o società che si registra sulla Piattaforma per offrire servizi edili, impiantistici o affini, operando in qualità di lavoratore autonomo titolare di Partita IVA.</li>
+                <li><strong className="text-slate-900 dark:text-white">«Cliente»:</strong> persona fisica o giuridica che utilizza la Piattaforma per ricercare professionisti o richiedere preventivi.</li>
+                <li><strong className="text-slate-900 dark:text-white">«Utente»:</strong> qualsiasi soggetto che accede alla Piattaforma, sia Professionista che Cliente.</li>
+                <li><strong className="text-slate-900 dark:text-white">«Utente Business»:</strong> ai sensi del Reg. UE 2019/1150, il Professionista che utilizza la Piattaforma nell&apos;esercizio della propria attività commerciale, artigianale o professionale.</li>
+              </ul>
+            </section>
 
-        <h2>2. Descrizione del servizio</h2>
-        <p>
-          Maestranze è un marketplace digitale che facilita l&apos;incontro tra:
-        </p>
-        <ul>
-          <li><strong>Clienti</strong> (privati o aziende) che necessitano di servizi edili, impiantistici o affini;</li>
-          <li><strong>Professionisti</strong> (imprese, artigiani, lavoratori autonomi) che offrono tali servizi.</li>
-        </ul>
-        <p>
-          Maestranze agisce esclusivamente da intermediario tecnologico. Non è parte dei contratti di lavoro stipulati tra clienti e professionisti, non garantisce la qualità delle prestazioni erogate dai professionisti e non è responsabile del pagamento di corrispettivi tra le parti.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">2. Accettazione dei termini</h2>
+              <p>
+                L&apos;accesso e l&apos;utilizzo della Piattaforma comportano l&apos;accettazione integrale dei presenti Termini di Servizio. Se non si accettano le condizioni qui descritte, si prega di non utilizzare la Piattaforma.
+              </p>
+              <p className="mt-3">
+                Maestranze si riserva il diritto di modificare i presenti Termini. Le modifiche vengono comunicate via email o avviso in piattaforma con un preavviso minimo di <strong className="text-slate-900 dark:text-white">15 giorni</strong> prima dell&apos;entrata in vigore, in conformità al Reg. UE 2019/1150 (P2B). Gli Utenti Business che non accettino le modifiche possono recedere senza penali entro tale termine. L&apos;utilizzo continuato del servizio dopo la scadenza del preavviso costituisce accettazione delle nuove condizioni.
+              </p>
+            </section>
 
-        <h2>3. Requisiti di accesso</h2>
-        <p>Per utilizzare la Piattaforma è necessario:</p>
-        <ul>
-          <li>aver compiuto 18 anni di età;</li>
-          <li>avere capacità giuridica di agire;</li>
-          <li>fornire informazioni veritiere, accurate e aggiornate durante la registrazione;</li>
-          <li>per i professionisti: essere titolari di Partita IVA valida e possedere le abilitazioni di legge richieste per i servizi offerti.</li>
-        </ul>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">3. Descrizione del servizio e natura della Piattaforma</h2>
+              <p>
+                Maestranze è un <strong className="text-slate-900 dark:text-white">marketplace digitale di intermediazione tecnologica</strong> che facilita l&apos;incontro tra Professionisti e Clienti nel settore edile e impiantistico.
+              </p>
+              <p className="mt-3">
+                <strong className="text-slate-900 dark:text-white">Maestranze non è un&apos;agenzia per il lavoro e non svolge attività di intermediazione di manodopera ai sensi del D.Lgs. 10 settembre 2003 n. 276.</strong> La Piattaforma non effettua somministrazione di lavoro, non instaura rapporti di lavoro subordinato o parasubordinato con i Professionisti, e non si interpone nei rapporti contrattuali tra Professionisti e Clienti. I Professionisti operano in piena autonomia organizzativa, gestionale ed economica, con propria Partita IVA e nel rispetto della normativa fiscale e previdenziale applicabile alla loro attività.
+              </p>
+              <p className="mt-3">
+                Maestranze agisce quale hosting provider ai sensi dell&apos;art. 6 del Reg. UE 2022/2065 (Digital Services Act). Non ha conoscenza preventiva dei contenuti pubblicati dagli Utenti e non è responsabile degli stessi, salvo nei casi in cui, ricevuta notifica di contenuto illegale, non abbia agito tempestivamente per rimuoverlo.
+              </p>
+            </section>
 
-        <h2>4. Registrazione e account</h2>
-        <p>
-          La registrazione alla Piattaforma è gratuita. L&apos;utente è responsabile della riservatezza delle credenziali di accesso e di tutte le attività svolte tramite il proprio account. In caso di accesso non autorizzato, deve notificarlo immediatamente a <a href="mailto:supporto@maestranze.com">supporto@maestranze.com</a>.
-        </p>
-        <p>
-          Maestranze si riserva il diritto di sospendere o cancellare account che violino i presenti Termini, forniscano informazioni false o tengano comportamenti scorretti nei confronti di altri utenti.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">4. Requisiti di accesso</h2>
+              <p>Per utilizzare la Piattaforma è necessario:</p>
+              <ul className="mt-3 space-y-1 list-disc pl-5">
+                <li>aver compiuto 18 anni di età;</li>
+                <li>avere piena capacità giuridica di agire;</li>
+                <li>fornire informazioni veritiere, accurate e aggiornate durante la registrazione;</li>
+                <li>per i Professionisti: essere titolari di Partita IVA valida e possedere le abilitazioni di legge richieste per i servizi offerti (es. abilitazione ai sensi del D.M. 37/2008 per impianti elettrici, idraulici e termici; patentino per gas; iscrizione CCIAA; qualifiche per la sicurezza nei cantieri).</li>
+              </ul>
+              <p className="mt-3">
+                L&apos;accesso da parte di minori di 18 anni è espressamente vietato. Registrandosi, l&apos;Utente dichiara di possedere i requisiti sopra indicati.
+              </p>
+            </section>
 
-        <h2>5. Obblighi del professionista</h2>
-        <p>Il professionista che si registra su Maestranze si impegna a:</p>
-        <ul>
-          <li>fornire informazioni veritiere sul proprio profilo (specializzazioni, zona operativa, certificazioni);</li>
-          <li>possedere e mantenere valide le abilitazioni di legge necessarie per i servizi offerti (es. abilitazione DM 37/08 per impianti elettrici e idraulici, patentino gas);</li>
-          <li>essere in possesso di assicurazione RC professionale;</li>
-          <li>rispondere alle richieste di preventivo in modo professionale e cortese;</li>
-          <li>non contattare i clienti per finalità diverse da quelle strettamente legate alla richiesta ricevuta;</li>
-          <li>non richiedere pagamenti in nero o accordi che aggirino la normativa fiscale.</li>
-        </ul>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">5. Registrazione e account</h2>
+              <p>
+                La registrazione alla Piattaforma è gratuita. L&apos;Utente è responsabile della riservatezza delle proprie credenziali di accesso e di tutte le attività svolte tramite il proprio account. In caso di accesso non autorizzato o violazione delle credenziali, l&apos;Utente deve notificarlo immediatamente a <a href="mailto:supporto@maestranze.com" className="text-orange-700 dark:text-orange-400 font-medium hover:underline">supporto@maestranze.com</a>.
+              </p>
+              <p className="mt-3">
+                Maestranze si riserva il diritto di sospendere o cancellare account che violino i presenti Termini, forniscano informazioni false o tengano comportamenti scorretti. In caso di sospensione, l&apos;Utente Business riceverà comunicazione motivata e avrà accesso al sistema di reclami interno (art. 13).
+              </p>
+            </section>
 
-        <h2>6. Obblighi del cliente</h2>
-        <p>Il cliente che utilizza Maestranze si impegna a:</p>
-        <ul>
-          <li>fornire informazioni accurate nelle richieste di preventivo;</li>
-          <li>non contattare i professionisti per finalità diverse dal lavoro richiesto;</li>
-          <li>trattare i professionisti con rispetto;</li>
-          <li>lasciare recensioni veritiere e basate sulla propria esperienza diretta.</li>
-        </ul>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">6. Obblighi del Professionista</h2>
+              <p>Il Professionista che si registra su Maestranze si impegna a:</p>
+              <ul className="mt-3 space-y-2 list-disc pl-5">
+                <li>fornire informazioni veritiere e aggiornate sul proprio profilo (specializzazioni, zona operativa, certificazioni);</li>
+                <li>possedere e mantenere valide tutte le abilitazioni di legge necessarie per i servizi offerti;</li>
+                <li>essere titolare di polizza assicurativa RC professionale adeguata all&apos;attività svolta;</li>
+                <li>rispettare integralmente le norme in materia di <strong className="text-slate-900 dark:text-white">sicurezza sul lavoro</strong> (D.Lgs. 9 aprile 2008 n. 81 e ss.mm.ii.), di tutela della salute nei cantieri edili e ogni altra normativa di settore applicabile;</li>
+                <li>operare nel pieno rispetto della normativa fiscale italiana, emettendo regolare fattura per ogni prestazione e non proponendo accordi in contanti non documentati o pagamenti in nero;</li>
+                <li>rispondere alle richieste di preventivo in modo professionale, corretto e tempestivo;</li>
+                <li>non contattare i Clienti per finalità diverse da quelle strettamente legate alla richiesta ricevuta tramite Piattaforma;</li>
+                <li>non instaurare rapporti di lavoro dipendente non dichiarato con personale impiegato nelle commesse acquisite tramite la Piattaforma.</li>
+              </ul>
+            </section>
 
-        <h2>7. Contenuti vietati</h2>
-        <p>È vietato pubblicare sulla Piattaforma contenuti che:</p>
-        <ul>
-          <li>siano falsi, ingannevoli o fraudolenti;</li>
-          <li>contengano informazioni di contatto (telefono, email, siti web) nei campi descrittivi del profilo al fine di eludere la piattaforma;</li>
-          <li>siano diffamatori, offensivi, discriminatori o violino i diritti di terzi;</li>
-          <li>violino la normativa vigente in materia di pubblicità, concorrenza sleale o protezione dei consumatori;</li>
-          <li>contengano virus, malware o codice dannoso.</li>
-        </ul>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">7. Obblighi del Cliente</h2>
+              <p>Il Cliente che utilizza Maestranze si impegna a:</p>
+              <ul className="mt-3 space-y-1 list-disc pl-5">
+                <li>fornire informazioni accurate nelle richieste di preventivo;</li>
+                <li>non sollecitare accordi che eludano la normativa fiscale o le norme in materia di sicurezza sul lavoro;</li>
+                <li>in qualità di committente, rispettare gli obblighi previsti dal D.Lgs. 81/2008 (nomina coordinatore per la sicurezza, piano di sicurezza, ecc.) ove applicabili;</li>
+                <li>trattare i Professionisti con rispetto e correttezza;</li>
+                <li>lasciare recensioni veritiere basate sulla propria esperienza diretta.</li>
+              </ul>
+            </section>
 
-        <h2>8. Recensioni e reputazione</h2>
-        <p>
-          Le recensioni sono riservate ai clienti che hanno effettuato una richiesta di preventivo tramite Maestranze. Maestranze si riserva il diritto di rimuovere recensioni che violino le presenti condizioni o che siano palesemente false, previa verifica. I professionisti possono segnalare recensioni ritenute improprie a <a href="mailto:segnalazioni@maestranze.com">segnalazioni@maestranze.com</a>.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">8. Contenuti vietati e segnalazione</h2>
+              <p>È vietato pubblicare sulla Piattaforma contenuti che:</p>
+              <ul className="mt-3 space-y-1 list-disc pl-5">
+                <li>siano falsi, ingannevoli o fraudolenti;</li>
+                <li>contengano dati di contatto diretti (telefono, email, siti web) nei campi descrittivi del profilo, al fine di eludere la Piattaforma;</li>
+                <li>siano diffamatori, offensivi, discriminatori o lesivi dei diritti di terzi;</li>
+                <li>violino la normativa vigente in materia di pubblicità, concorrenza sleale, protezione dei consumatori o diritto del lavoro;</li>
+                <li>costituiscano contenuto illegale ai sensi del Reg. UE 2022/2065 (DSA);</li>
+                <li>contengano virus, malware o codice dannoso.</li>
+              </ul>
+              <p className="mt-3">
+                Chiunque rilevi contenuti illegali o in violazione dei presenti Termini può segnalarli a <a href="mailto:segnalazioni@maestranze.com" className="text-orange-700 dark:text-orange-400 font-medium hover:underline">segnalazioni@maestranze.com</a>. Maestranze esamina ogni segnalazione e adotta i provvedimenti necessari entro un termine ragionevole, conformemente al DSA.
+              </p>
+            </section>
 
-        <h2>9. Responsabilità e limitazioni</h2>
-        <p>
-          <strong>Maestranze non è responsabile</strong> per:
-        </p>
-        <ul>
-          <li>la qualità, la sicurezza o la conformità dei lavori eseguiti dai professionisti;</li>
-          <li>le obbligazioni contrattuali tra clienti e professionisti;</li>
-          <li>danni diretti o indiretti derivanti dall&apos;uso o dall&apos;impossibilità di utilizzo della Piattaforma;</li>
-          <li>la veridicità delle informazioni inserite dagli utenti;</li>
-          <li>interruzioni del servizio dovute a manutenzione, guasti o cause di forza maggiore.</li>
-        </ul>
-        <p>
-          La responsabilità di Maestranze, nei limiti consentiti dalla legge, è in ogni caso limitata all&apos;importo degli eventuali corrispettivi pagati dall&apos;utente per piani a pagamento negli ultimi 12 mesi.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">9. Parametri di posizionamento (ranking)</h2>
+              <p>
+                Ai sensi dell&apos;art. 5 del Reg. UE 2019/1150, il posizionamento dei profili nei risultati di ricerca è determinato da:
+              </p>
+              <ul className="mt-3 space-y-1 list-disc pl-5">
+                <li>completezza del profilo (descrizione, foto, specializzazioni, certificazioni);</li>
+                <li>valutazione media ottenuta dalle recensioni verificate;</li>
+                <li>numero e recency delle recensioni ricevute;</li>
+                <li>corrispondenza tra la zona operativa dichiarata e la zona di ricerca del Cliente;</li>
+                <li>disponibilità dichiarata dall&apos;artigiano.</li>
+              </ul>
+              <p className="mt-3">
+                Maestranze non accetta pagamenti per alterare artificialmente il posizionamento. Eventuali futuri spazi promozionali a pagamento saranno chiaramente etichettati come tali.
+              </p>
+            </section>
 
-        <h2>10. Proprietà intellettuale</h2>
-        <p>
-          Tutti i contenuti della Piattaforma (logo, testi, grafica, codice sorgente) sono di proprietà di Maestranze o dei rispettivi titolari e sono protetti dalla normativa sul diritto d&apos;autore. È vietata la riproduzione, distribuzione o utilizzo commerciale senza autorizzazione scritta.
-        </p>
-        <p>
-          L&apos;utente, pubblicando contenuti sulla Piattaforma (descrizioni, foto, recensioni), concede a Maestranze una licenza non esclusiva, gratuita e mondiale per utilizzare tali contenuti ai fini dell&apos;erogazione e promozione del servizio.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">10. Recensioni e reputazione</h2>
+              <p>
+                Le recensioni sono riservate ai Clienti che hanno effettuato una richiesta di preventivo tramite Maestranze. Maestranze si riserva il diritto di rimuovere recensioni che violino i presenti Termini o che risultino palesemente false, previa verifica. I Professionisti possono segnalare recensioni ritenute improprie a <a href="mailto:segnalazioni@maestranze.com" className="text-orange-700 dark:text-orange-400 font-medium hover:underline">segnalazioni@maestranze.com</a>.
+              </p>
+            </section>
 
-        <h2>11. Servizio gratuito e piani premium</h2>
-        <p>
-          La registrazione e l&apos;utilizzo base della Piattaforma sono attualmente gratuiti. Maestranze si riserva il diritto di introdurre piani a pagamento con funzionalità aggiuntive, dandone adeguato preavviso agli utenti registrati. Le funzionalità gratuite attualmente attive non saranno rese a pagamento senza un preavviso di almeno 30 giorni.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">11. Responsabilità della Piattaforma e limitazioni</h2>
+              <p><strong className="text-slate-900 dark:text-white">Maestranze non è responsabile</strong> per:</p>
+              <ul className="mt-3 space-y-2 list-disc pl-5">
+                <li>la qualità, la sicurezza, la conformità normativa o l&apos;esecuzione dei lavori effettuati dai Professionisti;</li>
+                <li>il rispetto, da parte dei Professionisti, delle norme in materia di sicurezza sul lavoro (D.Lgs. 81/2008), fiscali, previdenziali o di abilitazione professionale;</li>
+                <li>le obbligazioni contrattuali tra Clienti e Professionisti, comprese eventuali controversie relative a pagamenti, garanzie o vizi dell&apos;opera;</li>
+                <li>danni diretti o indiretti derivanti dall&apos;uso o dall&apos;impossibilità di utilizzo della Piattaforma, salvi i casi di dolo o colpa grave di Maestranze;</li>
+                <li>la veridicità delle informazioni inserite dagli Utenti;</li>
+                <li>interruzioni del servizio dovute a manutenzione, guasti tecnici o cause di forza maggiore.</li>
+              </ul>
+              <p className="mt-3">
+                Nei limiti consentiti dalla legge, la responsabilità patrimoniale di Maestranze è in ogni caso limitata all&apos;importo dei corrispettivi eventualmente pagati dall&apos;Utente per piani a pagamento negli ultimi 12 mesi precedenti il fatto dannoso.
+              </p>
+            </section>
 
-        <h2>12. Recesso e cancellazione</h2>
-        <p>
-          L&apos;utente può cancellare il proprio account in qualsiasi momento scrivendo a <a href="mailto:supporto@maestranze.com">supporto@maestranze.com</a>. La cancellazione comporta la rimozione del profilo dalla Piattaforma. I dati saranno conservati nei termini previsti dalla Privacy Policy e dagli obblighi di legge.
-        </p>
-        <p>
-          Maestranze può recedere dal contratto con l&apos;utente in caso di violazione dei presenti Termini, con effetto immediato e senza obbligo di rimborso di eventuali crediti non utilizzati.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">12. Proprietà intellettuale</h2>
+              <p>
+                Tutti i contenuti della Piattaforma (logo, testi, grafica, codice sorgente) sono di proprietà di Maestranze o dei rispettivi titolari e sono protetti dalla normativa sul diritto d&apos;autore. È vietata la riproduzione, distribuzione o utilizzo commerciale senza autorizzazione scritta.
+              </p>
+              <p className="mt-3">
+                L&apos;Utente, pubblicando contenuti sulla Piattaforma (descrizioni, foto, recensioni), concede a Maestranze una licenza non esclusiva, gratuita, revocabile all&apos;atto della cancellazione dell&apos;account, per utilizzare tali contenuti ai fini dell&apos;erogazione e promozione del servizio.
+              </p>
+            </section>
 
-        <h2>13. Legge applicabile e foro competente</h2>
-        <p>
-          I presenti Termini sono regolati dalla legge italiana. Per qualsiasi controversia derivante dall&apos;utilizzo della Piattaforma, le parti concordano la competenza esclusiva del Foro di Milano, salvo diversa disposizione inderogabile di legge a tutela del consumatore.
-        </p>
-        <p>
-          Per la risoluzione alternativa delle controversie (ADR/ODR), i consumatori possono accedere alla piattaforma europea: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">ec.europa.eu/consumers/odr</a>.
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">13. Sistema di gestione dei reclami (P2B)</h2>
+              <p>
+                Ai sensi dell&apos;art. 11 del Reg. UE 2019/1150, Maestranze mette a disposizione degli Utenti Business un sistema interno di gestione dei reclami gratuito. I reclami possono riguardare:
+              </p>
+              <ul className="mt-3 space-y-1 list-disc pl-5">
+                <li>sospensione o cancellazione dell&apos;account;</li>
+                <li>restrizioni all&apos;accesso ai dati o alle funzionalità;</li>
+                <li>applicazione di condizioni contrattuali ritenute non conformi al Reg. UE 2019/1150;</li>
+                <li>rimozione di contenuti o recensioni.</li>
+              </ul>
+              <p className="mt-3">
+                I reclami vanno inviati a <a href="mailto:supporto@maestranze.com" className="text-orange-700 dark:text-orange-400 font-medium hover:underline">supporto@maestranze.com</a> con oggetto «Reclamo P2B». Maestranze risponde entro 15 giorni lavorativi, motivando le proprie decisioni.
+              </p>
+            </section>
 
-        <h2>14. Contatti</h2>
-        <p>
-          Per qualsiasi domanda relativa ai presenti Termini:<br />
-          <a href="mailto:supporto@maestranze.com">supporto@maestranze.com</a>
-        </p>
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">14. Servizio gratuito, piani premium e diritto di recesso</h2>
+              <p>
+                La registrazione e l&apos;utilizzo base della Piattaforma sono attualmente gratuiti. Maestranze si riserva il diritto di introdurre piani a pagamento con funzionalità aggiuntive, dandone preavviso di almeno 30 giorni agli Utenti registrati.
+              </p>
+              <p className="mt-3">
+                Per i servizi a pagamento rivolti a consumatori (persone fisiche che agiscono per scopi estranei all&apos;attività professionale), si applicano le disposizioni del Codice del Consumo (D.Lgs. 206/2005). Il consumatore ha diritto di recedere entro <strong className="text-slate-900 dark:text-white">14 giorni</strong> dalla stipula, senza necessità di fornire motivazioni, salvo che abbia espressamente richiesto l&apos;inizio immediato del servizio.
+              </p>
+            </section>
 
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">15. Recesso dell&apos;Utente e cancellazione account</h2>
+              <p>
+                L&apos;Utente può cancellare il proprio account in qualsiasi momento scrivendo a <a href="mailto:supporto@maestranze.com" className="text-orange-700 dark:text-orange-400 font-medium hover:underline">supporto@maestranze.com</a>. La cancellazione comporta la rimozione del profilo dalla Piattaforma. I dati saranno conservati nei termini previsti dalla Privacy Policy e dagli obblighi di legge.
+              </p>
+              <p className="mt-3">
+                Maestranze può recedere dal contratto in caso di violazione grave dei presenti Termini, con effetto immediato. Per violazioni non gravi, Maestranze fornisce preavviso motivato di almeno 15 giorni prima della sospensione, in conformità al Reg. UE 2019/1150 per gli Utenti Business.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">16. Forza maggiore</h2>
+              <p>
+                Maestranze non è responsabile per ritardi o inadempimenti causati da eventi di forza maggiore, ossia eventi straordinari, imprevedibili e non controllabili, tra cui: calamità naturali, pandemie, interruzioni delle reti di comunicazione, atti di terrorismo, blackout energetici, provvedimenti delle autorità pubbliche. In tali casi Maestranze informa tempestivamente gli Utenti e adotta ogni ragionevole misura per ripristinare il servizio.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">17. Clausola di salvaguardia</h2>
+              <p>
+                Qualora una o più disposizioni dei presenti Termini siano ritenute nulle, invalide o inapplicabili, le restanti disposizioni rimangono pienamente valide ed efficaci. La disposizione nulla sarà sostituita, nei limiti del possibile, da una disposizione valida che realizzi nel miglior modo possibile lo scopo economico della disposizione originaria.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">18. Legge applicabile, foro competente e ADR</h2>
+              <p>
+                I presenti Termini sono regolati dalla legge italiana. Per qualsiasi controversia derivante dall&apos;utilizzo della Piattaforma, le parti concordano la competenza del Foro di Milano, salvo diversa disposizione inderogabile di legge a tutela del consumatore (che conserva il diritto di adire il foro del proprio domicilio).
+              </p>
+              <p className="mt-3">
+                Per la risoluzione alternativa delle controversie con consumatori (ADR), Maestranze aderisce alla procedura di mediazione prevista dal D.Lgs. 28/2010. I consumatori UE possono altresì accedere alla piattaforma ODR: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-orange-700 dark:text-orange-400 font-medium hover:underline">ec.europa.eu/consumers/odr</a>.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white border-l-4 border-orange-500 pl-3 mb-4">19. Contatti e punto di contatto DSA</h2>
+              <p>
+                Per domande sui presenti Termini, per segnalazioni di contenuti illegali ai sensi del Reg. UE 2022/2065 (DSA) o per comunicazioni con le autorità competenti:<br />
+                <a href="mailto:supporto@maestranze.com" className="text-orange-700 dark:text-orange-400 font-medium hover:underline">supporto@maestranze.com</a>
+              </p>
+              <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+                Le autorità degli Stati membri e la Commissione Europea possono contattare Maestranze tramite il medesimo indirizzo, specificando nell&apos;oggetto «Comunicazione Ufficiale DSA».
+              </p>
+            </section>
+
+          </div>
+        </div>
       </div>
-    </div>
     </>
   )
 }

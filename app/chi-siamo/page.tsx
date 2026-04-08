@@ -29,25 +29,18 @@ const VALUES = [
   {
     icon: Zap,
     title: 'Velocità',
-    desc: 'Un\'azienda pubblica la sua esigenza, un artigiano risponde. In pochi minuti parte una collaborazione che prima richiedeva settimane di ricerca.',
+    desc: "Un'azienda pubblica la sua esigenza, un artigiano risponde. In pochi minuti parte una collaborazione che prima richiedeva settimane di ricerca.",
   },
   {
     icon: Users,
     title: 'Comunità di mestiere',
-    desc: 'Sostenere l\'artigianato italiano significa dare agli artigiani strumenti digitali all\'altezza delle loro competenze. Questo è il nostro impegno.',
+    desc: "Sostenere l'artigianato italiano significa dare agli artigiani strumenti digitali all'altezza delle loro competenze. Questo è il nostro impegno.",
   },
   {
     icon: TrendingUp,
     title: 'Crescita concreta',
     desc: 'Più visibilità, più lavoro qualificato, meno tempo perso. Gli artigiani su Maestranze costruiscono una reputazione che li fa crescere nel tempo.',
   },
-]
-
-const NUMBERS = [
-  { value: '10.000+', label: 'Artigiani registrati' },
-  { value: '2.000+', label: 'Aziende attive' },
-  { value: '300+', label: 'Città coperte' },
-  { value: '4,8/5', label: 'Valutazione media' },
 ]
 
 export default function ChiSiamoPage() {
@@ -81,13 +74,13 @@ export default function ChiSiamoPage() {
       </section>
 
       {/* Missione */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-white dark:bg-slate-950">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-start gap-4 mb-8">
             <div className="w-1 flex-shrink-0 bg-orange-500 rounded-full self-stretch min-h-[80px]" />
             <div>
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">La nostra missione</h2>
-              <div className="space-y-5 text-lg text-slate-600 leading-relaxed">
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">La nostra missione</h2>
+              <div className="space-y-5 text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                 <p>
                   In Italia ci sono migliaia di artigiani straordinari — elettricisti, idraulici,
                   carpentieri, installatori, posatori — che lavorano con competenza e dedizione.
@@ -100,7 +93,7 @@ export default function ChiSiamoPage() {
                   a trovarle, e quando ci riescono è solo per fortuna o per conoscenza diretta.
                 </p>
                 <p>
-                  <strong className="text-slate-900">Maestranze è il ponte che mancava.</strong>{' '}
+                  <strong className="text-slate-900 dark:text-white">Maestranze è il ponte che mancava.</strong>{' '}
                   Una piattaforma dove chi ha un mestiere si rende visibile, e chi ha lavoro da
                   assegnare trova le persone giuste — velocemente, in modo trasparente, senza
                   intermediari che si prendono una fetta.
@@ -111,56 +104,41 @@ export default function ChiSiamoPage() {
         </div>
       </section>
 
-      {/* Numeri */}
-      <section className="bg-orange-500 py-16 px-4">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-white text-center mb-12">Maestranze in numeri</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {NUMBERS.map((n) => (
-              <div key={n.label}>
-                <div className="text-4xl sm:text-5xl font-extrabold text-white mb-2">{n.value}</div>
-                <div className="text-sm text-orange-100 font-medium">{n.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Come funziona per entrambi */}
-      <section className="py-20 px-4 bg-slate-50">
+      <section className="py-20 px-4 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4">Due lati, un&apos;unica piattaforma</h2>
-          <p className="text-slate-500 text-center mb-14 max-w-xl mx-auto">Maestranze funziona per chi cerca lavoro e per chi offre lavoro, con strumenti pensati su misura per entrambi.</p>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white text-center mb-4">Due lati, un&apos;unica piattaforma</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center mb-14 max-w-xl mx-auto">Maestranze funziona per chi cerca lavoro e per chi offre lavoro, con strumenti pensati su misura per entrambi.</p>
           <div className="grid md:grid-cols-2 gap-8">
             {/* Artigiani */}
-            <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
-              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-5">
-                <Users className="w-6 h-6 text-orange-600" />
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
+              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-500/15 rounded-xl flex items-center justify-center mb-5">
+                <Users className="w-6 h-6 text-orange-600 dark:text-orange-400" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Per gli artigiani</h3>
-              <ul className="space-y-3 text-slate-600">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Per gli artigiani</h3>
+              <ul className="space-y-3 text-slate-600 dark:text-slate-300">
                 <li className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span> Profilo professionale gratuito con specializzazioni e zone di lavoro</li>
                 <li className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span> Richieste di lavoro qualificate dalla propria area</li>
                 <li className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span> Sistema di recensioni che costruisce reputazione nel tempo</li>
                 <li className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span> Nessuna commissione sui lavori acquisiti</li>
               </ul>
-              <Link href="/registrati" className="mt-6 inline-flex items-center font-semibold text-orange-500 hover:text-orange-600 transition-colors">
+              <Link href="/registrati" className="mt-6 inline-flex items-center font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors">
                 Registrati ora →
               </Link>
             </div>
             {/* Aziende */}
-            <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm">
-              <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mb-5">
-                <Handshake className="w-6 h-6 text-slate-700" />
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 shadow-sm">
+              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center mb-5">
+                <Handshake className="w-6 h-6 text-slate-700 dark:text-slate-300" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Per le aziende</h3>
-              <ul className="space-y-3 text-slate-600">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Per le aziende</h3>
+              <ul className="space-y-3 text-slate-600 dark:text-slate-300">
                 <li className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span> Ricerca di artigiani per specializzazione e zona geografica</li>
                 <li className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span> Profili verificati con storico e recensioni reali</li>
                 <li className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span> Richiesta preventivo in pochi minuti</li>
                 <li className="flex items-start gap-2"><span className="text-orange-500 font-bold mt-0.5">✓</span> Contatto diretto, senza intermediari</li>
               </ul>
-              <Link href="/richiedi-preventivo" className="mt-6 inline-flex items-center font-semibold text-orange-500 hover:text-orange-600 transition-colors">
+              <Link href="/richiedi-preventivo" className="mt-6 inline-flex items-center font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors">
                 Trova un artigiano →
               </Link>
             </div>
@@ -169,18 +147,18 @@ export default function ChiSiamoPage() {
       </section>
 
       {/* Valori */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-white dark:bg-slate-950">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4">I valori che ci guidano</h2>
-          <p className="text-slate-500 text-center mb-14 max-w-xl mx-auto">Non siamo una piattaforma generica. Siamo focalizzati sull&apos;artigianato italiano e sui valori che lo rendono grande.</p>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white text-center mb-4">I valori che ci guidano</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center mb-14 max-w-xl mx-auto">Non siamo una piattaforma generica. Siamo focalizzati sull&apos;artigianato italiano e sui valori che lo rendono grande.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {VALUES.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                <div className="w-11 h-11 bg-orange-50 rounded-xl flex items-center justify-center mb-4 border border-orange-100">
+              <div key={title} className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+                <div className="w-11 h-11 bg-orange-50 dark:bg-orange-500/10 rounded-xl flex items-center justify-center mb-4 border border-orange-100 dark:border-orange-500/20">
                   <Icon className="w-5 h-5 text-orange-500" />
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">{title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -212,17 +190,17 @@ export default function ChiSiamoPage() {
       </section>
 
       {/* CTA finale */}
-      <section className="py-20 px-4 text-center bg-white">
+      <section className="py-20 px-4 text-center bg-white dark:bg-slate-950">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">Entra in Maestranze</h2>
-          <p className="text-slate-500 mb-10 text-lg">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Entra in Maestranze</h2>
+          <p className="text-slate-500 dark:text-slate-400 mb-10 text-lg">
             Che tu abbia un mestiere da offrire o lavoro da assegnare, il tuo posto è qui.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/registrati" className="inline-flex items-center justify-center font-semibold rounded-lg px-7 py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition-colors shadow-md text-base">
               Registrati come Artigiano
             </Link>
-            <Link href="/richiedi-preventivo" className="inline-flex items-center justify-center font-semibold rounded-lg px-7 py-3.5 border-2 border-slate-200 text-slate-700 hover:border-orange-400 hover:text-orange-500 transition-colors text-base">
+            <Link href="/richiedi-preventivo" className="inline-flex items-center justify-center font-semibold rounded-lg px-7 py-3.5 border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-orange-400 hover:text-orange-600 dark:hover:text-orange-400 transition-colors text-base">
               Cerca Maestranze
             </Link>
           </div>
