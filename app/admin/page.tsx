@@ -1,11 +1,6 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { createServerClient } from '@supabase/ssr'
-import type { Database, Professional, LeadRequest } from '@/lib/database.types'
-import { approveProfessional, rejectProfessional, suspendProfessional, resendPasswordEmail } from './actions'
-import LeadsSection from './LeadsSection'
-
-const ADMIN_EMAIL = 'info@maestranze.com'
+import type { Database, Professional } from '@/lib/database.types'
+import { approveProfessional, rejectProfessional } from './actions'
 
 function createServiceClient() {
   return createServerClient<Database>(
@@ -18,117 +13,165 @@ function createServiceClient() {
   )
 }
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('it-IT', {
-    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
-  })
-}
-
-export default async function AdminPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user || user.email !== ADMIN_EMAIL) {
-    redirect('/')
-  }
-
+export default async function AdminDashboard() {
   const service = createServiceClient()
 
-  const [{ data: pending }, { data: active }, { data: leads }, { data: allPros }] = await Promise.all([
-    service
-      .from('professionals')
-      .select('*')
-      .eq('status', 'pending')
-      .order('created_at', { ascending: false }),
-    service
-      .from('professionals')
-      .select('*')
-      .eq('status', 'active')
-      .order('created_at', { ascending: false }),
-    service
-      .from('lead_requests')
-      .select('*')
-      .order('created_at', { ascending: false }),
-    service
-      .from('professionals')
-      .select('*')
-      .in('status', ['active'])
-      .order('ragione_sociale', { ascending: true }),
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+  const since30d = thirtyDaysAgo.toISOString()
+
+  const [
+    { data: proStatuses },
+    { data: leadStatuses },
+    { data: pending },
+    { data: newPros },
+    { data: newLeads },
+  ] = await Promise.all([
+    service.from('professionals').select('status'),
+    service.from('lead_requests').select('status'),
+    service.from('professionals').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
+    service.from('professionals').select('id').gte('created_at', since30d),
+    service.from('lead_requests').select('id').gte('created_at', since30d),
   ])
 
+  const pro = {
+    active:    proStatuses?.filter(p => p.status === 'active').length    ?? 0,
+    pending:   proStatuses?.filter(p => p.status === 'pending').length   ?? 0,
+    suspended: proStatuses?.filter(p => p.status === 'suspended').length ?? 0,
+    rejected:  proStatuses?.filter(p => p.status === 'rejected').length  ?? 0,
+    total:     proStatuses?.length ?? 0,
+  }
+
+  const lead = {
+    total:     leadStatuses?.length ?? 0,
+    pending:   leadStatuses?.filter(l => l.status === 'pending').length   ?? 0,
+    contacted: leadStatuses?.filter(l => l.status === 'contacted').length ?? 0,
+    closed:    leadStatuses?.filter(l => l.status === 'closed').length    ?? 0,
+  }
+
+  const closureRate = lead.total > 0
+    ? Math.round((lead.closed / lead.total) * 100)
+    : null
+
   const pendingList = (pending ?? []) as Professional[]
-  const activeList = (active ?? []) as Professional[]
-  const leadsList = (leads ?? []) as LeadRequest[]
-  const allProsList = (allPros ?? []) as Professional[]
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="p-6 max-w-5xl mx-auto space-y-8">
 
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Admin — Maestranze</h1>
-          <p className="text-sm text-gray-500 mt-1">Connesso come {user.email}</p>
+      {/* Header */}
+      <div>
+        <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-sm text-gray-400 mt-0.5">Panoramica generale della piattaforma</p>
+      </div>
+
+      {/* Profili */}
+      <section>
+        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Profili</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <StatCard label="Attivi" value={pro.active} color="green" />
+          <StatCard label="Da verificare" value={pro.pending} color="orange" badge={pro.pending > 0} />
+          <StatCard label="Sospesi" value={pro.suspended} color="gray" />
+          <StatCard label="Rifiutati" value={pro.rejected} color="red" />
+        </div>
+      </section>
+
+      {/* Lead */}
+      <section>
+        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Lead</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <StatCard label="Totale" value={lead.total} color="gray" />
+          <StatCard label="Non assegnati" value={lead.pending} color="yellow" badge={lead.pending > 0} />
+          <StatCard label="In lavorazione" value={lead.contacted} color="blue" />
+          <StatCard label="Chiusi" value={lead.closed} color="green" />
+        </div>
+      </section>
+
+      {/* Ultimi 30 giorni */}
+      <section>
+        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Ultimi 30 giorni</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <StatCard label="Nuovi profili" value={newPros?.length ?? 0} color="gray" />
+          <StatCard label="Nuovi lead" value={newLeads?.length ?? 0} color="gray" />
+          <StatCard
+            label="Tasso chiusura"
+            value={closureRate !== null ? `${closureRate}%` : '—'}
+            color="gray"
+          />
+          <StatCard
+            label="Totale profili"
+            value={pro.total}
+            color="gray"
+          />
+        </div>
+      </section>
+
+      {/* Profili in attesa — action items */}
+      <section>
+        <div className="flex items-center gap-3 mb-4">
+          <h2 className="text-lg font-semibold text-gray-800">In attesa di verifica</h2>
+          {pro.pending > 0 && (
+            <span className="bg-orange-100 text-orange-700 text-sm font-bold px-2.5 py-0.5 rounded-full">
+              {pro.pending}
+            </span>
+          )}
         </div>
 
-        {/* Pending Section */}
-        <section>
-          <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">In attesa di verifica</h2>
-            <span className="bg-orange-100 text-orange-700 text-sm font-bold px-2.5 py-0.5 rounded-full">
-              {pendingList.length} {pendingList.length === 1 ? 'profilo' : 'profili'}
-            </span>
+        {pendingList.length === 0 ? (
+          <p className="text-gray-400 text-sm bg-white border border-gray-200 rounded-lg p-6 text-center">
+            Nessun profilo in attesa.
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {pendingList.map((p) => (
+              <PendingCard key={p.id} pro={p} />
+            ))}
           </div>
-
-          {pendingList.length === 0 ? (
-            <p className="text-gray-400 text-sm bg-white border border-gray-200 rounded-lg p-6 text-center">
-              Nessun profilo in attesa.
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {pendingList.map((pro) => (
-                <ProfessionalCard key={pro.id} pro={pro} mode="pending" />
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Active Section */}
-        <section>
-          <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">Profili attivi</h2>
-            <span className="bg-green-100 text-green-700 text-sm font-bold px-2.5 py-0.5 rounded-full">
-              {activeList.length}
-            </span>
-          </div>
-
-          {activeList.length === 0 ? (
-            <p className="text-gray-400 text-sm bg-white border border-gray-200 rounded-lg p-6 text-center">
-              Nessun profilo attivo.
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {activeList.map((pro) => (
-                <ProfessionalCard key={pro.id} pro={pro} mode="active" />
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Leads Section */}
-        <LeadsSection leads={leadsList} professionals={allProsList} />
-
-      </div>
+        )}
+      </section>
     </div>
   )
 }
 
-function ProfessionalCard({ pro, mode }: { pro: Professional; mode: 'pending' | 'active' }) {
+/* ─── Stat Card ─── */
+
+const COLOR_MAP: Record<string, { bg: string; value: string; dot: string }> = {
+  green:  { bg: 'bg-green-50',  value: 'text-green-700',  dot: 'bg-green-400' },
+  orange: { bg: 'bg-orange-50', value: 'text-orange-700', dot: 'bg-orange-400' },
+  yellow: { bg: 'bg-yellow-50', value: 'text-yellow-700', dot: 'bg-yellow-400' },
+  blue:   { bg: 'bg-blue-50',   value: 'text-blue-700',   dot: 'bg-blue-400' },
+  red:    { bg: 'bg-red-50',    value: 'text-red-700',    dot: 'bg-red-400' },
+  gray:   { bg: 'bg-white',     value: 'text-gray-900',   dot: 'bg-gray-300' },
+}
+
+function StatCard({
+  label,
+  value,
+  color,
+  badge,
+}: {
+  label: string
+  value: number | string
+  color: keyof typeof COLOR_MAP
+  badge?: boolean
+}) {
+  const c = COLOR_MAP[color] ?? COLOR_MAP.gray
+  return (
+    <div className={`relative ${c.bg} border border-gray-200 rounded-xl p-4`}>
+      {badge && (
+        <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+      )}
+      <div className={`text-3xl font-bold ${c.value} tabular-nums`}>{value}</div>
+      <div className="text-xs text-gray-500 mt-1 font-medium">{label}</div>
+    </div>
+  )
+}
+
+/* ─── Pending Card ─── */
+
+function PendingCard({ pro }: { pro: Professional }) {
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-
-        {/* Info */}
         <div className="flex-1 space-y-1 text-sm">
           <div className="flex items-center gap-2">
             <span className="font-bold text-gray-900 text-base">{pro.ragione_sociale}</span>
@@ -146,6 +189,7 @@ function ProfessionalCard({ pro, mode }: { pro: Professional; mode: 'pending' | 
             Città: <span className="font-medium">{pro.citta}</span>
             {' · '}
             Raggio: {pro.raggio_km} km
+            {pro.anni_esperienza && ` · ${pro.anni_esperienza} anni esp.`}
           </div>
           <div className="text-gray-600">
             Servizi: <span className="font-medium">{pro.categorie.join(', ')}</span>
@@ -157,50 +201,24 @@ function ProfessionalCard({ pro, mode }: { pro: Professional; mode: 'pending' | 
           </div>
         </div>
 
-        {/* Actions */}
         <div className="flex gap-2 shrink-0">
-          {mode === 'pending' && (
-            <>
-              <form action={approveProfessional.bind(null, pro.id, pro.email, pro.ragione_sociale, pro.telegram_username)}>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors"
-                >
-                  Approva
-                </button>
-              </form>
-              <form action={rejectProfessional.bind(null, pro.id, pro.email, pro.ragione_sociale)}>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors"
-                >
-                  Rifiuta
-                </button>
-              </form>
-            </>
-          )}
-          {mode === 'active' && (
-            <>
-              <form action={resendPasswordEmail.bind(null, pro.email, pro.ragione_sociale)}>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors"
-                >
-                  Reinvia email password
-                </button>
-              </form>
-              <form action={suspendProfessional.bind(null, pro.id)}>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold rounded-lg transition-colors"
-                >
-                  Sospendi
-                </button>
-              </form>
-            </>
-          )}
+          <form action={approveProfessional.bind(null, pro.id, pro.email, pro.ragione_sociale, pro.telegram_username)}>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors"
+            >
+              Approva
+            </button>
+          </form>
+          <form action={rejectProfessional.bind(null, pro.id, pro.email, pro.ragione_sociale)}>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors"
+            >
+              Rifiuta
+            </button>
+          </form>
         </div>
-
       </div>
     </div>
   )

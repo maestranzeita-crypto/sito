@@ -168,6 +168,32 @@ export async function suspendProfessional(id: string) {
     .eq('id', id)
 
   revalidatePath('/admin')
+  revalidatePath('/admin/profili')
+}
+
+export async function reactivateProfessional(id: string) {
+  await getAdminUser()
+  const supabase = createServiceClient()
+
+  await supabase
+    .from('professionals')
+    .update({ status: 'active', verified_at: new Date().toISOString() })
+    .eq('id', id)
+
+  revalidatePath('/admin')
+  revalidatePath('/admin/profili')
+}
+
+export async function updateLeadStatus(leadId: string, status: 'pending' | 'contacted' | 'closed') {
+  await getAdminUser()
+  const supabase = createServiceClient()
+
+  await supabase
+    .from('lead_requests')
+    .update({ status })
+    .eq('id', leadId)
+
+  revalidatePath('/admin/lead')
 }
 
 export async function assignLeadManually(leadId: string, professionalId: string) {
@@ -202,6 +228,7 @@ export async function assignLeadManually(leadId: string, professionalId: string)
   })
 
   revalidatePath('/admin')
+  revalidatePath('/admin/lead')
 }
 
 function buildLeadAssignedEmail({
