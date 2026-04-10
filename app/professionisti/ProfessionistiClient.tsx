@@ -101,8 +101,9 @@ export default function ProfessionistiClient({ professionals, categories, cities
             <p className="text-sm mt-1">Prova a modificare i filtri di ricerca</p>
           </div>
         ) : (
-          <div className="relative">
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 ${!isLoggedIn ? 'blur-sm pointer-events-none select-none' : ''}`}>
+          <div>
+            <div className={`relative ${!isLoggedIn ? 'max-h-[520px] overflow-hidden' : ''}`}>
+              <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 ${!isLoggedIn ? 'blur-sm pointer-events-none select-none' : ''}`}>
               {filtered.map((pro) => {
                 const cityLabel = pro.citta.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
                 return (
@@ -175,30 +176,36 @@ export default function ProfessionistiClient({ professionals, categories, cities
                   </Link>
                 )
               })}
+              </div>
+
+              {/* Gradient fade */}
+              {!isLoggedIn && (
+                <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none" />
+              )}
             </div>
 
-            {/* Overlay registrazione */}
+            {/* Banner registrazione */}
             {!isLoggedIn && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 px-8 py-10 flex flex-col items-center text-center max-w-sm mx-4">
-                  <div className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center mb-4">
-                    <Lock className="w-7 h-7 text-orange-500" />
-                  </div>
-                  <h2 className="text-lg font-bold text-slate-900 mb-2">
-                    Accedi per vedere i professionisti
-                  </h2>
-                  <p className="text-sm text-slate-500 mb-6">
-                    Registrati gratuitamente per consultare i profili, leggere le recensioni e richiedere preventivi.
-                  </p>
+              <div className="mt-6 flex flex-col items-center text-center py-10 px-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                <div className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center mb-4">
+                  <Lock className="w-7 h-7 text-orange-500" />
+                </div>
+                <h2 className="text-lg font-bold text-slate-900 mb-2">
+                  Accedi per vedere tutti i professionisti
+                </h2>
+                <p className="text-sm text-slate-500 mb-6 max-w-sm">
+                  Registrati gratuitamente per consultare i profili, leggere le recensioni e richiedere preventivi.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Link
                     href="/registrati"
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm py-2.5 px-6 rounded-xl transition-colors"
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm py-2.5 px-8 rounded-xl transition-colors"
                   >
-                    Registrati gratis
+                    Registrati
                   </Link>
                   <Link
                     href="/accedi"
-                    className="mt-3 text-sm text-slate-500 hover:text-orange-500 transition-colors"
+                    className="border border-slate-200 hover:border-orange-400 text-slate-600 hover:text-orange-500 font-semibold text-sm py-2.5 px-8 rounded-xl transition-colors"
                   >
                     Hai già un account? Accedi
                   </Link>
