@@ -16,7 +16,7 @@ const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? GA_MEASUREM
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Trova Professionisti Edili e Impiantistici Verificati`,
+    default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     locale: 'it_IT',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — Trova Professionisti Edili e Impiantistici Verificati`,
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
   },
   twitter: {
