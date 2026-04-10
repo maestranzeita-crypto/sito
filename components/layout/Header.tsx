@@ -2,24 +2,12 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useRef } from 'react'
-import { Menu, X, ChevronDown } from 'lucide-react'
-import { CATEGORIES } from '@/lib/categories'
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 import Button from '@/components/ui/Button'
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [servicesOpen, setServicesOpen] = useState(false)
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  function openServices() {
-    if (closeTimer.current) clearTimeout(closeTimer.current)
-    setServicesOpen(true)
-  }
-
-  function scheduleClose() {
-    closeTimer.current = setTimeout(() => setServicesOpen(false), 150)
-  }
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
@@ -39,38 +27,6 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6">
-            <div className="relative group">
-              <button
-                className="flex items-center gap-1 text-slate-600 hover:text-slate-900 font-medium text-sm"
-                onMouseEnter={openServices}
-                onMouseLeave={scheduleClose}
-                aria-expanded={servicesOpen}
-                aria-haspopup="true"
-              >
-                Servizi <ChevronDown className="w-4 h-4" />
-              </button>
-              {servicesOpen && (
-                <div
-                  className="absolute top-full left-0 mt-1 w-56 bg-white border border-slate-200 rounded-xl shadow-lg py-2"
-                  onMouseEnter={openServices}
-                  onMouseLeave={scheduleClose}
-                >
-                  {CATEGORIES.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      href={`/${cat.slug}`}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-600"
-                    >
-                      <cat.icon className="w-4 h-4 text-slate-500 flex-shrink-0" />
-                      {cat.nameShort}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-            <Link href="/professionisti" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
-              Professionisti
-            </Link>
             <Link href="/calcolatore" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
               Calcolatori
             </Link>
@@ -103,20 +59,7 @@ export default function Header() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-1">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-2 pb-1">Servizi</p>
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={`/${cat.slug}`}
-              className="flex items-center gap-3 px-2 py-2.5 text-sm text-slate-700 hover:bg-orange-50 rounded-lg"
-              onClick={() => setMobileOpen(false)}
-            >
-              <cat.icon className="w-4 h-4 text-slate-500 flex-shrink-0" />
-              {cat.nameShort}
-            </Link>
-          ))}
-          <div className="border-t border-slate-100 pt-3 mt-3 space-y-2">
-            <Link href="/professionisti" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Professionisti</Link>
+          <div className="space-y-2">
             <Link href="/calcolatore" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Calcolatori</Link>
             <Link href="/blog" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Guide</Link>
           </div>
