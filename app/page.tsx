@@ -4,7 +4,6 @@ import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { SITE_DESCRIPTION } from '@/lib/utils'
 import CategoryCard from '@/components/home/CategoryCard'
-import HeroImage from '@/components/home/HeroImage'
 import { CATEGORIES } from '@/lib/categories'
 
 export const metadata: Metadata = {
@@ -126,43 +125,6 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative text-white overflow-hidden h-[100svh]">
-        {/* Immagine di sfondo rotante — full cover, desktop e mobile */}
-        <HeroImage />
-
-        {/* Overlay scuro per leggibilità del testo */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/30 z-10" />
-
-        {/* Testo sopra all'overlay */}
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="max-w-xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-6 drop-shadow-lg">
-              Trova il professionista
-              <span className="text-orange-400"> giusto </span>
-              per la tua casa
-            </h1>
-
-            <p className="text-lg md:text-xl text-white/90 leading-relaxed drop-shadow">
-              Elettricisti, idraulici, muratori, installatori fotovoltaico e molto altro.
-              Professionisti verificati, preventivi gratuiti, recensioni reali.
-            </p>
-
-            <p className="mt-8 text-sm text-white/70">
-              ✓ Gratuito per i clienti &nbsp;·&nbsp; ✓ Nessun obbligo &nbsp;·&nbsp; ✓ Preventivi in 24h
-            </p>
-          </div>
-        </div>
-
-        {/* Scopri di più — solo mobile, in basso centrato */}
-        <Link
-          href="/professionisti"
-          className="sm:hidden absolute bottom-8 left-0 right-0 z-20 flex justify-center items-center gap-1 text-white/80 text-sm font-medium hover:text-white transition-colors"
-        >
-          Scopri di più <ArrowRight className="w-4 h-4" />
-        </Link>
       </section>
 
       {/* ─── CATEGORIE SERVIZI ────────────────────────────────── */}
