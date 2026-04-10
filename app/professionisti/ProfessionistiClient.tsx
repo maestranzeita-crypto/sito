@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, MapPin, Shield, Search } from 'lucide-react'
+import { Star, MapPin, Shield, Search, Lock } from 'lucide-react'
 import type { Professional } from '@/lib/database.types'
 
 type ProWithCats = Professional & { categoryLabels: string[] }
@@ -12,6 +12,7 @@ interface Props {
   professionals: ProWithCats[]
   categories: { slug: string; nameShort: string }[]
   cities: string[]
+  isLoggedIn: boolean
 }
 
 function StarRating({ rating }: { rating: number }) {
@@ -27,7 +28,7 @@ function StarRating({ rating }: { rating: number }) {
   )
 }
 
-export default function ProfessionistiClient({ professionals, categories, cities }: Props) {
+export default function ProfessionistiClient({ professionals, categories, cities, isLoggedIn }: Props) {
   const [servizio, setServizio] = useState('')
   const [citta, setCitta] = useState('')
   const [search, setSearch] = useState('')
@@ -91,7 +92,7 @@ export default function ProfessionistiClient({ professionals, categories, cities
       {/* Griglia */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <p className="text-sm text-slate-500 mb-6">
-          {filtered.length} professionista{filtered.length !== 1 ? 'i' : ''} trovato{filtered.length !== 1 ? 'i' : ''}
+          {filtered.length} {filtered.length === 1 ? 'professionista trovato' : 'professionisti trovati'}
         </p>
 
         {filtered.length === 0 ? (
@@ -100,79 +101,110 @@ export default function ProfessionistiClient({ professionals, categories, cities
             <p className="text-sm mt-1">Prova a modificare i filtri di ricerca</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {filtered.map((pro) => {
-              const cityLabel = pro.citta.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
-              return (
-                <Link
-                  key={pro.id}
-                  href={`/professionisti/${pro.id}`}
-                  className="group bg-white rounded-2xl border border-slate-200 hover:border-orange-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
-                >
-                  {/* Foto profilo */}
-                  <div className="relative h-36 bg-gradient-to-br from-orange-400 to-orange-600 flex-shrink-0">
-                    {pro.foto_url ? (
-                      <Image
-                        src={pro.foto_url}
-                        alt={pro.ragione_sociale}
-                        fill
-                        className="object-cover"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl font-extrabold text-white/80">
-                        {pro.ragione_sociale.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                    {pro.is_top_rated && (
-                      <span className="absolute top-2 left-2 text-xs font-bold px-2 py-0.5 bg-orange-500 text-white rounded-full shadow">
-                        Top Rated
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="p-4 flex flex-col flex-1">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <h2 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-orange-600 transition-colors line-clamp-2">
-                        {pro.ragione_sociale}
-                      </h2>
-                      {pro.verified_at && (
-                        <Shield className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" title="Verificato Maestranze" />
-                      )}
-                    </div>
-
-                    <p className="text-xs text-slate-500 mb-2 line-clamp-1">
-                      {pro.categoryLabels.join(' · ')}
-                    </p>
-
-                    <div className="flex items-center gap-1 text-xs text-slate-400 mb-3">
-                      <MapPin className="w-3.5 h-3.5 text-orange-400 flex-shrink-0" />
-                      {cityLabel}
-                    </div>
-
-                    <div className="mt-auto flex items-center gap-2">
-                      {pro.rating_avg !== null ? (
-                        <>
-                          <StarRating rating={pro.rating_avg} />
-                          <span className="text-xs font-semibold text-slate-700">{pro.rating_avg.toFixed(1)}</span>
-                          <span className="text-xs text-slate-400">({pro.review_count})</span>
-                        </>
+          <div className="relative">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 ${!isLoggedIn ? 'blur-sm pointer-events-none select-none' : ''}`}>
+              {filtered.map((pro) => {
+                const cityLabel = pro.citta.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+                return (
+                  <Link
+                    key={pro.id}
+                    href={`/professionisti/${pro.id}`}
+                    className="group bg-white rounded-2xl border border-slate-200 hover:border-orange-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
+                  >
+                    {/* Foto profilo */}
+                    <div className="relative h-36 bg-gradient-to-br from-orange-400 to-orange-600 flex-shrink-0">
+                      {pro.foto_url ? (
+                        <Image
+                          src={pro.foto_url}
+                          alt={pro.ragione_sociale}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
                       ) : (
-                        <span className="text-xs text-slate-400">Nessuna recensione</span>
+                        <div className="w-full h-full flex items-center justify-center text-4xl font-extrabold text-white/80">
+                          {pro.ragione_sociale.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      {pro.is_top_rated && (
+                        <span className="absolute top-2 left-2 text-xs font-bold px-2 py-0.5 bg-orange-500 text-white rounded-full shadow">
+                          Top Rated
+                        </span>
                       )}
                     </div>
 
-                    {pro.verified_at && (
-                      <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-green-600 bg-green-50 border border-green-100 px-2.5 py-1 rounded-full w-fit">
-                        <Shield className="w-3 h-3" />
-                        Verificato Maestranze
+                    {/* Info */}
+                    <div className="p-4 flex flex-col flex-1">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h2 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-orange-600 transition-colors line-clamp-2">
+                          {pro.ragione_sociale}
+                        </h2>
+                        {pro.verified_at && (
+                          <Shield className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" title="Verificato Maestranze" />
+                        )}
                       </div>
-                    )}
+
+                      <p className="text-xs text-slate-500 mb-2 line-clamp-1">
+                        {pro.categoryLabels.join(' · ')}
+                      </p>
+
+                      <div className="flex items-center gap-1 text-xs text-slate-400 mb-3">
+                        <MapPin className="w-3.5 h-3.5 text-orange-400 flex-shrink-0" />
+                        {cityLabel}
+                      </div>
+
+                      <div className="mt-auto flex items-center gap-2">
+                        {pro.rating_avg !== null ? (
+                          <>
+                            <StarRating rating={pro.rating_avg} />
+                            <span className="text-xs font-semibold text-slate-700">{pro.rating_avg.toFixed(1)}</span>
+                            <span className="text-xs text-slate-400">({pro.review_count})</span>
+                          </>
+                        ) : (
+                          <span className="text-xs text-slate-400">Nessuna recensione</span>
+                        )}
+                      </div>
+
+                      {pro.verified_at && (
+                        <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-green-600 bg-green-50 border border-green-100 px-2.5 py-1 rounded-full w-fit">
+                          <Shield className="w-3 h-3" />
+                          Verificato Maestranze
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+
+            {/* Overlay registrazione */}
+            {!isLoggedIn && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 px-8 py-10 flex flex-col items-center text-center max-w-sm mx-4">
+                  <div className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center mb-4">
+                    <Lock className="w-7 h-7 text-orange-500" />
                   </div>
-                </Link>
-              )
-            })}
+                  <h2 className="text-lg font-bold text-slate-900 mb-2">
+                    Accedi per vedere i professionisti
+                  </h2>
+                  <p className="text-sm text-slate-500 mb-6">
+                    Registrati gratuitamente per consultare i profili, leggere le recensioni e richiedere preventivi.
+                  </p>
+                  <Link
+                    href="/registrati"
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm py-2.5 px-6 rounded-xl transition-colors"
+                  >
+                    Registrati gratis
+                  </Link>
+                  <Link
+                    href="/accedi"
+                    className="mt-3 text-sm text-slate-500 hover:text-orange-500 transition-colors"
+                  >
+                    Hai già un account? Accedi
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -24,6 +24,10 @@ export const metadata: Metadata = {
 export default async function ProfessionistiPage() {
   const supabase = await createClient()
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   const { data } = await supabase
     .from('professionals')
     .select(
@@ -82,6 +86,7 @@ export default async function ProfessionistiPage() {
         professionals={professionals}
         categories={CATEGORIES.map(({ slug, nameShort }) => ({ slug, nameShort }))}
         cities={cities}
+        isLoggedIn={!!user}
       />
     </>
   )
