@@ -401,7 +401,7 @@ export default function HomePage() {
           <p className="text-slate-600 mb-6">
             Preventivi gratuiti da professionisti verificati nella tua zona.
           </p>
-          <Link href="/preventivo">
+          <Link href="/richiedi-preventivo">
             <button className="px-8 py-3 font-semibold border-2 border-slate-900 text-slate-900 rounded-lg hover:bg-slate-50 transition-colors">
               Richiedi un preventivo
             </button>
