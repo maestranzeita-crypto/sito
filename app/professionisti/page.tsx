@@ -6,7 +6,7 @@ import { SITE_URL } from '@/lib/utils'
 import type { Professional } from '@/lib/database.types'
 import ProfessionistiClient from './ProfessionistiClient'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Professionisti Verificati | Maestranze',
