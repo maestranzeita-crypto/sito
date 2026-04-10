@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { headers } from 'next/headers'
 import './globals.css'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
+import { ChromeHeader, ChromeFooter } from '@/components/layout/Chrome'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/lib/utils'
 
@@ -67,24 +65,20 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const headersList = await headers()
-  const pathname = headersList.get('x-pathname') ?? ''
-  const hideChrome = pathname.startsWith('/dashboard') || pathname.startsWith('/accedi') || pathname.startsWith('/admin')
-
   return (
     <html lang="it" suppressHydrationWarning>
       <body className={`${inter.className} antialiased bg-white text-slate-900`}>
         {gaMeasurementId ? <GoogleAnalytics measurementId={gaMeasurementId} /> : null}
         {/* Anti-FOUC: apply stored theme before first paint */}
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('maestranze-theme');if(t==='dark'||(t===null&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}` }} />
-        {!hideChrome && <Header />}
-        {hideChrome ? children : <main>{children}</main>}
-        {!hideChrome && <Footer />}
+        <ChromeHeader />
+        <main>{children}</main>
+        <ChromeFooter />
       </body>
     </html>
   )
