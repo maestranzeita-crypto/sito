@@ -1,14 +1,22 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle2,
+  Building2,
+  Users,
+  BarChart3,
+  Bell,
+  Star,
+  ShieldCheck,
+} from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { SITE_DESCRIPTION } from '@/lib/utils'
-import CategoryCard from '@/components/home/CategoryCard'
-import { CATEGORIES } from '@/lib/categories'
 
 export const metadata: Metadata = {
-  title: 'Maestranze — Trova Professionisti Edili e Impiantistici Verificati in Italia',
-  description: SITE_DESCRIPTION,
+  title: 'Maestranze — Trova artigiani qualificati per il tuo cantiere',
+  description:
+    'La piattaforma italiana per imprese edili. Trova elettricisti, idraulici, muratori e installatori fotovoltaico verificati. Profili completi, disponibilità in tempo reale.',
   alternates: { canonical: 'https://maestranze.com' },
 }
 
@@ -38,262 +46,379 @@ function HomeJsonLd() {
   )
 }
 
+const PROBLEM_CARDS = [
+  'Trovare personale qualificato in fretta è quasi impossibile.',
+  'Il passaparola non basta. Le agenzie costano e ci vogliono settimane.',
+  "L'artigiano giusto esiste. Mancava il posto dove trovarlo.",
+]
 
-const HOW_IT_WORKS_CLIENT = [
+const STEPS = [
   {
-    step: '01',
-    title: 'Descrivi il tuo lavoro',
-    desc: 'Inserisci il tipo di intervento, la città e alcuni dettagli. Bastano 2 minuti.',
+    n: '01',
+    title: 'Cerca',
+    desc: 'Filtra per specializzazione, zona e disponibilità. Vedi subito chi c\'è.',
   },
   {
-    step: '02',
-    title: 'Ricevi preventivi',
-    desc: 'I professionisti verificati della tua zona ti inviano offerte entro 24 ore.',
+    n: '02',
+    title: 'Valuta',
+    desc: 'Leggi il profilo completo: certificazioni, foto lavori, recensioni di altre imprese.',
   },
   {
-    step: '03',
-    title: 'Scegli e inizia',
-    desc: 'Confronta profili, recensioni e prezzi. Affida il lavoro con fiducia.',
+    n: '03',
+    title: 'Contatta',
+    desc: 'Scrivi direttamente all\'artigiano. Nessun intermediario.',
   },
 ]
 
-const HOW_IT_WORKS_PRO = [
+const PROFILE_FEATURES = [
+  'Foto e descrizione del professionista',
+  'Specializzazioni e zone coperte',
+  'Certificazioni verificate — DM 37/08, DURC, polizza RC',
+  'Foto dei lavori eseguiti',
+  'Recensioni di altre imprese che lo hanno già ingaggiato',
+  'Disponibilità aggiornata in tempo reale',
+  'Tariffa indicativa',
+]
+
+const BADGE_CARDS = [
   {
-    step: '01',
-    title: 'Crea il tuo profilo',
-    desc: 'Registrazione gratuita. Carica certificazioni, foto dei lavori e descrizione.',
+    title: 'Profilo Base',
+    badge: null,
+    items: [
+      'Aperto a tutti',
+      'Foto, specializzazione, esperienza',
+      'Senza P.IVA',
+    ],
+    note: 'Per chi cerca lavoro come dipendente o collaboratore',
   },
   {
-    step: '02',
-    title: 'Ricevi richieste',
-    desc: 'I clienti nella tua zona ti trovano in base alla specializzazione.',
+    title: 'P.IVA Verificata',
+    badge: { label: 'P.IVA', color: 'bg-slate-400' },
+    items: [
+      'Partita IVA attiva e verificata',
+      'Lavora in autonomia',
+    ],
+    note: 'Per artigiani che lavorano in proprio',
   },
   {
-    step: '03',
-    title: 'Fai crescere il business',
-    desc: 'Gestisci preventivi, raccogli recensioni e aumenta la tua visibilità online.',
+    title: 'Maestranze Verificato',
+    badge: { label: 'Verificato', color: 'bg-orange-500' },
+    items: [
+      'DURC in corso di validità',
+      'Certificazioni di settore',
+      'Polizza RC professionale',
+      'Controllo manuale',
+    ],
+    note: 'La nostra garanzia di qualità',
   },
 ]
 
+const DASHBOARD_CARDS = [
+  {
+    icon: Building2,
+    title: 'Gestione Cantieri',
+    desc: 'Crea un cantiere, aggiungi le figure che ti servono e tieni traccia di chi hai trovato e chi manca ancora.',
+  },
+  {
+    icon: Users,
+    title: 'Squadra Fidata',
+    desc: 'Salva gli artigiani con cui hai lavorato bene. Vedi in tempo reale se sono disponibili e contattali in un click.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Storico e Statistiche',
+    desc: 'Quanti artigiani hai ingaggiato, per quale ruolo, a quale costo medio. Tutto tracciato, tutto misurabile.',
+  },
+  {
+    icon: Bell,
+    title: 'Notifiche Intelligenti',
+    desc: 'Ti avvisiamo quando un artigiano della tua Squadra Fidata torna disponibile nella tua zona.',
+  },
+]
 
 export default function HomePage() {
   return (
     <>
       <HomeJsonLd />
 
-      {/* ─── B2B FULL-WIDTH SECTION ───────────────────────────── */}
-      <section className="relative flex items-center justify-center text-white overflow-hidden py-16 md:py-24">
-        {/* Immagine di sfondo */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url(https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg)' }}
-        />
-        {/* Overlay scuro */}
-        <div className="absolute inset-0 bg-black/60" />
-        {/* Contenuto */}
-        <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto w-full">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
-            Il cantiere non aspetta.<br className="sm:hidden" /> La squadra giusta nemmeno.
-          </h2>
-          <p className="text-white/85 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-            Sei un&apos;impresa con un cantiere aperto e ti manca personale qualificato? Sei un artigiano con tempo libero e vuoi lavorare? Maestranze connette entrambi — senza agenzie, senza intermediari.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            <Link href="/manodopera" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto bg-white text-slate-900 font-semibold px-6 py-3 rounded-xl hover:bg-white/90 transition-colors text-sm md:text-base">
-                Sono un&apos;impresa
-              </button>
-            </Link>
-            <Link href="/manodopera" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto border-2 border-white text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors text-sm md:text-base">
-                Sono un artigiano
-              </button>
-            </Link>
-          </div>
-          <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-xs sm:max-w-sm mx-auto">
+      {/* ─── 1. HERO ──────────────────────────────────────────── */}
+      <section className="bg-slate-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Sinistra */}
             <div>
-              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">48h</p>
-              <p className="text-white/70 text-xs mt-1 leading-snug">per trovare un artigiano disponibile</p>
+              <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-6 uppercase tracking-wider">
+                Per Imprese Edili
+              </span>
+              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-5">
+                Trova l&apos;artigiano giusto per il tuo cantiere.{' '}
+                <span className="text-orange-400">In 48 ore.</span>
+              </h1>
+              <p className="text-slate-300 text-lg leading-relaxed mb-8">
+                Hai accesso al profilo completo di ogni professionista — specializzazioni,
+                certificazioni, recensioni reali e disponibilità aggiornata. Scegli chi
+                vuoi, contattalo direttamente.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 mb-8">
+                <Link href="/manodopera">
+                  <Button size="lg">Cerca un artigiano</Button>
+                </Link>
+                <Link href="/registrati">
+                  <button className="px-8 py-3.5 text-lg font-semibold border-2 border-white text-white rounded-lg hover:bg-white/10 transition-colors">
+                    Registra la tua impresa
+                  </button>
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {['DURC verificato', 'Profili completi', 'Zero commissioni'].map((b) => (
+                  <span
+                    key={b}
+                    className="flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 px-3 py-1.5 rounded-full"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                    {b}
+                  </span>
+                ))}
+              </div>
             </div>
-            <div>
-              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">100%</p>
-              <p className="text-white/70 text-xs mt-1 leading-snug">professionisti con DURC verificato</p>
-            </div>
-            <div>
-              <p className="text-xl sm:text-2xl md:text-3xl font-extrabold">0€</p>
-              <p className="text-white/70 text-xs mt-1 leading-snug">commissioni sui lavori</p>
+
+            {/* Destra — immagine */}
+            <div className="hidden lg:block">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg"
+                alt="Cantiere edile"
+                className="w-full h-[420px] object-cover rounded-2xl shadow-2xl"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── CATEGORIE SERVIZI ────────────────────────────────── */}
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
-              I nostri servizi
-            </h2>
-            <p className="text-slate-500 max-w-xl mx-auto">
-              Dal fotovoltaico alla ristrutturazione completa. Professionisti specializzati per ogni esigenza.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {CATEGORIES.map((cat) => (
-              <CategoryCard key={cat.slug} cat={cat} />
+      {/* ─── 2. IL PROBLEMA ───────────────────────────────────── */}
+      <section className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 text-center mb-10">
+            Chi lavora in edilizia lo sa già.
+          </h2>
+          <div className="flex flex-col gap-4">
+            {PROBLEM_CARDS.map((text) => (
+              <div
+                key={text}
+                className="border-l-4 border-orange-500 pl-5 py-4 bg-slate-50 rounded-r-xl"
+              >
+                <p className="text-slate-700 font-medium text-base md:text-lg">{text}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── COME FUNZIONA — CLIENTI ──────────────────────────── */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="text-sm font-semibold text-orange-500 uppercase tracking-wider">Per i Clienti</span>
-            <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-slate-900">
-              Trova il professionista in 3 passi
-            </h2>
-          </div>
+      {/* ─── 3. COME FUNZIONA ─────────────────────────────────── */}
+      <section className="bg-slate-50 py-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 text-center mb-12">
+            Semplice come cercare su LinkedIn.{' '}
+            <span className="text-orange-500">Ma per l&apos;edilizia.</span>
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {HOW_IT_WORKS_CLIENT.map(({ step, title, desc }) => (
-              <div key={step} className="relative text-center">
+            {STEPS.map(({ n, title, desc }) => (
+              <div key={n} className="text-center">
                 <div className="w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 text-xl font-extrabold shadow-md">
-                  {step}
+                  {n}
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">{title}</h3>
                 <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
-          <div className="text-center mt-10">
-            <Link href="/richiedi-preventivo">
-              <Button size="lg">
-                Richiedi Preventivo Gratis <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* ─── PER I PROFESSIONISTI ─────────────────────────────── */}
-      <section className="py-16 bg-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <span className="text-sm font-semibold text-orange-400 uppercase tracking-wider">Per i Professionisti</span>
-              <h2 className="mt-3 text-3xl md:text-4xl font-extrabold leading-tight mb-4">
-                Fai crescere la tua attività con Maestranze
-              </h2>
-              <p className="text-slate-400 text-lg mb-8 leading-relaxed">
-                Connettiti con migliaia di clienti alla ricerca di professionisti come te.
-                Profilo gratuito, nessuna commissione sui lavori.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Profilo verificato con badge di qualità',
-                  'Clienti qualificati nella tua zona',
-                  'Gestione preventivi e comunicazione',
-                  'Statistiche e analisi del tuo profilo',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-slate-300">
-                    <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/registrati">
-                  <Button size="lg">Registrati Gratis</Button>
-                </Link>
-                <Link href="/come-funziona">
-                  <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
-                    Scopri di più
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              {HOW_IT_WORKS_PRO.map(({ step, title, desc }) => (
-                <div key={step} className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-2xl p-5">
-                  <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-sm font-extrabold flex-shrink-0">
-                    {step}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-white mb-1">{title}</h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── NON BASTA REGISTRARSI ────────────────────────────── */}
-      <section className="py-20 bg-white">
+      {/* ─── 4. I PROFILI ─────────────────────────────────────── */}
+      <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
-              Non basta registrarsi.
+              Ogni artigiano ha un profilo completo.
             </h2>
-            <p className="text-slate-500 max-w-2xl mx-auto">
-              Ogni professionista su Maestranze viene verificato manualmente dal nostro team prima di essere visibile ai clienti.
+            <p className="text-slate-500 max-w-xl mx-auto">
+              Non una semplice scheda. Uno strumento per scegliere con criterio.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[
-              { n: '01', title: 'P.IVA attiva', desc: 'Verifichiamo che la partita IVA sia attiva e intestata all\'azienda registrata.' },
-              { n: '02', title: 'Documenti di settore', desc: 'Polizza RC, certificazioni specifiche — DM 37/08 per elettricisti, abilitazioni per installatori fotovoltaico, DURC per le imprese.' },
-              { n: '03', title: 'Controllo manuale', desc: 'Una persona reale legge ogni richiesta. Se qualcosa non torna, chiediamo chiarimenti prima di attivare il profilo.' },
-              { n: '04', title: 'Badge Verificato', desc: 'Solo dopo aver superato tutti i controlli il professionista riceve il badge Maestranze Verificato sul profilo pubblico.' },
-            ].map(({ n, title, desc }) => (
-              <div key={n} className="text-center">
-                <div className="w-12 h-12 bg-orange-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 text-lg font-extrabold shadow-md">
-                  {n}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Lista features */}
+            <ul className="space-y-4">
+              {PROFILE_FEATURES.map((f) => (
+                <li key={f} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">{f}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Mock card profilo */}
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm max-w-sm mx-auto w-full">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-14 h-14 rounded-full bg-slate-300 flex items-center justify-center text-slate-600 font-bold text-xl">
+                  MR
+                </div>
+                <div>
+                  <p className="font-bold text-slate-900 text-base">Marco R.</p>
+                  <p className="text-sm text-slate-500">Elettricista</p>
+                  <div className="flex items-center gap-0.5 mt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-orange-400 text-orange-400" />
+                    ))}
+                    <span className="text-xs text-slate-500 ml-1">4.9 (23 rec.)</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-4">
+                <span className="inline-flex items-center gap-1 bg-orange-100 text-orange-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                  <ShieldCheck className="w-3 h-3" /> Verificato
+                </span>
+                <span className="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">
+                  DM 37/08
+                </span>
+                <span className="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">
+                  DURC valido
+                </span>
+                <span className="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">
+                  Polizza RC
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mb-4">
+                Roma, Milano, Napoli &nbsp;·&nbsp; Disponibile da subito
+              </p>
+              <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+                Contatta
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 5. BADGE E VERIFICA ──────────────────────────────── */}
+      <section className="bg-slate-900 text-white py-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
+              Scegli in base a quello che ti serve.
+            </h2>
+            <p className="text-slate-400 max-w-xl mx-auto">
+              Su Maestranze trovi tre tipi di professionisti.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {BADGE_CARDS.map(({ title, badge, items, note }) => (
+              <div
+                key={title}
+                className="bg-white/5 border border-white/10 rounded-2xl p-6"
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  <h3 className="font-bold text-white text-base">{title}</h3>
+                  {badge && (
+                    <span
+                      className={`${badge.color} text-white text-xs font-semibold px-2 py-0.5 rounded-full`}
+                    >
+                      {badge.label}
+                    </span>
+                  )}
+                </div>
+                <ul className="space-y-2 mb-4">
+                  {items.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-sm text-slate-300">
+                      <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs text-slate-400 italic">{note}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-sm text-slate-400">
+            I risultati mostrano prima i profili Verificati, poi P.IVA, poi Base.
+            Puoi sempre espandere la ricerca.
+          </p>
+        </div>
+      </section>
+
+      {/* ─── 6. DASHBOARD PRO ─────────────────────────────────── */}
+      <section className="bg-slate-50 py-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-5 uppercase tracking-wider">
+              Dashboard Pro — Per Imprese
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
+              Uno strumento di gestione, non solo una rubrica.
+            </h2>
+            <p className="text-slate-500 max-w-2xl mx-auto">
+              Con il piano Pro hai tutto quello che ti serve per gestire la manodopera
+              dei tuoi cantieri in un unico posto.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+            {DASHBOARD_CARDS.map(({ icon: Icon, title, desc }) => (
+              <div
+                key={title}
+                className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm"
+              >
+                <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mb-4">
+                  <Icon className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 mb-2">{title}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
-          <div className="text-center mt-10">
-            <Link href="/come-funziona" className="inline-flex items-center gap-1 text-sm font-medium text-orange-600 hover:text-orange-700">
-              Scopri come funziona la verifica <ArrowRight className="w-4 h-4" />
+          <div className="text-center">
+            <Link href="/registrati">
+              <Button size="lg">
+                Scopri il piano Pro <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
             </Link>
           </div>
         </div>
       </section>
 
-
-{/* ─── COLLABORAZIONI ───────────────────────────────────── */}
-      <section className="relative py-24 text-white overflow-hidden">
-        {/* Immagine di sfondo */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: 'url(https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}
-        />
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-slate-900/80" />
-        {/* Contenuto */}
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-5 uppercase tracking-wider">
-            Collaborazioni
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-            Vuoi collaborare con noi?
-          </h2>
-          <p className="text-white/70 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-            Siamo aperti a partnership con associazioni di categoria, piattaforme di settore, media specializzati e realtà che condividono la nostra missione. Scrivici e valutiamo insieme.
+      {/* ─── 7. PER I PRIVATI ─────────────────────────────────── */}
+      <section className="bg-white py-12">
+        <div className="max-w-xl mx-auto px-4 sm:px-6 text-center">
+          <p className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">
+            Sei un privato e cerchi un professionista per casa?
           </p>
-          <a
-            href="mailto:info@maestranze.com"
-            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-xl transition-colors text-base shadow-lg"
-          >
-            info@maestranze.com
-            <ArrowRight className="w-5 h-5" />
-          </a>
+          <p className="text-slate-600 mb-6">
+            Preventivi gratuiti da professionisti verificati nella tua zona.
+          </p>
+          <Link href="/preventivo">
+            <button className="px-8 py-3 font-semibold border-2 border-slate-900 text-slate-900 rounded-lg hover:bg-slate-50 transition-colors">
+              Richiedi un preventivo
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      {/* ─── 8. CTA FINALE ────────────────────────────────────── */}
+      <section className="bg-orange-500 py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-8">
+            Inizia oggi. È gratuito.
+          </h2>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/manodopera">
+              <button className="w-full sm:w-auto bg-white text-slate-900 font-semibold px-8 py-3.5 rounded-xl hover:bg-white/90 transition-colors text-base shadow-md">
+                Sono un&apos;impresa
+              </button>
+            </Link>
+            <Link href="/registrati">
+              <button className="w-full sm:w-auto border-2 border-white text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/10 transition-colors text-base">
+                Sono un artigiano
+              </button>
+            </Link>
+          </div>
         </div>
       </section>
     </>
