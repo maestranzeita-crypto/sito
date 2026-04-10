@@ -409,24 +409,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── 8. CTA FINALE ────────────────────────────────────── */}
-      <section className="bg-orange-500 py-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-8">
-            Inizia oggi. È gratuito.
+      {/* ─── 8. COLLABORAZIONI ────────────────────────────────── */}
+      <section className="relative py-24 text-white overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1920"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-slate-900/80" />
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-5 uppercase tracking-wider">
+            Collaborazioni
+          </span>
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
+            Vuoi collaborare con noi?
           </h2>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/manodopera">
-              <button className="w-full sm:w-auto bg-white text-slate-900 font-semibold px-8 py-3.5 rounded-xl hover:bg-white/90 transition-colors text-base shadow-md">
-                Sono un&apos;impresa
-              </button>
-            </Link>
-            <Link href="/registrati">
-              <button className="w-full sm:w-auto border-2 border-white text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/10 transition-colors text-base">
-                Sono un artigiano
-              </button>
-            </Link>
-          </div>
+          <p className="text-white/70 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+            Siamo aperti a partnership con associazioni di categoria, piattaforme di settore,
+            media specializzati e realtà che condividono la nostra missione. Scrivici e
+            valutiamo insieme.
+          </p>
+          <a
+            href="mailto:info@maestranze.com"
+            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-xl transition-colors text-base shadow-lg"
+          >
+            info@maestranze.com
+            <ArrowRight className="w-5 h-5" />
+          </a>
         </div>
       </section>
     </>
