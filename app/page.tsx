@@ -142,63 +142,52 @@ export default function HomePage() {
       <HomeJsonLd />
 
       {/* ─── 1. HERO ──────────────────────────────────────────── */}
-      <section className="bg-slate-900 text-white">
-        {/* Immagine full-width solo mobile */}
-        <div className="lg:hidden w-full h-52 sm:h-64 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg?auto=compress&cs=tinysrgb&w=1200"
-            alt="Cantiere edile"
-            className="w-full h-full object-cover opacity-80"
-          />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Sinistra */}
-            <div>
-              <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-6 uppercase tracking-wider">
-                Per Imprese Edili
-              </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-5">
-                Trova l&apos;artigiano giusto per il tuo cantiere.{' '}
-                <span className="text-orange-400">In 48 ore.</span>
-              </h1>
-              <p className="text-slate-300 text-lg leading-relaxed mb-8">
-                Hai accesso al profilo completo di ogni professionista — specializzazioni,
-                certificazioni, recensioni reali e disponibilità aggiornata. Scegli chi
-                vuoi, contattalo direttamente.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 mb-8">
-                <Link href="/manodopera">
-                  <Button size="lg">Cerca un artigiano</Button>
-                </Link>
-                <Link href="/registrati">
-                  <button className="px-8 py-3.5 text-lg font-semibold border-2 border-white text-white rounded-lg hover:bg-white/10 transition-colors">
-                    Registra la tua impresa
-                  </button>
-                </Link>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {['DURC verificato', 'Profili completi', 'Zero commissioni'].map((b) => (
-                  <span
-                    key={b}
-                    className="flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-white/10 px-3 py-1.5 rounded-full"
-                  >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
-                    {b}
-                  </span>
-                ))}
-              </div>
+      <section className="relative text-white overflow-hidden">
+        {/* Sfondo fotografico */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg?auto=compress&cs=tinysrgb&w=1920"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/40" />
+        {/* Contenuto */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+          <div className="max-w-2xl">
+            <span className="inline-block bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full mb-6 uppercase tracking-wider">
+              Per Imprese Edili
+            </span>
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-5">
+              Trova l&apos;artigiano giusto per il tuo cantiere.{' '}
+              <span className="text-orange-400">In 48 ore.</span>
+            </h1>
+            <p className="text-white/85 text-lg leading-relaxed mb-8">
+              Hai accesso al profilo completo di ogni professionista — specializzazioni,
+              certificazioni, recensioni reali e disponibilità aggiornata. Scegli chi
+              vuoi, contattalo direttamente.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              <Link href="/manodopera">
+                <Button size="lg">Cerca un artigiano</Button>
+              </Link>
+              <Link href="/registrati">
+                <button className="px-8 py-3.5 text-lg font-semibold border-2 border-white text-white rounded-lg hover:bg-white/10 transition-colors">
+                  Registra la tua impresa
+                </button>
+              </Link>
             </div>
-
-            {/* Destra — immagine desktop */}
-            <div className="hidden lg:block">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                alt="Cantiere edile"
-                className="w-full h-[460px] object-cover rounded-2xl shadow-2xl"
-              />
+            <div className="flex flex-wrap gap-3">
+              {['DURC verificato', 'Profili completi', 'Zero commissioni'].map((b) => (
+                <span
+                  key={b}
+                  className="flex items-center gap-1.5 text-xs font-medium text-white/80 bg-white/10 px-3 py-1.5 rounded-full"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                  {b}
+                </span>
+              ))}
             </div>
           </div>
         </div>
