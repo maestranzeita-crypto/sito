@@ -27,6 +27,12 @@ export default function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6">
+            <Link href="/chi-siamo" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
+              Chi siamo
+            </Link>
+            <Link href="/dashboard" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
+              Dashboard
+            </Link>
             <Link href="/calcolatore" className="text-slate-600 hover:text-slate-900 font-medium text-sm">
               Calcolatori
             </Link>
@@ -60,6 +66,8 @@ export default function Header() {
       {mobileOpen && (
         <div className="md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-1">
           <div className="space-y-2">
+            <Link href="/chi-siamo" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Chi siamo</Link>
+            <Link href="/dashboard" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Dashboard</Link>
             <Link href="/calcolatore" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Calcolatori</Link>
             <Link href="/blog" className="block px-2 py-2 text-sm text-slate-700" onClick={() => setMobileOpen(false)}>Guide</Link>
           </div>
