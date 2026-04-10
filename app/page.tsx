@@ -143,7 +143,16 @@ export default function HomePage() {
 
       {/* ─── 1. HERO ──────────────────────────────────────────── */}
       <section className="bg-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        {/* Immagine full-width solo mobile */}
+        <div className="lg:hidden w-full h-52 sm:h-64 overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg?auto=compress&cs=tinysrgb&w=1200"
+            alt="Cantiere edile"
+            className="w-full h-full object-cover opacity-80"
+          />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Sinistra */}
             <div>
@@ -182,13 +191,13 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Destra — immagine */}
+            {/* Destra — immagine desktop */}
             <div className="hidden lg:block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg"
+                src="https://images.pexels.com/photos/10202865/pexels-photo-10202865.jpeg?auto=compress&cs=tinysrgb&w=1200"
                 alt="Cantiere edile"
-                className="w-full h-[420px] object-cover rounded-2xl shadow-2xl"
+                className="w-full h-[460px] object-cover rounded-2xl shadow-2xl"
               />
             </div>
           </div>
@@ -300,8 +309,18 @@ export default function HomePage() {
       </section>
 
       {/* ─── 5. BADGE E VERIFICA ──────────────────────────────── */}
-      <section className="bg-slate-900 text-white py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative text-white py-16 overflow-hidden">
+        {/* Sfondo fotografico */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Overlay navy */}
+        <div className="absolute inset-0 bg-slate-900/85" />
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
               Scegli in base a quello che ti serve.
