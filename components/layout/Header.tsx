@@ -85,7 +85,7 @@ export default function Header() {
               <Button variant="ghost" size="sm">Accedi</Button>
             </Link>
             <Link href="/registrati">
-              <Button size="sm">Registrati Gratis</Button>
+              <Button size="sm">Registrati</Button>
             </Link>
           </div>
 
@@ -125,7 +125,7 @@ export default function Header() {
               <Button variant="outline" size="sm" className="w-full">Accedi</Button>
             </Link>
             <Link href="/registrati" onClick={() => setMobileOpen(false)}>
-              <Button size="sm" className="w-full">Registrati Gratis</Button>
+              <Button size="sm" className="w-full">Registrati</Button>
             </Link>
           </div>
         </div>
