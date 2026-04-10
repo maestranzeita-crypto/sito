@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ChromeHeader, ChromeFooter } from '@/components/layout/Chrome'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/lib/utils'
 
@@ -76,9 +77,9 @@ export default function RootLayout({
         {gaMeasurementId ? <GoogleAnalytics measurementId={gaMeasurementId} /> : null}
         {/* Anti-FOUC: apply stored theme before first paint */}
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('maestranze-theme');if(t==='dark'||(t===null&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}` }} />
-        <ChromeHeader />
+        <Header />
         <main>{children}</main>
-        <ChromeFooter />
+        <Footer />
       </body>
     </html>
   )

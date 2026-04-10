@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { Menu, X, LogOut, LayoutDashboard, User } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
@@ -107,9 +108,16 @@ function UserMenu({ user, profile }: { user: SupabaseUser; profile: ProProfile |
 }
 
 export default function Header() {
+  const pathname = usePathname() ?? ''
   const [mobileOpen, setMobileOpen] = useState(false)
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [profile, setProfile] = useState<ProProfile | null>(null)
+
+  if (
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/accedi') ||
+    pathname.startsWith('/admin')
+  ) return null
 
   useEffect(() => {
     const supabase = createClient()
