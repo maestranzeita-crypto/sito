@@ -113,12 +113,6 @@ export default function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [profile, setProfile] = useState<ProProfile | null>(null)
 
-  if (
-    pathname.startsWith('/dashboard') ||
-    pathname.startsWith('/accedi') ||
-    pathname.startsWith('/admin')
-  ) return null
-
   useEffect(() => {
     const supabase = createClient()
 
@@ -143,6 +137,12 @@ export default function Header() {
 
     return () => subscription.unsubscribe()
   }, [])
+
+  if (
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/accedi') ||
+    pathname.startsWith('/admin')
+  ) return null
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
