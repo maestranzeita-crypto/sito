@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     'preventivo ristrutturazione',
     'costo ristrutturazione al mq',
     'quanto costa ristrutturare casa',
-    'bonus ristrutturazioni 2025',
+    'bonus ristrutturazioni 2026',
   ],
 }
 
@@ -33,7 +33,7 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: 'Quali incentivi fiscali ci sono per le ristrutturazioni nel 2025?',
+      name: 'Quali incentivi fiscali ci sono per le ristrutturazioni nel 2026?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Per le ristrutturazioni ordinarie è disponibile il Bonus Ristrutturazioni con detrazione IRPEF del 50% in 10 anni, fino a un massimo di 96.000€ per unità immobiliare.',
@@ -106,7 +106,7 @@ export default function CalcolatoreRistruttarazionePage() {
                 a: 'Il costo varia tra 150 e 1.800 €/mq a seconda del tipo di intervento e delle finiture. Una ristrutturazione leggera (tinteggiatura, piccole riparazioni) parte da 150 €/mq, una media (pavimenti, impianti parziali) costa 300–600 €/mq, una completa (demolizione totale e ricostruzione) può arrivare a 600–1.200 €/mq per un appartamento.',
               },
               {
-                q: 'Quali incentivi fiscali ci sono per le ristrutturazioni nel 2025?',
+                q: 'Quali incentivi fiscali ci sono per le ristrutturazioni nel 2026?',
                 a: 'Il Bonus Ristrutturazioni prevede una detrazione IRPEF del 50% in 10 anni sulle spese di ristrutturazione, fino a un massimo di 96.000€ per unità immobiliare. Per interventi di efficienza energetica è disponibile l\'Ecobonus con detrazioni variabili dal 50% al 65%.',
               },
               {
