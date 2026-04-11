@@ -42,13 +42,12 @@ const TOOLS = [
   },
   {
     icon: Home,
-    href: '/calcolatore/fotovoltaico',
+    href: '/calcolatore/ristrutturazione',
     title: 'Calcolatore Ristrutturazione',
-    desc: 'Ottieni una stima del costo di ristrutturazione di un appartamento per mq, con o senza Superbonus.',
-    badge: 'Presto disponibile',
-    badgeColor: 'bg-slate-100 text-slate-500',
+    desc: 'Ottieni una stima del costo di ristrutturazione per mq: appartamento, bagno, cucina o singola stanza.',
+    badge: 'Disponibile',
+    badgeColor: 'bg-green-100 text-green-700',
     color: 'from-green-50 to-emerald-50 border-green-200',
-    disabled: true,
   },
 ]
 
