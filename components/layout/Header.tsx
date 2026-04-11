@@ -40,7 +40,7 @@ function UserMenu({ user, profile }: { user: SupabaseUser; profile: ProProfile |
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-400"
+        className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded-xl px-2 py-1 hover:bg-slate-50 transition-colors"
         aria-label="Menu utente"
       >
         {profile?.foto_url ? (
@@ -49,14 +49,15 @@ function UserMenu({ user, profile }: { user: SupabaseUser; profile: ProProfile |
             alt={name}
             width={36}
             height={36}
-            className="w-9 h-9 rounded-full object-cover border-2 border-orange-400"
+            className="w-9 h-9 rounded-full object-cover border-2 border-orange-400 flex-shrink-0"
             unoptimized
           />
         ) : (
-          <div className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-sm border-2 border-orange-400">
+          <div className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-sm border-2 border-orange-400 flex-shrink-0">
             {initial}
           </div>
         )}
+        <span className="text-sm font-semibold text-slate-800 max-w-[120px] truncate">{name}</span>
       </button>
 
       {open && (
