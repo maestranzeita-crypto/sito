@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight, Sun, Zap, Euro, TrendingDown, Battery,
-  CheckCircle2, AlertCircle, ChevronDown, Info, SlidersHorizontal,
+  CheckCircle2, AlertCircle, ChevronDown, Info, SlidersHorizontal, Lock,
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 
 // ─── Costanti base ────────────────────────────────────────────────────────────
 const PREZZI_KWP: Record<string, number> = {
@@ -134,6 +136,28 @@ export default function CalcolatoreClient() {
   const [zona, setZona]         = useState<Zona>('nord')
   const [consumo, setConsumo]   = useState(3000)
   const [showDetails, setShowDetails] = useState(false)
+
+  // auth
+  const [user, setUser] = useState<User | null>(null)
+  const [showProGate, setShowProGate] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  function handleProClick() {
+    if (user) {
+      setProMode(true)
+      setShowProGate(false)
+    } else {
+      setShowProGate(true)
+    }
+  }
 
   // pro state
   const [proMode, setProMode]           = useState(false)
@@ -273,15 +297,47 @@ export default function CalcolatoreClient() {
         </div>
 
         {/* Pulsante passa a pro */}
-        {!proMode && (
+        {!proMode && !showProGate && (
           <div className="mt-6 pt-5 border-t border-slate-100 flex justify-center">
             <button
-              onClick={() => setProMode(true)}
+              onClick={handleProClick}
               className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-orange-600 border border-slate-200 hover:border-orange-300 rounded-xl px-5 py-2.5 transition-all hover:bg-orange-50"
             >
               <SlidersHorizontal className="w-4 h-4" />
               Passa al Calcolatore Professionale
             </button>
+          </div>
+        )}
+
+        {/* Gate registrazione pro */}
+        {showProGate && !proMode && (
+          <div className="mt-6 pt-5 border-t border-slate-100">
+            <div className="rounded-2xl border-2 border-orange-200 bg-orange-50 p-6 flex flex-col sm:flex-row items-center gap-5">
+              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <Lock className="w-6 h-6 text-orange-500" />
+              </div>
+              <div className="flex-1 text-center sm:text-left">
+                <p className="font-extrabold text-slate-900 mb-1">Il Calcolatore Pro è riservato agli utenti registrati</p>
+                <p className="text-sm text-slate-600">
+                  Orientamento tetto, perdite di sistema, autoconsumo personalizzato, Scambio Sul Posto e molto altro.
+                  Registrati gratis per sbloccare tutti i parametri avanzati.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 flex-shrink-0 w-full sm:w-auto">
+                <Link
+                  href="/registrati"
+                  className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors"
+                >
+                  Registrati gratis <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href={`/accedi?redirect=${encodeURIComponent('/calcolatore/fotovoltaico')}`}
+                  className="inline-flex items-center justify-center gap-2 border border-slate-200 text-slate-600 hover:border-orange-300 hover:text-orange-600 font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors bg-white"
+                >
+                  Hai già un account? Accedi
+                </Link>
+              </div>
+            </div>
           </div>
         )}
       </div>
