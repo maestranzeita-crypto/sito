@@ -176,7 +176,7 @@ export default function Header() {
           </nav>
 
           {/* CTA / Avatar */}
-          <div className="hidden md:flex items-center gap-3 ml-auto">
+          <div className="hidden md:flex items-center gap-3">
             {user ? (
               <UserMenu user={user} profile={profile} />
             ) : (
