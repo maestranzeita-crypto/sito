@@ -64,8 +64,7 @@ function UserMenu({ user, profile }: { user: SupabaseUser; profile: ProProfile |
         <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-50">
           {/* Info utente */}
           <div className="px-4 py-3 border-b border-slate-100">
-            <p className="font-semibold text-slate-900 text-sm truncate">{name}</p>
-            <p className="text-xs text-slate-400 truncate mt-0.5">{user.email}</p>
+            <p className="text-xs text-slate-400 truncate">{user.email}</p>
             {profile?.citta && (
               <p className="text-xs text-slate-400 mt-0.5">
                 {profile.citta.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
@@ -178,7 +177,7 @@ export default function Header() {
           </nav>
 
           {/* CTA / Avatar */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3 ml-auto">
             {user ? (
               <UserMenu user={user} profile={profile} />
             ) : (
