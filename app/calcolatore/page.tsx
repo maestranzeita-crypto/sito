@@ -17,27 +17,24 @@ const TOOLS = [
     title: 'Calcolatore Fotovoltaico',
     desc: 'Stima costo, risparmio annuo e ammortamento del tuo impianto solare. Configura kWp, batterie e zona geografica.',
     badge: 'Disponibile',
-    badgeColor: 'bg-green-100 text-green-700',
-    color: 'from-amber-50 to-orange-50 border-amber-200',
+    photo: 'https://images.pexels.com/photos/9875445/pexels-photo-9875445.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&dpr=1',
   },
   {
     icon: Zap,
-    href: '/calcolatore/fotovoltaico',
+    href: '#',
     title: 'Calcolatore Impianto Elettrico',
     desc: 'Stima il costo di rifacimento o ampliamento dell\'impianto elettrico in base ai mq e al tipo di abitazione.',
     badge: 'Presto disponibile',
-    badgeColor: 'bg-slate-100 text-slate-500',
-    color: 'from-yellow-50 to-amber-50 border-yellow-200',
+    photo: 'https://images.pexels.com/photos/2898199/pexels-photo-2898199.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&dpr=1',
     disabled: true,
   },
   {
     icon: Droplets,
-    href: '/calcolatore/fotovoltaico',
+    href: '#',
     title: 'Calcolatore Impianto Idraulico',
     desc: 'Calcola il preventivo per installazione o sostituzione caldaia, impianto di riscaldamento o ristrutturazione bagno.',
     badge: 'Presto disponibile',
-    badgeColor: 'bg-slate-100 text-slate-500',
-    color: 'from-blue-50 to-cyan-50 border-blue-200',
+    photo: 'https://images.pexels.com/photos/6419128/pexels-photo-6419128.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&dpr=1',
     disabled: true,
   },
   {
@@ -46,17 +43,26 @@ const TOOLS = [
     title: 'Calcolatore Ristrutturazione',
     desc: 'Ottieni una stima del costo di ristrutturazione per mq: appartamento, bagno, cucina o singola stanza.',
     badge: 'Disponibile',
-    badgeColor: 'bg-green-100 text-green-700',
-    color: 'from-green-50 to-emerald-50 border-green-200',
+    photo: 'https://images.pexels.com/photos/3990359/pexels-photo-3990359.jpeg?auto=compress&cs=tinysrgb&w=800&h=500&dpr=1',
   },
 ]
 
 export default function CalcolatoriPage() {
   return (
     <>
-      {/* ── HERO ──────────────────────────────────────────────── */}
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-14 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── HERO con foto Pexels ───────────────────────────────── */}
+      <section
+        className="relative text-white py-14 md:py-28 overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.pexels.com/photos/834892/pexels-photo-834892.jpeg?auto=compress&cs=tinysrgb&w=1920&h=900&dpr=1)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* overlay scuro */}
+        <div className="absolute inset-0 bg-slate-900/75" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="text-sm text-slate-400 mb-6 flex items-center gap-2" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <span>›</span>
@@ -78,29 +84,51 @@ export default function CalcolatoriPage() {
       <section className="py-14 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {TOOLS.map(({ icon: Icon, href, title, desc, badge, badgeColor, color, disabled }) => (
+            {TOOLS.map(({ icon: Icon, href, title, desc, badge, photo, disabled }) => (
               <div
                 key={title}
-                className={`bg-gradient-to-br ${color} border rounded-2xl p-6 flex flex-col ${disabled ? 'opacity-70' : ''}`}
+                className={`relative overflow-hidden rounded-2xl flex flex-col min-h-[240px] ${disabled ? 'opacity-80' : 'group'}`}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <Icon className="w-10 h-10 text-slate-600" />
-                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${badgeColor}`}>{badge}</span>
+                {/* Foto di sfondo */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style={{ backgroundImage: `url(${photo})` }}
+                />
+                {/* Overlay scuro sfumato */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-slate-900/30" />
+
+                {/* Contenuto */}
+                <div className="relative p-6 flex flex-col flex-1">
+                  <div className="flex items-start justify-between mb-auto">
+                    <div className="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                      disabled
+                        ? 'bg-white/20 text-white/70'
+                        : 'bg-green-400/20 text-green-300 border border-green-400/30'
+                    }`}>
+                      {badge}
+                    </span>
+                  </div>
+
+                  <div className="mt-8">
+                    <h2 className="text-lg font-extrabold text-white mb-2">{title}</h2>
+                    <p className="text-sm text-slate-300 leading-relaxed mb-5">{desc}</p>
+                    {disabled ? (
+                      <span className="inline-flex items-center gap-2 bg-white/10 text-white/50 font-semibold text-sm px-5 py-2.5 rounded-xl cursor-not-allowed w-fit border border-white/10">
+                        Presto disponibile
+                      </span>
+                    ) : (
+                      <Link
+                        href={href}
+                        className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors w-fit shadow-lg"
+                      >
+                        Apri calcolatore <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
-                <h2 className="text-lg font-extrabold text-slate-900 mb-2">{title}</h2>
-                <p className="text-sm text-slate-600 leading-relaxed mb-5 flex-1">{desc}</p>
-                {disabled ? (
-                  <span className="inline-flex items-center gap-2 bg-white/70 text-slate-400 font-semibold text-sm px-5 py-2.5 rounded-xl cursor-not-allowed w-fit">
-                    Presto disponibile
-                  </span>
-                ) : (
-                  <Link
-                    href={href}
-                    className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors w-fit"
-                  >
-                    Apri calcolatore <ArrowRight className="w-4 h-4" />
-                  </Link>
-                )}
               </div>
             ))}
           </div>
