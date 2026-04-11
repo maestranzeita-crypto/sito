@@ -6,7 +6,7 @@ import { CATEGORIES, getCategoryBySlug } from '@/lib/categories'
 import { SITE_URL } from '@/lib/utils'
 import ServiceSchema from '@/components/category/ServiceSchema'
 import FaqAccordion from '@/components/category/FaqAccordion'
-import CityGrid from '@/components/category/CityGrid'
+import CalculatorCTA from '@/components/category/CalculatorCTA'
 import RequestQuoteBanner from '@/components/category/RequestQuoteBanner'
 
 // Genera le route statiche al build time
@@ -185,8 +185,8 @@ export default function CategoryPage({ params }: { params: { category: string } 
       {/* ─── CTA BANNER ───────────────────────────────────────── */}
       <RequestQuoteBanner category={cat} />
 
-      {/* ─── CITTÀ ────────────────────────────────────────────── */}
-      <CityGrid category={cat} />
+      {/* ─── CALCOLATORE ──────────────────────────────────────── */}
+      <CalculatorCTA category={cat} />
 
       {/* ─── FAQ ──────────────────────────────────────────────── */}
       <section className="py-14 bg-white">

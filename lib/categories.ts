@@ -14,6 +14,8 @@ export type Category = {
   services: string[]       // sotto-servizi per la pagina categoria
   faqs: { q: string; a: string }[]
   avgPrice: string         // range prezzo indicativo
+  calculatorHref?: string  // link al calcolatore dedicato
+  calculatorAvailable?: boolean
 }
 
 export const CATEGORIES: Category[] = [
@@ -58,6 +60,8 @@ export const CATEGORIES: Category[] = [
       },
     ],
     avgPrice: '4.500€ – 12.000€',
+    calculatorHref: '/calcolatore/fotovoltaico',
+    calculatorAvailable: true,
   },
   {
     slug: 'elettricista',
@@ -96,6 +100,8 @@ export const CATEGORIES: Category[] = [
       },
     ],
     avgPrice: '50€ – 150€/ora · impianto completo da 3.000€',
+    calculatorHref: '/calcolatore/elettrico',
+    calculatorAvailable: false,
   },
   {
     slug: 'idraulico',
@@ -134,6 +140,8 @@ export const CATEGORIES: Category[] = [
       },
     ],
     avgPrice: '60€ – 120€/ora · impianto completo da 2.500€',
+    calculatorHref: '/calcolatore/idraulico',
+    calculatorAvailable: false,
   },
   {
     slug: 'muratore',
@@ -210,6 +218,8 @@ export const CATEGORIES: Category[] = [
       },
     ],
     avgPrice: '300€ – 700€/mq · appartamento da 25.000€',
+    calculatorHref: '/calcolatore/ristrutturazione',
+    calculatorAvailable: true,
   },
 ]
 
