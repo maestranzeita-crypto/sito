@@ -9,7 +9,6 @@ import { SITE_NAME } from '@/lib/utils'
 export default function Footer() {
   const pathname = usePathname() ?? ''
   if (
-    pathname.startsWith('/dashboard') ||
     pathname.startsWith('/accedi') ||
     pathname.startsWith('/admin')
   ) return null

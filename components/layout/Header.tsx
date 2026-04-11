@@ -139,7 +139,6 @@ export default function Header() {
   }, [])
 
   if (
-    pathname.startsWith('/dashboard') ||
     pathname.startsWith('/accedi') ||
     pathname.startsWith('/admin')
   ) return null
