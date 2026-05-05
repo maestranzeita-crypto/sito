@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #FDF8F0;
+  --color-coffee: #3C2415;
+  --color-bordeaux: #722F37;
+  --color-caramel: #8B6914;
+  --color-night: #1A0808;
+  --color-dusk: #2C1008;
+  --color-amber: #C4853A;
+
+  --font-display: "Playfair Display", serif;
+  --font-body: "DM Sans", sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "DM Sans", sans-serif;
+  color: #3C2415;
+  background: linear-gradient(
+    to bottom,
+    #FDF8F0 0%,
+    #F5ECD8 18%,
+    #E8D4A8 38%,
+    #C4853A 62%,
+    #6B2418 80%,
+    #1A0808 100%
+  );
+  background-size: 100% 100%;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Playfair Display", serif;
+}
+
+p {
+  line-height: 1.75;
+}
+
+/* Smooth scroll target offset for sticky nav */
+section {
+  scroll-margin-top: 72px;
+}
